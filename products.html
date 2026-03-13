@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products &mdash; SkyHigh Scanner</title>
+  <meta name="description" content="Explore 15 integrated security scanners across application security, cloud security, SaaS posture management, infrastructure hardening, threat detection, and attack surface management.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+
+  <!-- NAV (same as index) -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner container">
+      <a href="index.html" class="nav__logo">
+        <svg class="nav__logo-icon" viewBox="0 0 32 32" fill="none"><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" fill="url(#sg1)" opacity="0.15"/><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" stroke="url(#sg1)" stroke-width="1.5" fill="none"/><path d="M12 16l3 3 5-6" stroke="url(#sg1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><defs><linearGradient id="sg1" x1="4" y1="2" x2="28" y2="26"><stop stop-color="#00D4FF"/><stop offset="1" stop-color="#7B61FF"/></linearGradient></defs></svg>
+        <span>SkyHigh<span class="nav__logo-accent">Scanner</span></span>
+      </a>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="platform.html">Platform</a></li>
+        <li><a href="products.html" style="color:var(--text)">Products</a></li>
+        <li><a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+      <div class="nav__actions">
+        <a href="https://github.com/Krishcalin" class="btn btn--ghost" target="_blank" rel="noopener">Star on GitHub</a>
+        <a href="about.html#contact" class="btn btn--primary">Get Started</a>
+      </div>
+      <button class="nav__hamburger" id="navHamburger" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero__glow"></div>
+    <div class="container" style="position:relative">
+      <span class="section-tag">Products</span>
+      <h1 class="section-title" style="font-size:clamp(2rem,4.5vw,3.2rem)">15 Security Scanners.<br><span class="gradient-text">One Platform.</span></h1>
+      <p class="section-desc" style="max-width:640px;margin:0 auto">Each tool is self-contained, open-source, and production-ready. Click any product below for full details, features, and technical specifications.</p>
+    </div>
+  </section>
+
+  <!-- ====================== APPLICATION SECURITY ====================== -->
+  <section class="pillar-section" id="appsec">
+    <div class="container">
+      <span class="section-tag" style="border-color:rgba(16,185,129,0.3);color:#10B981;background:rgba(16,185,129,0.08)">Application Security</span>
+      <h2 class="section-title" style="margin-bottom:48px">Static Application Security Testing</h2>
+
+      <!-- Java -->
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#F89820">&#9672;</div>
+          <div>
+            <div class="product-detail__title">Java SAST Scanner</div>
+            <div class="product-detail__subtitle">v4.0.0 &middot; java_scanner.py &middot; ~1,191 lines</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Comprehensive static analysis for Java applications. Scans source files, Maven POM configurations, Gradle build files, web.xml deployment descriptors, and compiled .jar/.war archives for dependency CVEs.</p>
+            <ul class="product-detail__features">
+              <li>SQL injection, XSS, command injection, path traversal detection</li>
+              <li>Insecure deserialization and XXE vulnerability patterns</li>
+              <li>Hardcoded credentials and secrets detection</li>
+              <li>Maven/Gradle dependency CVE lookup (9 known CVEs)</li>
+              <li>web.xml security misconfiguration analysis</li>
+              <li>CI/CD friendly: exit code 1 on CRITICAL/HIGH findings</li>
+              <li>JSON + self-contained HTML reports with dark theme</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">20+</div><div class="product-detail__stat-label">SAST Rules</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">9</div><div class="product-detail__stat-label">Dependency CVEs</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">5</div><div class="product-detail__stat-label">File Types</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHP -->
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#777BB4">&#9672;</div>
+          <div>
+            <div class="product-detail__title">PHP SAST Scanner</div>
+            <div class="product-detail__subtitle">v4.0.0 &middot; php_scanner.py &middot; ~848 lines</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Static analysis for PHP source code and php.ini configuration files. Covers OWASP Top 10 vulnerabilities specific to PHP applications.</p>
+            <ul class="product-detail__features">
+              <li>SQL injection (mysql_*, mysqli, PDO patterns)</li>
+              <li>Cross-site scripting (XSS) and output encoding</li>
+              <li>Insecure deserialization (unserialize)</li>
+              <li>php.ini security configuration audit (8 checks)</li>
+              <li>File inclusion and command injection detection</li>
+              <li>Session security and cookie configuration</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">15+</div><div class="product-detail__stat-label">SAST Rules</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">8</div><div class="product-detail__stat-label">INI Checks</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Python -->
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#3776AB">&#9672;</div>
+          <div>
+            <div class="product-detail__title">Python SAST Scanner</div>
+            <div class="product-detail__subtitle">v4.0.0 &middot; python_scanner.py &middot; ~1,231 lines</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Deep static analysis for Python applications. Scans source files, requirements.txt, Pipfile, and pyproject.toml for security vulnerabilities and known CVEs.</p>
+            <ul class="product-detail__features">
+              <li>50+ SAST patterns covering injection, secrets, crypto, deserialization</li>
+              <li>16+ dependency CVEs tracked across popular packages</li>
+              <li>eval/exec, pickle, subprocess, and os.system detection</li>
+              <li>Flask/Django specific security patterns</li>
+              <li>Weak cryptography and insecure random detection</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">50+</div><div class="product-detail__stat-label">SAST Rules</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">16+</div><div class="product-detail__stat-label">Dependency CVEs</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MERN -->
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#F7DF1E">&#9672;</div>
+          <div>
+            <div class="product-detail__title">MERN Stack SAST Scanner</div>
+            <div class="product-detail__subtitle">v4.0.0 &middot; mern_scanner.py &middot; ~1,181 lines</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Full-stack security scanning for MongoDB, Express, React, and Node.js applications. Covers JS/TS source, package.json dependencies, and .env secret exposure.</p>
+            <ul class="product-detail__features">
+              <li>25+ SAST patterns for JavaScript and TypeScript</li>
+              <li>17 npm dependency CVEs tracked</li>
+              <li>7 .env file security checks (exposed secrets, API keys)</li>
+              <li>NoSQL injection and prototype pollution detection</li>
+              <li>React dangerouslySetInnerHTML and XSS patterns</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">25+</div><div class="product-detail__stat-label">SAST Rules</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">17</div><div class="product-detail__stat-label">npm CVEs</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OWASP LLM -->
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#10B981">&#9672;</div>
+          <div>
+            <div class="product-detail__title">OWASP LLM Top 10 Scanner</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; owasp_llm_scanner.py &middot; ~1,400 lines</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Purpose-built scanner for AI/ML applications covering all 10 categories of the OWASP Top 10 for LLM Applications. Scans Python, JavaScript, .env, YAML configs, and dependency manifests.</p>
+            <ul class="product-detail__features">
+              <li>LLM01: Prompt Injection detection patterns</li>
+              <li>LLM02: Information Disclosure (API keys, model leakage)</li>
+              <li>LLM03: Supply Chain (13 Python + 3 npm vulnerable LLM packages)</li>
+              <li>LLM06: Excessive Agency (unrestricted tool/function calling)</li>
+              <li>LLM07: System Prompt Leakage in YAML configs</li>
+              <li>LLM10: Unbounded Consumption (no rate limiting, token limits)</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">52</div><div class="product-detail__stat-label">Security Rules</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">10</div><div class="product-detail__stat-label">OWASP Categories</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== CLOUD SECURITY ====================== -->
+  <section class="pillar-section" id="cloudsec">
+    <div class="container">
+      <span class="section-tag" style="border-color:rgba(249,115,22,0.3);color:#F97316;background:rgba(249,115,22,0.08)">Cloud Security</span>
+      <h2 class="section-title" style="margin-bottom:48px">CSPM &amp; CNAPP for Multi-Cloud</h2>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#FF9900">&#9672;</div>
+          <div>
+            <div class="product-detail__title">AWS Security Scanner</div>
+            <div class="product-detail__subtitle">v1.1.0 &middot; aws_scanner.py (IaC) + bash audit scripts (live) &middot; ~2,460+ lines</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Dual-mode AWS security scanner: IaC scanning for CloudFormation YAML/JSON and Terraform .tf files, plus live CIS Foundations Benchmark auditing via AWS CLI and boto3.</p>
+            <ul class="product-detail__features">
+              <li>42 CloudFormation resource type handlers (S3, IAM, EC2, RDS, Lambda, etc.)</li>
+              <li>60+ Terraform regex rules across 20+ AWS services</li>
+              <li>Custom YAML loader for CloudFormation intrinsic functions (!Ref, !Sub, !GetAtt)</li>
+              <li>Live audit: 57+ checks across 16 sections (CIS v3.0 aligned)</li>
+              <li>Bedrock and Bedrock Agents security checks (v1.1.0)</li>
+              <li>CloudWatch, WAFv2, GuardDuty, Config rule validation</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">100+</div><div class="product-detail__stat-label">Total Checks</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">42</div><div class="product-detail__stat-label">CF Handlers</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">16</div><div class="product-detail__stat-label">Audit Sections</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#0078D4">&#9672;</div>
+          <div>
+            <div class="product-detail__title">Azure Security Scanner</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; Bash + Azure CLI &middot; CIS Azure Foundations v4.0.0</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">CIS Azure Foundations Benchmark v4.0.0 aligned audit scripts. Read-only assessment of live Azure subscriptions using Azure CLI and Microsoft Graph API.</p>
+            <ul class="product-detail__features">
+              <li>70+ checks across 16 service categories</li>
+              <li>IAM, Storage, Networking, Key Vault, VMs, App Service, Database</li>
+              <li>Defender for Cloud, Conditional Access, Resource Locks</li>
+              <li>NSG Flow Logs, Bastion, ACR, AKS checks</li>
+              <li>Entra ID querying via Microsoft Graph API</li>
+              <li>Timestamped evidence directory per scan</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">70+</div><div class="product-detail__stat-label">Checks</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">16</div><div class="product-detail__stat-label">Sections</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#4285F4">&#9672;</div>
+          <div>
+            <div class="product-detail__title">GCP CNAPP Security Scanner</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; Python &middot; CIS GCP Foundation v2.0</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Full CNAPP scanner covering all five pillars: CSPM, CIEM, CWPP, KSPM, and IaC scanning. Analyzes gcloud CLI JSON configuration exports against CIS GCP Foundation Benchmark v2.0.</p>
+            <ul class="product-detail__features">
+              <li>CSPM: IAM, Network/VPC, Compute, Storage, Cloud SQL, Logging, BigQuery</li>
+              <li>CIEM: IAM entitlements, service account security, least privilege</li>
+              <li>CWPP: GKE/Kubernetes workload protection (9 checks)</li>
+              <li>KSPM: Container and serverless security</li>
+              <li>IaC: Terraform state and plan scanning</li>
+              <li>Zero external dependencies (Python stdlib only)</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">67+</div><div class="product-detail__stat-label">Checks</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">5</div><div class="product-detail__stat-label">CNAPP Pillars</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">15</div><div class="product-detail__stat-label">Modules</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== SAAS SECURITY ====================== -->
+  <section class="pillar-section" id="sspm">
+    <div class="container">
+      <span class="section-tag" style="border-color:rgba(99,102,241,0.3);color:#6366F1;background:rgba(99,102,241,0.08)">SaaS Security (SSPM)</span>
+      <h2 class="section-title" style="margin-bottom:48px">SaaS Posture Management</h2>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#0078D4">&#9672;</div>
+          <div>
+            <div class="product-detail__title">Microsoft 365 + Entra ID SSPM</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; m365_scanner.py &middot; ~1,900 lines</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Comprehensive SaaS posture management for Microsoft 365 and Entra ID via Microsoft Graph API. OAuth 2.0 Client Credentials flow authentication.</p>
+            <ul class="product-detail__features">
+              <li>Security Defaults and Conditional Access policy analysis</li>
+              <li>MFA registration audit (users without MFA, SMS-only)</li>
+              <li>Privileged access: Global Admin count, guest admins, PIM</li>
+              <li>App registration risk: high-risk permissions, expired secrets</li>
+              <li>Exchange, SharePoint, and Teams security configuration</li>
+              <li>Identity Protection: risky users, sign-in risk policies</li>
+              <li>Audit logging: UAL, log export, mailbox audit</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">50+</div><div class="product-detail__stat-label">Checks</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">12</div><div class="product-detail__stat-label">Domains</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#62D84E">&#9672;</div>
+          <div>
+            <div class="product-detail__title">ServiceNow SSPM Scanner</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; servicenow_scanner.py &middot; ~1,696 lines</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Live REST API scanner for ServiceNow instances. Audits system properties, user accounts, OAuth applications, ACLs, audit logging, and email security.</p>
+            <ul class="product-detail__features">
+              <li>30 sys_properties checks (XSS, CSRF, sessions, auth, MFA, TLS)</li>
+              <li>User audit: default admin, stale accounts, service accounts</li>
+              <li>OAuth client sprawl, admin scope, stale clients, token lifetime</li>
+              <li>ACL validation: public read/write on sensitive tables</li>
+              <li>Syslog and log retention verification</li>
+              <li>Email allow/deny lists and antivirus scanning</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">40+</div><div class="product-detail__stat-label">Checks</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">13</div><div class="product-detail__stat-label">Categories</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#0FAAFF">&#9672;</div>
+          <div>
+            <div class="product-detail__title">SAP SuccessFactors SSPM</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; successfactors_scanner.py &middot; ~1,599 lines</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Live OData v2 API scanner for SAP SuccessFactors. Evaluates password policies, SSO/MFA, session management, audit logging, data privacy, and integration security.</p>
+            <ul class="product-detail__features">
+              <li>10 password policy rules (length, complexity, expiry, lockout, history)</li>
+              <li>SSO and MFA enforcement verification</li>
+              <li>Session timeout and concurrent session controls</li>
+              <li>GDPR: purge jobs, field masking, consent management</li>
+              <li>OAuth client sprawl and token lifetime checks</li>
+              <li>Integration flow HTTPS enforcement</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">30+</div><div class="product-detail__stat-label">Checks</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">8</div><div class="product-detail__stat-label">Categories</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#E8762D">&#9672;</div>
+          <div>
+            <div class="product-detail__title">Tableau Cloud SSPM Scanner</div>
+            <div class="product-detail__subtitle">v0.1.0 &middot; Python package &middot; tableauserverclient SDK</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Read-only SaaS Security Posture Management scanner for Tableau Cloud. Connects via Personal Access Token, evaluates 45 security controls across 5 domains, produces severity-weighted posture score.</p>
+            <ul class="product-detail__features">
+              <li>Identity: IdP federation, stale accounts, admin count, service accounts</li>
+              <li>Access: over-privileged Creators, default permissions, 'All Users' scope</li>
+              <li>Data: embedded credentials, extract encryption, sensitive naming</li>
+              <li>API: extension allowlist, flow security, stale flows, Ask Data</li>
+              <li>Logging: Tableau Catalog, access review, orphaned content, site state</li>
+              <li>Severity-weighted scoring (CRITICAL=25, HIGH=15, MEDIUM=8, LOW=3)</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">45</div><div class="product-detail__stat-label">Controls</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">5</div><div class="product-detail__stat-label">Domains</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== INFRASTRUCTURE ====================== -->
+  <section class="pillar-section" id="infra">
+    <div class="container">
+      <span class="section-tag" style="border-color:rgba(234,179,8,0.3);color:#EAB308;background:rgba(234,179,8,0.08)">Infrastructure Security</span>
+      <h2 class="section-title" style="margin-bottom:48px">Network, OS, OT &amp; Enterprise</h2>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#049FD9">&#9672;</div>
+          <div>
+            <div class="product-detail__title">Cisco IOS/IOS-XE Scanner</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; cisco_scanner.py &middot; ~2,385 lines</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Live network device security scanner connecting via SSH (netmiko) and SNMP (pysnmp) to Cisco routers and switches. IP range discovery, parallel probing, 48 misconfiguration rules + 20 CVEs.</p>
+            <ul class="product-detail__features">
+              <li>Authentication: enable secret, AAA, password encryption</li>
+              <li>SSH: version, timeout, retries, transport configuration</li>
+              <li>VTY lines: telnet blocking, access-class, exec-timeout</li>
+              <li>SNMP: default communities, RW access, v3 enforcement</li>
+              <li>Layer 2: DHCP snooping, port security, BPDU guard, root guard</li>
+              <li>20 IOS CVE checks (IOS 12.x/15.x, IOS-XE 16.x/17.x)</li>
+              <li>Services: disable CDP, HTTP server, source routing, small servers</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">68</div><div class="product-detail__stat-label">Rules + CVEs</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">15</div><div class="product-detail__stat-label">Categories</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#FA582D">&#9672;</div>
+          <div>
+            <div class="product-detail__title">Palo Alto NGFW Scanner</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; paloalto_scanner.py &middot; ~3,063 lines</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Comprehensive PAN-OS XML API scanner for Palo Alto Networks next-generation firewalls. Supports both standalone firewalls and Panorama-managed deployments.</p>
+            <ul class="product-detail__features">
+              <li>Security rules: allow-all, any app/svc/zone, disabled rules (10 checks)</li>
+              <li>Threat prevention: AV, anti-spyware, URL filtering, WildFire, DNS Security</li>
+              <li>Security profiles: missing AV/AS/VP/URL/FB/WF on allow rules (8 checks)</li>
+              <li>Management: HTTP/Telnet, permitted-IP, lockout, idle timeout, SNMPv2c</li>
+              <li>SSL/TLS decryption: forward proxy, exclusions, expired certificates</li>
+              <li>GlobalProtect: MFA, split-tunnel, HIP checks</li>
+              <li>20 PAN-OS CVEs (PAN-OS 6.x through 11.x)</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">112</div><div class="product-detail__stat-label">Rules + CVEs</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">15</div><div class="product-detail__stat-label">Categories</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#EE0000">&#9672;</div>
+          <div>
+            <div class="product-detail__title">Linux CIS Hardening Scripts</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; Bash &middot; RHEL 8 (CIS v3.0.0) + RHEL 9 (CIS v2.0.0)</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Automated CIS Benchmark-aligned hardening scripts for Red Hat Enterprise Linux 8 and 9. Actively applies security settings with full backup of all modified configurations.</p>
+            <ul class="product-detail__features">
+              <li>SSH hardening: cipher/MAC/KexAlgorithm enforcement, pre-restart validation</li>
+              <li>Kernel sysctl: ASLR, kptr_restrict, dmesg_restrict, SYN cookies</li>
+              <li>auditd: 8192 buffer, comprehensive audit rules</li>
+              <li>RHEL 9: nftables default-deny firewall, AIDE file integrity, fapolicyd, USBGuard</li>
+              <li>170+ individual settings across filesystem, SSH, kernel, PAM, logging</li>
+              <li>Generates audit artefacts (SUID/SGID, world-writable files, duplicate UIDs)</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">170+</div><div class="product-detail__stat-label">Settings</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">29</div><div class="product-detail__stat-label">Hardening Areas</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#00ADEF">&#9672;</div>
+          <div>
+            <div class="product-detail__title">Windows CIS Scanner &amp; Hardening</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; PowerShell &middot; Win11 + Server 2016/2019/2022</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">CIS Benchmark compliance scanners for Windows Server 2016, 2019, and 2022 (read-only), plus a hardening script for Windows 11 Enterprise. 1,200+ total controls.</p>
+            <ul class="product-detail__features">
+              <li>Win11 hardening: 170+ settings, L1/L2 profiles, WhatIf dry-run, GPO-deployable</li>
+              <li>Server scanners: 318 (2016) + 360 (2019) + 392 (2022) controls</li>
+              <li>6 check types: Registry, Secedit, UserRight, Auditpol, Service, Firewall</li>
+              <li>Auto-detection of DC vs Member Server role</li>
+              <li>Interactive HTML dashboards with JS filtering</li>
+              <li>Server 2022: PrintNightmare, SMB hardening, Defender, Device Guard, DoH</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">1,200+</div><div class="product-detail__stat-label">Total Controls</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">4</div><div class="product-detail__stat-label">OS Targets</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#D97706">&#9672;</div>
+          <div>
+            <div class="product-detail__title">OT/ICS Passive Security Scanner</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; Python &middot; PCAP-based analysis</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Purely passive, PCAP-based security scanners for OT/ICS environments. Zero active network traffic. Safe for live production industrial systems.</p>
+            <ul class="product-detail__features">
+              <li>PLC device inventory: IP, MAC, vendor, model, firmware, risk assessment</li>
+              <li>RTU/FRTU/IED vulnerability detection for power grid, water, pipeline</li>
+              <li>12+ OT protocols: Modbus, S7comm, EtherNet/IP, DNP3, IEC 60870-5-104, IEC 61850</li>
+              <li>12+ vendor support: Siemens, Rockwell, Schneider, ABB, Honeywell, GE</li>
+              <li>Compliance: IEC 62443, NERC CIP, NIS2</li>
+              <li>130+ MAC OUI entries for industrial vendor identification</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">12+</div><div class="product-detail__stat-label">OT Protocols</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">0</div><div class="product-detail__stat-label">Packets Sent</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#7C3AED">&#9672;</div>
+          <div>
+            <div class="product-detail__title">SAP S/4HANA RISE Security Scanner</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; Python &middot; Offline CSV/JSON analysis</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Offline security audit for SAP S/4HANA RISE and BTP environments. Analyzes exported CSV/JSON configuration data&mdash;ideal for RISE with restricted RFC access.</p>
+            <ul class="product-detail__features">
+              <li>186+ checks across 12 audit modules</li>
+              <li>SoD conflict detection (7 financial/HR/security conflict pairs)</li>
+              <li>BTP Cloud Attack Surface: 29 checks (Cloud Connector, IAS, Event Mesh, CPI)</li>
+              <li>ABAP code security: SQL injection, hardcoded credentials, dangerous statements</li>
+              <li>GDPR/DPDP toolkit: Read Access Logging, ILM retention, data masking, DSAR</li>
+              <li>Custom baseline JSON for threshold overrides</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">186+</div><div class="product-detail__stat-label">Checks</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">12</div><div class="product-detail__stat-label">Modules</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#0FAAFF">&#9672;</div>
+          <div>
+            <div class="product-detail__title">SAP SuccessFactors Offline Scanner</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; Python &middot; Offline CSV/JSON analysis</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Offline security scanner for SAP SuccessFactors HCM exports. Focuses on HR-specific security surface: RBP permissions, terminated employee access, SCIM provisioning.</p>
+            <ul class="product-detail__features">
+              <li>RBP role-based permissions: SoD conflicts, broad-scoped roles</li>
+              <li>Terminated employee access and SCIM provisioning audit</li>
+              <li>API & Integration: OAuth scope, OData authorization, Integration Center</li>
+              <li>Data Privacy: field masking, retention/purge, MDF field classification</li>
+              <li>37+ checks across 7 modules</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">37+</div><div class="product-detail__stat-label">Checks</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">7</div><div class="product-detail__stat-label">Modules</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== THREAT DETECTION ====================== -->
+  <section class="pillar-section" id="threat">
+    <div class="container">
+      <span class="section-tag" style="border-color:rgba(239,68,68,0.3);color:#EF4444;background:rgba(239,68,68,0.08)">Threat Detection</span>
+      <h2 class="section-title" style="margin-bottom:48px">Detection Engineering &amp; EDR Validation</h2>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#65BA42">&#9672;</div>
+          <div>
+            <div class="product-detail__title">Splunk Detection Engineering Library</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; Splunk SPL &middot; YAML rule format</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">170+ Splunk SIEM detection rules for SOC teams covering Windows AD attacks, RHEL Linux, and Apache web servers. Every rule is MITRE ATT&CK mapped with investigation queries and IR playbooks.</p>
+            <ul class="product-detail__features">
+              <li>Windows AD: DCSync, Golden Ticket, Kerberoasting, LSASS, NTDS.dit, PtH</li>
+              <li>ADCS abuse coverage: ESC1 through ESC13</li>
+              <li>RHEL Linux: privilege escalation, persistence, credential access, defense evasion</li>
+              <li>Apache: path traversal, web shells, SQLi/XSS, brute force, reconnaissance</li>
+              <li>Recent campaigns: CVE-2026-21509 APT28 Operation Neusploit</li>
+              <li>Each rule: SPL query, ATT&CK ID, false positive tuning, investigation queries, IR playbook</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">170+</div><div class="product-detail__stat-label">Detection Rules</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">4</div><div class="product-detail__stat-label">Platform Categories</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#E5233D">&#9672;</div>
+          <div>
+            <div class="product-detail__title">CrowdStrike T1562.001 Red Team Auditor</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; Python &middot; Atomic Red Team tests</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Offline audit tool covering all 59 Atomic Red Team tests for MITRE ATT&CK T1562.001 (Impair Defenses: Disable or Modify Tools) across Windows, Linux, macOS, ESXi, AWS, and O365.</p>
+            <ul class="product-detail__features">
+              <li>Defender tampering detection (13 tests)</li>
+              <li>AMSI bypass and ETW tampering (8 tests)</li>
+              <li>EDR kill tools: Backstab, EDR-Freeze, Kasseika</li>
+              <li>Real-world threat actor mapping: LockBit, WhisperGate, Conti, FIN7</li>
+              <li>Each finding: Atomic GUID, remediation command, ATT&CK technique ID</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">59</div><div class="product-detail__stat-label">Atomic Tests</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">6</div><div class="product-detail__stat-label">Platforms</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#E5233D">&#9672;</div>
+          <div>
+            <div class="product-detail__title">CrowdStrike Falcon EDR Validation Scanner</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; Python &middot; Offline Falcon API JSON analysis</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Posture assessment for CrowdStrike Falcon EDR deployments. Finds misconfigured prevention policies, dangerous exclusions, sensor health issues, and configuration drift.</p>
+            <ul class="product-detail__features">
+              <li>Prevention policy: NGAV, behavioral prevention, exploit mitigations, ML levels</li>
+              <li>Exclusion audit: dangerous ML paths, LOLBin processes, telemetry blind spots</li>
+              <li>Sensor health: offline/degraded sensors, RFM, stale sensors</li>
+              <li>MITRE ATT&CK coverage assessment (top 10 techniques)</li>
+              <li>Supports FalconPy SDK, Console export, or Data Replicator</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">36+</div><div class="product-detail__stat-label">Checks</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">10</div><div class="product-detail__stat-label">Modules</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== EASM ====================== -->
+  <section class="pillar-section" id="easm">
+    <div class="container">
+      <span class="section-tag" style="border-color:rgba(6,182,212,0.3);color:#06B6D4;background:rgba(6,182,212,0.08)">Attack Surface Management</span>
+      <h2 class="section-title" style="margin-bottom:48px">EASM &amp; Active Vulnerability Scanning</h2>
+
+      <div class="product-detail">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#06B6D4">&#9672;</div>
+          <div>
+            <div class="product-detail__title">External Attack Surface Management (EASM) Platform</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; Python &middot; 14-step automated pipeline</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Comprehensive EASM platform with a 14-step automated pipeline that discovers, enriches, and assesses internet-facing assets. Includes REST API, interactive dashboard, multi-channel alerting, and SIEM export.</p>
+            <ul class="product-detail__features">
+              <li>14-step pipeline: seed, ASN, subdomains, DNS, ports, HTTP, WHOIS, TLS, GeoIP, tech fingerprinting, CVE, Nuclei, misconfig, risk scoring</li>
+              <li>Subdomain takeover detection across 25 cloud providers</li>
+              <li>39 sensitive path checks, 36 default credential pairs</li>
+              <li>150+ technology fingerprint signatures</li>
+              <li>REST API (14 FastAPI endpoints) + interactive SPA dashboard</li>
+              <li>Alerting: Email, Slack, Microsoft Teams, webhooks</li>
+              <li>SIEM: Splunk HEC, Elasticsearch, Syslog CEF, CSV, JSONL</li>
+              <li>Jira Cloud/Server integration with JQL deduplication</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">50+</div><div class="product-detail__stat-label">Security Rules</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">14</div><div class="product-detail__stat-label">Pipeline Steps</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">14</div><div class="product-detail__stat-label">API Endpoints</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail" id="skyhigh">
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="color:#8B5CF6">&#9672;</div>
+          <div>
+            <div class="product-detail__title">SkyHigh Active Vulnerability Scanner</div>
+            <div class="product-detail__subtitle">v1.0.0 &middot; Python &middot; Nessus-class scanner</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <p class="product-detail__desc-text">Open-source Nessus-inspired active vulnerability scanner. Connects via SSH, WinRM, SNMP, and HTTP to perform authenticated security assessments with DAST, CIS benchmarks, and CVE detection across 23 platforms.</p>
+            <ul class="product-detail__features">
+              <li>820+ security rules across 21 check modules + 11 DAST categories</li>
+              <li>32,000+ CVE database (510 seed + NVD API 2.0 sync + EPSS scores)</li>
+              <li>DAST: web crawler, scope enforcement, WAF detection (8 WAFs), 82 rules</li>
+              <li>6 CIS Benchmarks: Windows, Linux, Cisco, Oracle DB, MySQL, MongoDB</li>
+              <li>Auto-discovery: IP range scanning, service fingerprinting, OS classification</li>
+              <li>Compliance: NIST 800-53, ISO 27001:2022, PCI DSS v4.0, CIS Controls v8</li>
+              <li>SARIF v2.1.0 export for GitHub Code Scanning integration</li>
+              <li>Plugin architecture, scan profiles, baseline diff scanning</li>
+              <li>999 tests with CI on Python 3.9-3.12</li>
+            </ul>
+          </div>
+          <div class="product-detail__sidebar">
+            <div class="product-detail__stat"><div class="product-detail__stat-value">820+</div><div class="product-detail__stat-label">Security Rules</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">32K+</div><div class="product-detail__stat-label">CVE Database</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">23</div><div class="product-detail__stat-label">Platforms</div></div>
+            <div class="product-detail__stat"><div class="product-detail__stat-value">999</div><div class="product-detail__stat-label">Test Suite</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-section__inner">
+        <div class="cta-section__glow"></div>
+        <h2>Start Scanning Today</h2>
+        <p>Every tool is free, open source, and ready to deploy. No license keys, no vendor lock-in.</p>
+        <div class="cta-section__actions">
+          <a href="https://github.com/Krishcalin" class="btn btn--primary btn--lg" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            Clone from GitHub
+          </a>
+          <a href="about.html#contact" class="btn btn--ghost btn--lg">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="index.html" class="nav__logo">
+            <svg class="nav__logo-icon" viewBox="0 0 32 32" fill="none"><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" fill="url(#sg3)" opacity="0.15"/><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" stroke="url(#sg3)" stroke-width="1.5" fill="none"/><path d="M12 16l3 3 5-6" stroke="url(#sg3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><defs><linearGradient id="sg3" x1="4" y1="2" x2="28" y2="26"><stop stop-color="#00D4FF"/><stop offset="1" stop-color="#7B61FF"/></linearGradient></defs></svg>
+            <span>SkyHigh<span class="nav__logo-accent">Scanner</span></span>
+          </a>
+          <p class="footer__tagline">Enterprise security platform.<br>Open source. No compromises.</p>
+        </div>
+        <div class="footer__col">
+          <h4>Platform</h4>
+          <a href="#appsec">Application Security</a>
+          <a href="#cloudsec">Cloud Security</a>
+          <a href="#sspm">SaaS Security</a>
+          <a href="#infra">Infrastructure</a>
+          <a href="#threat">Threat Detection</a>
+          <a href="#easm">Attack Surface</a>
+        </div>
+        <div class="footer__col">
+          <h4>Resources</h4>
+          <a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a>
+          <a href="platform.html">Documentation</a>
+          <a href="about.html">About</a>
+        </div>
+        <div class="footer__col">
+          <h4>Compliance</h4>
+          <a href="#">CIS Benchmarks</a>
+          <a href="#">NIST 800-53</a>
+          <a href="#">ISO 27001</a>
+          <a href="#">PCI DSS v4.0</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2026 SkyHigh Scanner. All rights reserved.</span>
+        <span>www.skyhighscanner.io</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

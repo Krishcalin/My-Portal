@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform &mdash; SkyHigh Scanner</title>
+  <meta name="description" content="SkyHigh Scanner platform architecture: six security pillars covering application, cloud, SaaS, infrastructure, threat detection, and attack surface management.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner container">
+      <a href="index.html" class="nav__logo">
+        <svg class="nav__logo-icon" viewBox="0 0 32 32" fill="none"><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" fill="url(#sg4)" opacity="0.15"/><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" stroke="url(#sg4)" stroke-width="1.5" fill="none"/><path d="M12 16l3 3 5-6" stroke="url(#sg4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><defs><linearGradient id="sg4" x1="4" y1="2" x2="28" y2="26"><stop stop-color="#00D4FF"/><stop offset="1" stop-color="#7B61FF"/></linearGradient></defs></svg>
+        <span>SkyHigh<span class="nav__logo-accent">Scanner</span></span>
+      </a>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="platform.html" style="color:var(--text)">Platform</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+      <div class="nav__actions">
+        <a href="https://github.com/Krishcalin" class="btn btn--ghost" target="_blank" rel="noopener">Star on GitHub</a>
+        <a href="about.html#contact" class="btn btn--primary">Get Started</a>
+      </div>
+      <button class="nav__hamburger" id="navHamburger" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero__glow"></div>
+    <div class="container" style="position:relative">
+      <span class="section-tag">Platform</span>
+      <h1 class="section-title" style="font-size:clamp(2rem,4.5vw,3.2rem)">One Platform.<br><span class="gradient-text">Complete Coverage.</span></h1>
+      <p class="section-desc" style="max-width:640px;margin:0 auto">SkyHigh Scanner unifies 15 purpose-built security scanners into six pillars that cover every layer of your organization's security posture.</p>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE OVERVIEW -->
+  <section style="padding:80px 0;border-bottom:1px solid var(--border)">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Architecture</span>
+        <h2 class="section-title">The 3-Phase <span class="gradient-text">Scanner Pipeline</span></h2>
+        <p class="section-desc">Every scanner in the platform follows the same battle-tested architecture: Collect, Analyze, Report. This consistency means predictable behavior, standardized output, and easy CI/CD integration.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px">
+        <div class="cap-card" style="text-align:center">
+          <div style="width:64px;height:64px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.4rem;font-weight:800">1</div>
+          <h4 style="margin-bottom:8px">Collect</h4>
+          <p>Connect to targets via SSH, SNMP, REST API, or parse files directly. Retry with exponential backoff. Strictly read-only.</p>
+          <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center">
+            <span class="tool-tag">SSH</span>
+            <span class="tool-tag">REST API</span>
+            <span class="tool-tag">SNMP</span>
+            <span class="tool-tag">File Parse</span>
+            <span class="tool-tag">PCAP</span>
+          </div>
+        </div>
+        <div class="cap-card" style="text-align:center">
+          <div style="width:64px;height:64px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.4rem;font-weight:800">2</div>
+          <h4 style="margin-bottom:8px">Analyze</h4>
+          <p>Evaluate collected data against security rules. Each finding gets an ID, severity (CRITICAL to INFO), evidence, description, and remediation.</p>
+          <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center">
+            <span class="tool-tag">2,800+ Rules</span>
+            <span class="tool-tag">32K+ CVEs</span>
+            <span class="tool-tag">CIS Benchmarks</span>
+          </div>
+        </div>
+        <div class="cap-card" style="text-align:center">
+          <div style="width:64px;height:64px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.4rem;font-weight:800">3</div>
+          <h4 style="margin-bottom:8px">Report</h4>
+          <p>Calculate posture scores, generate multi-format reports, return appropriate exit codes for CI/CD pipelines.</p>
+          <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center">
+            <span class="tool-tag">JSON</span>
+            <span class="tool-tag">HTML</span>
+            <span class="tool-tag">SARIF</span>
+            <span class="tool-tag">CSV</span>
+            <span class="tool-tag">CEF</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILLAR SECTIONS -->
+
+  <!-- Pillar 1: Application Security -->
+  <section class="pillar-section">
+    <div class="container">
+      <div class="pillar-section__inner">
+        <div>
+          <span class="pillar-section__tag" style="border:1px solid rgba(16,185,129,0.3);color:#10B981;background:rgba(16,185,129,0.08)">Pillar 1</span>
+          <h2 class="pillar-section__title">Application Security</h2>
+          <p class="pillar-section__desc">Static Application Security Testing (SAST) for five major language ecosystems. Find vulnerabilities in source code before they reach production. Dependency CVE scanning for Java, Python, and npm packages.</p>
+          <div class="pillar-section__tools-list">
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">Java SAST Scanner</span><span class="pillar-tool-item__meta">20+ rules, 9 CVEs</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">PHP SAST Scanner</span><span class="pillar-tool-item__meta">15+ rules, 8 ini checks</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">Python SAST Scanner</span><span class="pillar-tool-item__meta">50+ rules, 16 CVEs</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">MERN Stack Scanner</span><span class="pillar-tool-item__meta">25+ rules, 17 CVEs</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">OWASP LLM Top 10</span><span class="pillar-tool-item__meta">52 rules, 10 categories</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="about-card" style="margin-bottom:24px">
+            <div class="about-card__number">5</div>
+            <h4>Language Ecosystems</h4>
+            <p>Java, PHP, Python, JavaScript/TypeScript, and AI/ML applications</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card__number">150+</div>
+            <h4>SAST Rules</h4>
+            <p>Covering OWASP Top 10, injection, secrets, crypto, deserialization, and more</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pillar 2: Cloud Security -->
+  <section class="pillar-section">
+    <div class="container">
+      <div class="pillar-section__inner">
+        <div>
+          <span class="pillar-section__tag" style="border:1px solid rgba(249,115,22,0.3);color:#F97316;background:rgba(249,115,22,0.08)">Pillar 2</span>
+          <h2 class="pillar-section__title">Cloud Security</h2>
+          <p class="pillar-section__desc">CSPM and CNAPP across all three major cloud providers. CIS Benchmark auditing, Infrastructure-as-Code scanning, and live API assessments. From Terraform to production.</p>
+          <div class="pillar-section__tools-list">
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">AWS Security Scanner</span><span class="pillar-tool-item__meta">100+ checks, IaC + live</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">Azure Security Scanner</span><span class="pillar-tool-item__meta">70+ checks, CIS v4.0.0</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">GCP CNAPP Scanner</span><span class="pillar-tool-item__meta">67+ checks, 5 pillars</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="about-card" style="margin-bottom:24px">
+            <div class="about-card__number">3</div>
+            <h4>Cloud Providers</h4>
+            <p>AWS, Azure, and Google Cloud Platform</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card__number">237+</div>
+            <h4>Cloud Checks</h4>
+            <p>CIS Foundations Benchmark aligned, covering IAM, networking, storage, compute, and more</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pillar 3: SaaS Security -->
+  <section class="pillar-section">
+    <div class="container">
+      <div class="pillar-section__inner">
+        <div>
+          <span class="pillar-section__tag" style="border:1px solid rgba(99,102,241,0.3);color:#6366F1;background:rgba(99,102,241,0.08)">Pillar 3</span>
+          <h2 class="pillar-section__title">SaaS Security (SSPM)</h2>
+          <p class="pillar-section__desc">SaaS Security Posture Management for critical business applications. Live API-driven assessments of Microsoft 365, ServiceNow, SAP SuccessFactors, and Tableau Cloud configurations.</p>
+          <div class="pillar-section__tools-list">
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">Microsoft 365 + Entra ID</span><span class="pillar-tool-item__meta">50+ checks, 12 domains</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">ServiceNow SSPM</span><span class="pillar-tool-item__meta">40+ checks, 13 categories</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">SAP SuccessFactors</span><span class="pillar-tool-item__meta">30+ checks, OData API</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">Tableau Cloud SSPM</span><span class="pillar-tool-item__meta">45 controls, 5 domains</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="about-card" style="margin-bottom:24px">
+            <div class="about-card__number">4</div>
+            <h4>SaaS Platforms</h4>
+            <p>M365, ServiceNow, SAP SuccessFactors, and Tableau Cloud</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card__number">165+</div>
+            <h4>SSPM Controls</h4>
+            <p>Authentication, access control, data security, logging, and compliance</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pillar 4: Infrastructure -->
+  <section class="pillar-section">
+    <div class="container">
+      <div class="pillar-section__inner">
+        <div>
+          <span class="pillar-section__tag" style="border:1px solid rgba(234,179,8,0.3);color:#EAB308;background:rgba(234,179,8,0.08)">Pillar 4</span>
+          <h2 class="pillar-section__title">Infrastructure Security</h2>
+          <p class="pillar-section__desc">Network device auditing, OS hardening, OT/ICS passive scanning, and enterprise application security. From routers to PLCs to SAP systems.</p>
+          <div class="pillar-section__tools-list">
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">Cisco IOS/IOS-XE Scanner</span><span class="pillar-tool-item__meta">68 rules, SSH+SNMP</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">Palo Alto NGFW Scanner</span><span class="pillar-tool-item__meta">112 rules, XML API</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">Linux CIS Hardening</span><span class="pillar-tool-item__meta">170+ settings, RHEL 8/9</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">Windows CIS Scanners</span><span class="pillar-tool-item__meta">1,200+ controls, 4 OS</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">OT/ICS Passive Scanner</span><span class="pillar-tool-item__meta">12 protocols, 0 packets</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">SAP S/4HANA RISE Scanner</span><span class="pillar-tool-item__meta">186+ checks, 12 modules</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">SAP SF Offline Scanner</span><span class="pillar-tool-item__meta">37+ checks, 7 modules</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="about-card" style="margin-bottom:24px">
+            <div class="about-card__number">7</div>
+            <h4>Scanner Tools</h4>
+            <p>Network, firewall, OS, OT/ICS, and enterprise applications</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card__number">1,800+</div>
+            <h4>Total Controls</h4>
+            <p>The largest pillar, covering everything from Cisco ACLs to SAP SoD conflicts</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pillar 5: Threat Detection -->
+  <section class="pillar-section">
+    <div class="container">
+      <div class="pillar-section__inner">
+        <div>
+          <span class="pillar-section__tag" style="border:1px solid rgba(239,68,68,0.3);color:#EF4444;background:rgba(239,68,68,0.08)">Pillar 5</span>
+          <h2 class="pillar-section__title">Threat Detection &amp; Response</h2>
+          <p class="pillar-section__desc">Splunk SIEM detection rules for SOC teams plus CrowdStrike Falcon EDR posture validation. Every detection rule maps to MITRE ATT&CK with investigation queries and IR playbooks.</p>
+          <div class="pillar-section__tools-list">
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">Detection Engineering Library</span><span class="pillar-tool-item__meta">170+ rules, Splunk SPL</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">CrowdStrike Red Team Auditor</span><span class="pillar-tool-item__meta">59 tests, T1562.001</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">Falcon EDR Validator</span><span class="pillar-tool-item__meta">36+ checks, 10 modules</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="about-card" style="margin-bottom:24px">
+            <div class="about-card__number">265+</div>
+            <h4>Detection Rules</h4>
+            <p>MITRE ATT&CK mapped Splunk SPL + EDR validation checks</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card__number">10+</div>
+            <h4>Threat Actors</h4>
+            <p>LockBit, WhisperGate, Conti, BlackBasta, FIN7, APT28, and more</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pillar 6: EASM -->
+  <section class="pillar-section">
+    <div class="container">
+      <div class="pillar-section__inner">
+        <div>
+          <span class="pillar-section__tag" style="border:1px solid rgba(6,182,212,0.3);color:#06B6D4;background:rgba(6,182,212,0.08)">Pillar 6</span>
+          <h2 class="pillar-section__title">Attack Surface Management</h2>
+          <p class="pillar-section__desc">External attack surface discovery and active vulnerability scanning. From internet-facing asset enumeration to authenticated CIS benchmark assessments and DAST.</p>
+          <div class="pillar-section__tools-list">
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">EASM Platform</span><span class="pillar-tool-item__meta">14-step pipeline, REST API</span></div>
+            <div class="pillar-tool-item"><span class="pillar-tool-item__name">SkyHigh Active Scanner</span><span class="pillar-tool-item__meta">820+ rules, 32K+ CVEs</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="about-card" style="margin-bottom:24px">
+            <div class="about-card__number">870+</div>
+            <h4>Security Rules</h4>
+            <p>EASM reconnaissance + active vulnerability and DAST scanning</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card__number">32K+</div>
+            <h4>CVE Database</h4>
+            <p>NVD API 2.0 synced with EPSS scores and CISA KEV enrichment</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPLIANCE MAPPING -->
+  <section style="padding:120px 0">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Compliance</span>
+        <h2 class="section-title">Framework <span class="gradient-text">Coverage Matrix</span></h2>
+      </div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
+          <thead>
+            <tr style="border-bottom:2px solid var(--border)">
+              <th style="text-align:left;padding:12px 16px;color:var(--text-muted)">Framework</th>
+              <th style="padding:12px 8px;color:var(--text-muted)">AppSec</th>
+              <th style="padding:12px 8px;color:var(--text-muted)">Cloud</th>
+              <th style="padding:12px 8px;color:var(--text-muted)">SaaS</th>
+              <th style="padding:12px 8px;color:var(--text-muted)">Infra</th>
+              <th style="padding:12px 8px;color:var(--text-muted)">Threat</th>
+              <th style="padding:12px 8px;color:var(--text-muted)">ASM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:12px 16px;font-weight:600">CIS Benchmarks</td><td style="text-align:center">-</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center">-</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center">-</td><td style="text-align:center;color:#28CA42">&#10003;</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:12px 16px;font-weight:600">OWASP Top 10</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center;color:#28CA42">&#10003;</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:12px 16px;font-weight:600">NIST SP 800-53</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:12px 16px;font-weight:600">ISO 27001:2022</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center">-</td><td style="text-align:center;color:#28CA42">&#10003;</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:12px 16px;font-weight:600">PCI DSS v4.0</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center">-</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center">-</td><td style="text-align:center;color:#28CA42">&#10003;</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:12px 16px;font-weight:600">MITRE ATT&CK</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center">-</td></tr>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:12px 16px;font-weight:600">IEC 62443 / NERC CIP</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center">-</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center">-</td><td style="text-align:center">-</td></tr>
+            <tr><td style="padding:12px 16px;font-weight:600">SOC 2 Type II</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td><td style="text-align:center;color:#28CA42">&#10003;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-section__inner">
+        <div class="cta-section__glow"></div>
+        <h2>Explore Every Scanner</h2>
+        <p>Dive into the technical details of each product in our portfolio.</p>
+        <div class="cta-section__actions">
+          <a href="products.html" class="btn btn--primary btn--lg">View All Products &rarr;</a>
+          <a href="https://github.com/Krishcalin" class="btn btn--ghost btn--lg" target="_blank" rel="noopener">GitHub Repository</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="index.html" class="nav__logo">
+            <svg class="nav__logo-icon" viewBox="0 0 32 32" fill="none"><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" fill="url(#sg5)" opacity="0.15"/><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" stroke="url(#sg5)" stroke-width="1.5" fill="none"/><path d="M12 16l3 3 5-6" stroke="url(#sg5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><defs><linearGradient id="sg5" x1="4" y1="2" x2="28" y2="26"><stop stop-color="#00D4FF"/><stop offset="1" stop-color="#7B61FF"/></linearGradient></defs></svg>
+            <span>SkyHigh<span class="nav__logo-accent">Scanner</span></span>
+          </a>
+          <p class="footer__tagline">Enterprise security platform.<br>Open source. No compromises.</p>
+        </div>
+        <div class="footer__col"><h4>Platform</h4><a href="products.html#appsec">Application Security</a><a href="products.html#cloudsec">Cloud Security</a><a href="products.html#sspm">SaaS Security</a><a href="products.html#infra">Infrastructure</a><a href="products.html#threat">Threat Detection</a><a href="products.html#easm">Attack Surface</a></div>
+        <div class="footer__col"><h4>Resources</h4><a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a><a href="products.html">All Products</a><a href="about.html">About</a></div>
+        <div class="footer__col"><h4>Compliance</h4><a href="#">CIS Benchmarks</a><a href="#">NIST 800-53</a><a href="#">ISO 27001</a><a href="#">PCI DSS v4.0</a></div>
+      </div>
+      <div class="footer__bottom"><span>&copy; 2026 SkyHigh Scanner. All rights reserved.</span><span>www.skyhighscanner.io</span></div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
