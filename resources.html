@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resources &mdash; Phalanx Cyber</title>
+  <meta name="description" content="Phalanx Cyber resource library: whitepapers, videos, infographics, datasheets, blogs, and analyst reports on open-source cybersecurity, AI security, and enterprise risk management.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <style>
+    /* Resource page specific styles */
+    .resource-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+    .resource-filter {
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--bg-glass);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(8px);
+    }
+    .resource-filter:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+      background: rgba(255,255,255,0.08);
+    }
+    .resource-filter.active {
+      background: var(--gradient);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 20px rgba(0,212,255,0.25);
+    }
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .resource-grid { grid-template-columns: 1fr; }
+    }
+    .resource-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .resource-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .resource-card__thumb {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .resource-card__thumb svg {
+      width: 64px;
+      height: 64px;
+      opacity: 0.7;
+    }
+    .resource-card__badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      padding: 4px 14px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge--whitepaper { background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid rgba(16,185,129,0.3); }
+    .badge--video { background: rgba(239,68,68,0.15); color: #EF4444; border: 1px solid rgba(239,68,68,0.3); }
+    .badge--infographic { background: rgba(168,85,247,0.15); color: #A855F7; border: 1px solid rgba(168,85,247,0.3); }
+    .badge--datasheet { background: rgba(0,212,255,0.15); color: #00D4FF; border: 1px solid rgba(0,212,255,0.3); }
+    .badge--blog { background: rgba(245,158,11,0.15); color: #F59E0B; border: 1px solid rgba(245,158,11,0.3); }
+    .badge--report { background: rgba(123,97,255,0.15); color: #7B61FF; border: 1px solid rgba(123,97,255,0.3); }
+    .resource-card__body {
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .resource-card__body h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .resource-card__body p {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      flex: 1;
+    }
+    .resource-card__meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .resource-card__meta a {
+      color: var(--accent-1);
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .resource-card__meta a:hover { color: var(--accent-2); }
+    .resource-card[data-category].hidden { display: none; }
+    .resource-empty {
+      text-align: center;
+      padding: 80px 24px;
+      color: var(--text-muted);
+      display: none;
+    }
+    .resource-empty.visible { display: block; }
+    .resource-empty svg { margin: 0 auto 24px; opacity: 0.3; }
+    .resource-empty h3 { font-size: 1.3rem; margin-bottom: 8px; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner container">
+      <a href="index.html" class="nav__logo">
+        <svg class="nav__logo-icon" viewBox="0 0 32 32" fill="none"><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" fill="url(#sg8)" opacity="0.15"/><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" stroke="url(#sg8)" stroke-width="1.5" fill="none"/><path d="M12 16l3 3 5-6" stroke="url(#sg8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><defs><linearGradient id="sg8" x1="4" y1="2" x2="28" y2="26"><stop stop-color="#00D4FF"/><stop offset="1" stop-color="#7B61FF"/></linearGradient></defs></svg>
+        <span>Phalanx<span class="nav__logo-accent">Cyber</span></span>
+      </a>
+      <ul class="nav__links" id="navLinks">
+        <li class="nav__dropdown">
+          <a href="products.html">Solutions <svg width="10" height="6" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+          <div class="nav__dropdown-panel">
+            <div class="nav__dropdown-grid">
+              <div class="nav__dropdown-col">
+                <h4>Security Domains</h4>
+                <a href="products.html#appsec">Application Security</a>
+                <a href="products.html#cloudsec">Cloud Security</a>
+                <a href="products.html#sspm">SaaS Security</a>
+                <a href="products.html#infra">Infrastructure</a>
+                <a href="products.html#threat">Threat Detection</a>
+                <a href="products.html#easm">Attack Surface</a>
+              </div>
+              <div class="nav__dropdown-col">
+                <h4>Highlights</h4>
+                <a href="products.html">All 15 Scanners</a>
+                <a href="index.html#executive-brief">Why Open Source</a>
+                <a href="index.html#ai-advantage">AI-Driven Security</a>
+                <a href="platform.html">Strategic Roadmap</a>
+              </div>
+              <div class="nav__dropdown-col nav__dropdown-col--highlight">
+                <h4>Platform</h4>
+                <div class="nav__dropdown-card">
+                  <strong>2,800+ Security Controls</strong>
+                  <p>Covering 6 domains, 8 compliance frameworks, and 23+ platforms &mdash; all open source and AI-ready.</p>
+                  <a href="products.html" class="link-arrow">Explore solutions &rarr;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="platform.html">Strategy</a></li>
+        <li class="nav__dropdown">
+          <a href="resources.html" style="color:var(--text)">Resources <svg width="10" height="6" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+          <div class="nav__dropdown-panel">
+            <div class="nav__dropdown-grid">
+              <div class="nav__dropdown-col">
+                <h4>Library</h4>
+                <a href="resources.html#whitepapers">Whitepapers</a>
+                <a href="resources.html#videos">Videos</a>
+                <a href="resources.html#infographics">Infographics</a>
+                <a href="resources.html#datasheets">Datasheets</a>
+              </div>
+              <div class="nav__dropdown-col">
+                <h4>Insights</h4>
+                <a href="resources.html#blogs">Blogs</a>
+                <a href="resources.html#reports">Analyst Reports</a>
+                <a href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener">LinkedIn Articles</a>
+                <a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+      <div class="nav__actions">
+        <a href="https://github.com/Krishcalin" class="btn btn--ghost" target="_blank" rel="noopener">View Source</a>
+        <a href="about.html#contact" class="btn btn--primary">Talk to Us</a>
+      </div>
+      <button class="nav__hamburger" id="navHamburger" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero__glow"></div>
+    <div class="container" style="position:relative">
+      <span class="section-tag">Resource Library</span>
+      <h1 class="section-title" style="font-size:clamp(2rem,4.5vw,3.2rem)">Knowledge Hub for<br><span class="gradient-text">Security Leaders</span></h1>
+      <p class="section-desc" style="max-width:700px;margin:0 auto">Whitepapers, videos, infographics, datasheets, blogs, and analyst reports &mdash; curated insights on open-source cybersecurity, AI-augmented security operations, and enterprise risk management.</p>
+    </div>
+  </section>
+
+  <!-- ============ RESOURCE LIBRARY ============ -->
+  <section class="about-section" id="resources">
+    <div class="container">
+
+      <!-- Filter tabs -->
+      <div class="resource-filters">
+        <button class="resource-filter active" data-filter="all">All Resources</button>
+        <button class="resource-filter" data-filter="whitepaper">Whitepapers</button>
+        <button class="resource-filter" data-filter="video">Videos</button>
+        <button class="resource-filter" data-filter="infographic">Infographics</button>
+        <button class="resource-filter" data-filter="datasheet">Datasheets</button>
+        <button class="resource-filter" data-filter="blog">Blogs</button>
+        <button class="resource-filter" data-filter="report">Analyst Reports</button>
+      </div>
+
+      <!-- Resource Grid -->
+      <div class="resource-grid" id="resourceGrid">
+
+        <!-- WHITEPAPERS -->
+        <div class="resource-card" data-category="whitepaper" id="whitepapers">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05))">
+            <span class="resource-card__badge badge--whitepaper">Whitepaper</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#10B981" stroke-width="1.5"><rect x="14" y="8" width="36" height="48" rx="3"/><path d="M22 20h20M22 28h16M22 36h20M22 44h10"/><path d="M38 8v10h12" fill="none"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>The Open-Source Security Manifesto: Why Transparency Wins</h3>
+            <p>A strategic analysis of why open-source security tools outperform proprietary alternatives in detection accuracy, customization, and long-term cost of ownership for enterprises.</p>
+            <div class="resource-card__meta">
+              <span>12 pages &middot; PDF</span>
+              <a href="#">Download &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-card" data-category="whitepaper">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05))">
+            <span class="resource-card__badge badge--whitepaper">Whitepaper</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#10B981" stroke-width="1.5"><rect x="14" y="8" width="36" height="48" rx="3"/><path d="M22 20h20M22 28h16M22 36h20M22 44h10"/><path d="M38 8v10h12" fill="none"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>AI Security Posture Management: Securing the AI Lifecycle</h3>
+            <p>How to systematically identify and mitigate security risks across the AI/ML lifecycle &mdash; from training data poisoning to prompt injection and model theft in production deployments.</p>
+            <div class="resource-card__meta">
+              <span>18 pages &middot; PDF</span>
+              <a href="#">Download &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-card" data-category="whitepaper">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05))">
+            <span class="resource-card__badge badge--whitepaper">Whitepaper</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#10B981" stroke-width="1.5"><rect x="14" y="8" width="36" height="48" rx="3"/><path d="M22 20h20M22 28h16M22 36h20M22 44h10"/><path d="M38 8v10h12" fill="none"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>CISO's Guide to Cybersecurity Culture &amp; Business Alignment</h3>
+            <p>Why cyber culture, leadership awareness, and business-aligned security engineering matter more than tool procurement. A framework for building resilient security programs.</p>
+            <div class="resource-card__meta">
+              <span>15 pages &middot; PDF</span>
+              <a href="#">Download &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIDEOS -->
+        <div class="resource-card" data-category="video" id="videos">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.05))">
+            <span class="resource-card__badge badge--video">Video</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#EF4444" stroke-width="1.5"><rect x="8" y="14" width="48" height="36" rx="4"/><polygon points="28,24 28,42 42,33" fill="none" stroke="#EF4444" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>Platform Overview: 2,800+ Security Controls in Action</h3>
+            <p>A walkthrough of the Phalanx Cyber platform demonstrating all six security domains, AI-augmented scanning, and real-time reporting across enterprise environments.</p>
+            <div class="resource-card__meta">
+              <span>15 min &middot; Video</span>
+              <a href="#">Watch &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-card" data-category="video">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.05))">
+            <span class="resource-card__badge badge--video">Video</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#EF4444" stroke-width="1.5"><rect x="8" y="14" width="48" height="36" rx="4"/><polygon points="28,24 28,42 42,33" fill="none" stroke="#EF4444" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>OWASP LLM Top 10: Scanning AI Applications for Security Risks</h3>
+            <p>Live demonstration of the OWASP LLM Scanner detecting prompt injection, data poisoning, excessive agency, and supply chain vulnerabilities in AI/ML codebases.</p>
+            <div class="resource-card__meta">
+              <span>12 min &middot; Video</span>
+              <a href="#">Watch &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-card" data-category="video">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.05))">
+            <span class="resource-card__badge badge--video">Video</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#EF4444" stroke-width="1.5"><rect x="8" y="14" width="48" height="36" rx="4"/><polygon points="28,24 28,42 42,33" fill="none" stroke="#EF4444" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>Cloud Security at Scale: AWS, Azure &amp; GCP Scanning</h3>
+            <p>End-to-end walkthrough of multi-cloud security scanning with Terraform, CloudFormation, and live API audits across all three major cloud providers.</p>
+            <div class="resource-card__meta">
+              <span>18 min &middot; Video</span>
+              <a href="#">Watch &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- INFOGRAPHICS -->
+        <div class="resource-card" data-category="infographic" id="infographics">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(168,85,247,0.1), rgba(168,85,247,0.05))">
+            <span class="resource-card__badge badge--infographic">Infographic</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#A855F7" stroke-width="1.5"><rect x="10" y="8" width="44" height="48" rx="3"/><rect x="16" y="16" width="14" height="10" rx="2"/><rect x="34" y="16" width="14" height="10" rx="2"/><rect x="16" y="32" width="32" height="4" rx="1"/><rect x="16" y="40" width="24" height="4" rx="1"/><rect x="16" y="48" width="28" height="4" rx="1"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>The $213 Billion Cybersecurity Paradox</h3>
+            <p>A visual exploration of why $213B in global security spend hasn't stopped breaches from rising &mdash; and how cybersecurity culture, not just tools, makes the difference.</p>
+            <div class="resource-card__meta">
+              <span>Infographic &middot; PNG</span>
+              <a href="#">View &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-card" data-category="infographic">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(168,85,247,0.1), rgba(168,85,247,0.05))">
+            <span class="resource-card__badge badge--infographic">Infographic</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#A855F7" stroke-width="1.5"><rect x="10" y="8" width="44" height="48" rx="3"/><rect x="16" y="16" width="14" height="10" rx="2"/><rect x="34" y="16" width="14" height="10" rx="2"/><rect x="16" y="32" width="32" height="4" rx="1"/><rect x="16" y="40" width="24" height="4" rx="1"/><rect x="16" y="48" width="28" height="4" rx="1"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>Six Pillars of Enterprise Security Coverage</h3>
+            <p>Visual breakdown of all six security domains &mdash; AppSec, Cloud, SaaS, Infrastructure, Threat Detection, and Attack Surface &mdash; with scanner counts and rule coverage mapped.</p>
+            <div class="resource-card__meta">
+              <span>Infographic &middot; PNG</span>
+              <a href="#">View &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- DATASHEETS -->
+        <div class="resource-card" data-category="datasheet" id="datasheets">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,212,255,0.05))">
+            <span class="resource-card__badge badge--datasheet">Datasheet</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#00D4FF" stroke-width="1.5"><rect x="12" y="8" width="40" height="48" rx="3"/><path d="M20 18h24M20 26h20M20 34h24M20 42h16"/><rect x="18" y="14" width="28" height="34" rx="2" stroke-dasharray="4 2"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>Phalanx Cyber Platform Datasheet</h3>
+            <p>Complete technical specifications: 15 scanners, 2,800+ controls, 8 compliance frameworks, supported platforms, output formats, and deployment requirements.</p>
+            <div class="resource-card__meta">
+              <span>2 pages &middot; PDF</span>
+              <a href="#">Download &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-card" data-category="datasheet">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,212,255,0.05))">
+            <span class="resource-card__badge badge--datasheet">Datasheet</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#00D4FF" stroke-width="1.5"><rect x="12" y="8" width="40" height="48" rx="3"/><path d="M20 18h24M20 26h20M20 34h24M20 42h16"/><rect x="18" y="14" width="28" height="34" rx="2" stroke-dasharray="4 2"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>Compliance Framework Mapping Matrix</h3>
+            <p>Detailed mapping of all Phalanx Cyber controls to CIS Benchmarks, NIST 800-53, ISO 27001, PCI DSS v4.0, OWASP, MITRE ATT&amp;CK, IEC 62443, and SOC 2.</p>
+            <div class="resource-card__meta">
+              <span>4 pages &middot; PDF</span>
+              <a href="#">Download &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOGS -->
+        <div class="resource-card" data-category="blog" id="blogs">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05))">
+            <span class="resource-card__badge badge--blog">Blog</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#F59E0B" stroke-width="1.5"><path d="M12 52V16a4 4 0 014-4h32a4 4 0 014 4v28a4 4 0 01-4 4H16"/><path d="M12 52a4 4 0 004-4h0a4 4 0 00-4-4"/><path d="M22 22h20M22 30h16M22 38h20"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>Agentic AI-Based Red Teaming: The Pentest Copilot</h3>
+            <p>How agentic AI systems can augment penetration testing workflows, automating reconnaissance, vulnerability discovery, and exploit chain construction.</p>
+            <div class="resource-card__meta">
+              <span>8 min read</span>
+              <a href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener">Read on LinkedIn &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-card" data-category="blog">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05))">
+            <span class="resource-card__badge badge--blog">Blog</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#F59E0B" stroke-width="1.5"><path d="M12 52V16a4 4 0 014-4h32a4 4 0 014 4v28a4 4 0 01-4 4H16"/><path d="M12 52a4 4 0 004-4h0a4 4 0 00-4-4"/><path d="M22 22h20M22 30h16M22 38h20"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>Penetration Testing in Kubernetes Clusters</h3>
+            <p>Comprehensive methodology for attacking Kubernetes environments: RBAC exploitation, container escapes, service account abuse, and secrets exfiltration techniques.</p>
+            <div class="resource-card__meta">
+              <span>10 min read</span>
+              <a href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener">Read on LinkedIn &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-card" data-category="blog">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05))">
+            <span class="resource-card__badge badge--blog">Blog</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#F59E0B" stroke-width="1.5"><path d="M12 52V16a4 4 0 014-4h32a4 4 0 014 4v28a4 4 0 01-4 4H16"/><path d="M12 52a4 4 0 004-4h0a4 4 0 00-4-4"/><path d="M22 22h20M22 30h16M22 38h20"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>ESC8 Attack: Exploiting ADCS for Domain Dominance</h3>
+            <p>Technical analysis of Active Directory Certificate Services exploitation &mdash; how misconfigured certificate templates enable privilege escalation to domain administrator.</p>
+            <div class="resource-card__meta">
+              <span>12 min read</span>
+              <a href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener">Read on LinkedIn &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANALYST REPORTS -->
+        <div class="resource-card" data-category="report" id="reports">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(123,97,255,0.1), rgba(123,97,255,0.05))">
+            <span class="resource-card__badge badge--report">Analyst Report</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#7B61FF" stroke-width="1.5"><rect x="10" y="8" width="44" height="48" rx="3"/><path d="M20 40l6-8 6 4 8-12"/><circle cx="42" cy="24" r="3"/><path d="M20 48h24"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>Open-Source vs. Commercial Security Tools: A TCO Analysis</h3>
+            <p>Independent analysis comparing total cost of ownership, detection efficacy, and deployment flexibility between open-source and commercial security platforms across 500+ enterprises.</p>
+            <div class="resource-card__meta">
+              <span>24 pages &middot; PDF</span>
+              <a href="#">Download &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="resource-card" data-category="report">
+          <div class="resource-card__thumb" style="background:linear-gradient(135deg, rgba(123,97,255,0.1), rgba(123,97,255,0.05))">
+            <span class="resource-card__badge badge--report">Analyst Report</span>
+            <svg viewBox="0 0 64 64" fill="none" stroke="#7B61FF" stroke-width="1.5"><rect x="10" y="8" width="44" height="48" rx="3"/><path d="M20 40l6-8 6 4 8-12"/><circle cx="42" cy="24" r="3"/><path d="M20 48h24"/></svg>
+          </div>
+          <div class="resource-card__body">
+            <h3>The State of AI Security 2025: Risks, Frameworks &amp; Defenses</h3>
+            <p>Comprehensive report on AI/ML security risks, covering OWASP LLM Top 10, MITRE ATLAS, NIST AI RMF, and the EU AI Act &mdash; with practical mitigation strategies for enterprise deployments.</p>
+            <div class="resource-card__meta">
+              <span>30 pages &middot; PDF</span>
+              <a href="#">Download &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Empty state -->
+      <div class="resource-empty" id="resourceEmpty">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><rect x="10" y="8" width="44" height="48" rx="3"/><path d="M22 28h20M22 36h14"/><circle cx="32" cy="20" r="4"/></svg>
+        <h3>No resources in this category yet</h3>
+        <p>Check back soon &mdash; new content is being added regularly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NEWSLETTER / CTA ============ -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-section__inner">
+        <div class="cta-section__glow"></div>
+        <h2>Stay Ahead of Emerging Threats</h2>
+        <p>Get notified when new whitepapers, research reports, and technical deep-dives are published. Join security leaders who trust open-source intelligence.</p>
+        <div class="cta-section__actions">
+          <a href="about.html#contact" class="btn btn--primary btn--lg">Get in Touch &rarr;</a>
+          <a href="https://www.linkedin.com/in/krishnendude/" class="btn btn--ghost btn--lg" target="_blank" rel="noopener">Follow on LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="index.html" class="nav__logo">
+            <svg class="nav__logo-icon" viewBox="0 0 32 32" fill="none"><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" fill="url(#sg9)" opacity="0.15"/><path d="M16 2L4 8v8c0 7.73 5.12 14.96 12 16 6.88-1.04 12-8.27 12-16V8L16 2z" stroke="url(#sg9)" stroke-width="1.5" fill="none"/><path d="M12 16l3 3 5-6" stroke="url(#sg9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><defs><linearGradient id="sg9" x1="4" y1="2" x2="28" y2="26"><stop stop-color="#00D4FF"/><stop offset="1" stop-color="#7B61FF"/></linearGradient></defs></svg>
+            <span>Phalanx<span class="nav__logo-accent">Cyber</span></span>
+          </a>
+          <p class="footer__tagline">Open-source cybersecurity for the AI era.<br>Created by Krishnendu De.</p>
+        </div>
+        <div class="footer__col"><h4>For Executives</h4><a href="index.html#executive-brief">Executive Brief</a><a href="index.html#ai-advantage">AI-Driven Security</a><a href="index.html#roi-calculator">TCO Analysis</a><a href="platform.html">Strategic Roadmap</a></div>
+        <div class="footer__col"><h4>Solutions</h4><a href="products.html#appsec">Application Security</a><a href="products.html#cloudsec">Cloud Security</a><a href="products.html#sspm">SaaS Security</a><a href="products.html#infra">Infrastructure</a></div>
+        <div class="footer__col"><h4>Resources</h4><a href="resources.html">Resource Library</a><a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a><a href="about.html">About</a><a href="about.html#contact">Contact</a></div>
+      </div>
+      <div class="footer__bottom"><span>&copy; 2026 Krishnendu De. All rights reserved.</span><span>www.phalanxcyber.io</span></div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Resource filter functionality
+    (function() {
+      const filters = document.querySelectorAll('.resource-filter');
+      const cards = document.querySelectorAll('.resource-card');
+      const emptyState = document.getElementById('resourceEmpty');
+
+      filters.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const filter = this.getAttribute('data-filter');
+
+          // Update active state
+          filters.forEach(function(f) { f.classList.remove('active'); });
+          this.classList.add('active');
+
+          // Filter cards
+          let visibleCount = 0;
+          cards.forEach(function(card) {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.classList.remove('hidden');
+              visibleCount++;
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+
+          // Show/hide empty state
+          if (visibleCount === 0) {
+            emptyState.classList.add('visible');
+          } else {
+            emptyState.classList.remove('visible');
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
