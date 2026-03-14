@@ -139,6 +139,7 @@ function initScrollReveal() {
     '.board-card',
     '.context-card',
     '.lockin-card',
+    '.timeline__item',
   ];
 
   selectors.forEach(sel => {

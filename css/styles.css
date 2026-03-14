@@ -1561,6 +1561,167 @@ button { cursor: pointer; font: inherit; border: none; background: none; color: 
 }
 
 /* ================================================================
+   FOUNDER PROFILE & TIMELINE (about.html)
+   ================================================================ */
+.founder-profile {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 64px;
+  align-items: flex-start;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.founder-profile__left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  position: sticky;
+  top: calc(var(--nav-h) + 24px);
+}
+.founder-avatar {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: var(--gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: #fff;
+  box-shadow: 0 0 60px rgba(0,212,255,0.25);
+}
+.founder-social {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.founder-social .btn {
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .founder-profile {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .founder-profile__left {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .founder-avatar {
+    width: 120px;
+    height: 120px;
+    font-size: 2.2rem;
+  }
+  .founder-social {
+    flex-direction: row;
+    width: auto;
+  }
+}
+
+/* Timeline */
+.timeline {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  padding-left: 40px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent-1), var(--accent-2), var(--accent-3));
+  opacity: 0.3;
+}
+.timeline__item {
+  position: relative;
+  margin-bottom: 48px;
+}
+.timeline__item:last-child {
+  margin-bottom: 0;
+}
+.timeline__marker {
+  position: absolute;
+  left: -33px;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--gradient);
+  box-shadow: 0 0 16px rgba(0,212,255,0.4);
+}
+.timeline__content {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: border-color 0.3s;
+}
+.timeline__content:hover {
+  border-color: var(--border-hover);
+}
+.timeline__period {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--gradient-subtle);
+  color: var(--accent-1);
+  border: 1px solid rgba(0,212,255,0.2);
+  margin-bottom: 12px;
+}
+.timeline__content h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.timeline__location {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.timeline__content > p:last-child {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Repository links */
+.repo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.repo-list a {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+.repo-list a:hover {
+  color: var(--accent-1);
+}
+.repo-list a::before {
+  content: '>';
+  color: var(--accent-1);
+  font-weight: 700;
+  margin-right: 8px;
+  font-size: 0.75rem;
+}
+
+/* ================================================================
    ANIMATIONS (scroll reveal)
    ================================================================ */
 .reveal {
