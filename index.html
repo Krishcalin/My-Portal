@@ -10,6 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <style>
+    .lang-btn{padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:700;letter-spacing:0.03em;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .2s}
+    .lang-btn:hover{border-color:var(--border-hover);color:var(--text)}
+    .lang-btn.active{background:var(--gradient);color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(0,212,255,0.2)}
+  </style>
 </head>
 <body>
 
@@ -84,8 +89,13 @@
       </ul>
 
       <div class="nav__actions">
-        <a href="https://github.com/Krishcalin" class="btn btn--ghost" target="_blank" rel="noopener">View Source</a>
-        <a href="about.html#contact" class="btn btn--primary">Talk to Us</a>
+        <div style="display:flex;gap:4px;margin-right:8px">
+          <button class="lang-btn active" data-lang="en" onclick="setLang('en')" title="English">EN</button>
+          <button class="lang-btn" data-lang="nl" onclick="setLang('nl')" title="Nederlands">NL</button>
+          <button class="lang-btn" data-lang="de" onclick="setLang('de')" title="Deutsch">DE</button>
+        </div>
+        <a href="https://github.com/Krishcalin" class="btn btn--ghost" target="_blank" rel="noopener" data-i18n="nav.viewsource">View Source</a>
+        <a href="about.html#contact" class="btn btn--primary" data-i18n="nav.talktous">Talk to Us</a>
       </div>
 
       <button class="nav__hamburger" id="navHamburger" aria-label="Toggle navigation">
@@ -105,18 +115,18 @@
       <div class="hero__content">
         <div class="hero__badge">
           <span class="hero__badge-dot"></span>
-          Rethinking Cybersecurity for the AI Era
+          <span data-i18n="hero.badge">Rethinking Cybersecurity for the AI Era</span>
         </div>
-        <h1 class="hero__title">
+        <h1 class="hero__title" data-i18n="hero.title">
           2,800+ Security Controls.<br>
           Open Source. <span class="gradient-text">AI-Augmented.</span>
         </h1>
-        <p class="hero__subtitle">
+        <p class="hero__subtitle" data-i18n="hero.subtitle">
           Phalanx Cyber is a unified, open-source cybersecurity platform covering six security domains &mdash; from application code to cloud infrastructure to OT networks. Built by a practitioner with 24+ years of experience, purpose-built for teams who value transparency, customization, and AI-driven automation.
         </p>
         <div class="hero__ctas">
-          <a href="#executive-brief" class="btn btn--primary btn--lg">Read the Executive Brief &rarr;</a>
-          <a href="platform.html" class="btn btn--ghost btn--lg">See the Strategy</a>
+          <a href="#executive-brief" class="btn btn--primary btn--lg" data-i18n="hero.cta1">Read the Executive Brief &rarr;</a>
+          <a href="platform.html" class="btn btn--ghost btn--lg" data-i18n="hero.cta2">See the Strategy</a>
         </div>
       </div>
 
@@ -153,9 +163,9 @@
   <section class="exec-section" id="executive-brief">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Executive Brief</span>
-        <h2 class="section-title">The $213 Billion <span class="gradient-text">Paradox</span></h2>
-        <p class="section-desc">The world spends $213 billion a year on cybersecurity (Gartner 2025). Yet breaches remain at 3,000+ per year, 68% are caused by human error, and cybercrime damages have reached $10.5 trillion &mdash; 50x the defense budget. The problem was never a lack of tools.</p>
+        <span class="section-tag" data-i18n="exec.tag">Executive Brief</span>
+        <h2 class="section-title" data-i18n="exec.title">The $213 Billion <span class="gradient-text">Paradox</span></h2>
+        <p class="section-desc" data-i18n="exec.desc">The world spends $213 billion a year on cybersecurity (Gartner 2025). Yet breaches remain at 3,000+ per year, 68% are caused by human error, and cybercrime damages have reached $10.5 trillion &mdash; 50x the defense budget. The problem was never a lack of tools.</p>
       </div>
 
       <div class="exec-grid">
@@ -163,8 +173,8 @@
           <div class="exec-card__icon">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           </div>
-          <h3>The Numbers Don't Lie</h3>
-          <p>Despite record spending, organizations with 50+ security tools are actually <strong>8% worse</strong> at detecting threats than those with fewer tools (Ponemon). Large enterprises juggle 70-130 security products, yet 68% of breaches still stem from human error, social engineering, and misconfiguration &mdash; not from a gap in tooling (Verizon DBIR 2024). Meanwhile, 4.8 million cybersecurity positions remain unfilled globally (ISC2 2024), and the average breach still takes 241 days to detect.</p>
+          <h3 data-i18n="exec.numbers.title">The Numbers Don't Lie</h3>
+          <p data-i18n="exec.numbers.text">Despite record spending, organizations with 50+ security tools are actually <strong>8% worse</strong> at detecting threats than those with fewer tools (Ponemon). Large enterprises juggle 70-130 security products, yet 68% of breaches still stem from human error, social engineering, and misconfiguration &mdash; not from a gap in tooling (Verizon DBIR 2024). Meanwhile, 4.8 million cybersecurity positions remain unfilled globally (ISC2 2024), and the average breach still takes 241 days to detect.</p>
           <ul class="exec-card__points">
             <li>$213B spent on security in 2025 &mdash; yet $10.5T in cybercrime damages (50x gap)</li>
             <li>3,158 data compromises in 2024 &mdash; 1.3B victim notices sent (211% increase)</li>
@@ -177,8 +187,8 @@
           <div class="exec-card__icon">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           </div>
-          <h3>What Actually Makes the Difference</h3>
-          <p>It is not the most expensive security tools that protect an organization. It is <strong>cyber culture, business alignment, and leadership awareness</strong> that make all the difference. When security is treated as an engineering discipline aligned with business outcomes &mdash; rather than a checkbox procurement exercise &mdash; even a stack of open-source tools can deliver extraordinary results.</p>
+          <h3 data-i18n="exec.difference.title">What Actually Makes the Difference</h3>
+          <p data-i18n="exec.difference.text">It is not the most expensive security tools that protect an organization. It is <strong>cyber culture, business alignment, and leadership awareness</strong> that make all the difference. When security is treated as an engineering discipline aligned with business outcomes &mdash; rather than a checkbox procurement exercise &mdash; even a stack of open-source tools can deliver extraordinary results.</p>
           <ul class="exec-card__points">
             <li>Cyber culture: security awareness embedded in every team, not just the SOC</li>
             <li>Business alignment: every control maps to a real risk, not a vendor upsell</li>
@@ -190,7 +200,7 @@
 
       <!-- The Mindset Note -->
       <div class="tco-note" style="margin-top:48px;border-left:3px solid var(--accent-1)">
-        <p style="font-size:1.05rem;line-height:1.9;color:var(--text-secondary)">
+        <p style="font-size:1.05rem;line-height:1.9;color:var(--text-secondary)" data-i18n="exec.insight">
           <strong style="color:var(--text);font-size:1.1rem">The real insight:</strong> Organizations do not get breached because they chose the wrong security product. They get breached because of misconfigured tools, untrained employees, poor incident response processes, and security programs disconnected from business reality. <strong style="color:var(--accent-1)">Phalanx Cyber</strong> exists to prove that a practitioner-built, open-source security platform &mdash; combined with the right cybersecurity mindset, engineering discipline, and business alignment &mdash; can deliver what matters most: <strong style="color:var(--text)">real security outcomes</strong>. That is what organizations need in the AI era. Not more tools. Better thinking.
         </p>
       </div>
@@ -201,41 +211,41 @@
   <section class="exec-section" id="ai-advantage" style="background: linear-gradient(180deg, var(--bg) 0%, var(--bg-surface) 50%, var(--bg) 100%);">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">AI-Driven Security</span>
-        <h2 class="section-title">Why AI Changes <span class="gradient-text">Everything</span></h2>
-        <p class="section-desc">Generative AI is not just another technology trend. It fundamentally shifts the economics of cybersecurity, making it possible for lean teams to achieve what previously required million-dollar toolsets and large specialist headcount.</p>
+        <span class="section-tag" data-i18n="ai.tag">AI-Driven Security</span>
+        <h2 class="section-title" data-i18n="ai.title">Why AI Changes <span class="gradient-text">Everything</span></h2>
+        <p class="section-desc" data-i18n="ai.desc">Generative AI is not just another technology trend. It fundamentally shifts the economics of cybersecurity, making it possible for lean teams to achieve what previously required million-dollar toolsets and large specialist headcount.</p>
       </div>
 
       <div class="ai-grid">
         <div class="ai-card">
           <div class="ai-card__number">01</div>
-          <h4>AI-Generated Detection Rules</h4>
-          <p>Large language models can analyze threat intelligence feeds and generate SIEM detection rules, YARA signatures, and compliance checks in seconds. What took a detection engineer days now takes minutes. Our 2,800+ rules serve as training templates for AI to extend coverage to your specific environment.</p>
+          <h4 data-i18n="ai.card1.title">AI-Generated Detection Rules</h4>
+          <p data-i18n="ai.card1.text">Large language models can analyze threat intelligence feeds and generate SIEM detection rules, YARA signatures, and compliance checks in seconds. What took a detection engineer days now takes minutes. Our 2,800+ rules serve as training templates for AI to extend coverage to your specific environment.</p>
         </div>
         <div class="ai-card">
           <div class="ai-card__number">02</div>
-          <h4>Intelligent Triage &amp; Prioritization</h4>
-          <p>AI models can correlate findings across all six security domains, deduplicate alerts, assess exploitability using EPSS scores, and present CISOs with a prioritized action list. This eliminates the alert fatigue that plagues SOC teams drowning in commercial tool output.</p>
+          <h4 data-i18n="ai.card2.title">Intelligent Triage &amp; Prioritization</h4>
+          <p data-i18n="ai.card2.text">AI models can correlate findings across all six security domains, deduplicate alerts, assess exploitability using EPSS scores, and present CISOs with a prioritized action list. This eliminates the alert fatigue that plagues SOC teams drowning in commercial tool output.</p>
         </div>
         <div class="ai-card">
           <div class="ai-card__number">03</div>
-          <h4>Automated Remediation Playbooks</h4>
-          <p>From a security finding, AI can generate infrastructure-as-code patches, pull request descriptions, and incident response runbooks. Open-source scanners with structured JSON output integrate seamlessly with AI pipelines &mdash; no proprietary API fees required.</p>
+          <h4 data-i18n="ai.card3.title">Automated Remediation Playbooks</h4>
+          <p data-i18n="ai.card3.text">From a security finding, AI can generate infrastructure-as-code patches, pull request descriptions, and incident response runbooks. Open-source scanners with structured JSON output integrate seamlessly with AI pipelines &mdash; no proprietary API fees required.</p>
         </div>
         <div class="ai-card">
           <div class="ai-card__number">04</div>
-          <h4>Continuous Posture Intelligence</h4>
-          <p>AI transforms static scan results into dynamic security narratives. Board-ready reports, trend analysis, risk forecasting, and compliance gap analysis &mdash; all generated from the same open-source scan data that costs nothing to collect.</p>
+          <h4 data-i18n="ai.card4.title">Continuous Posture Intelligence</h4>
+          <p data-i18n="ai.card4.text">AI transforms static scan results into dynamic security narratives. Board-ready reports, trend analysis, risk forecasting, and compliance gap analysis &mdash; all generated from the same open-source scan data that costs nothing to collect.</p>
         </div>
         <div class="ai-card">
           <div class="ai-card__number">05</div>
-          <h4>Build vs. Buy Equation Reversal</h4>
-          <p>AI-powered code generation means organizations can build custom security tooling in weeks, not years. Open-source foundations like Phalanx Cyber provide the architecture; AI fills in the domain-specific gaps. The build vs. buy equation now favors building.</p>
+          <h4 data-i18n="ai.card5.title">Build vs. Buy Equation Reversal</h4>
+          <p data-i18n="ai.card5.text">AI-powered code generation means organizations can build custom security tooling in weeks, not years. Open-source foundations like Phalanx Cyber provide the architecture; AI fills in the domain-specific gaps. The build vs. buy equation now favors building.</p>
         </div>
         <div class="ai-card">
           <div class="ai-card__number">06</div>
-          <h4>Democratized Security Expertise</h4>
-          <p>The global shortage of 4.8 million cybersecurity professionals (ISC2 2024) becomes manageable when AI augments every analyst. Junior engineers with AI assistants can operate open-source security tools at the level of experienced practitioners &mdash; bridging the skills gap where hiring alone cannot.</p>
+          <h4 data-i18n="ai.card6.title">Democratized Security Expertise</h4>
+          <p data-i18n="ai.card6.text">The global shortage of 4.8 million cybersecurity professionals (ISC2 2024) becomes manageable when AI augments every analyst. Junior engineers with AI assistants can operate open-source security tools at the level of experienced practitioners &mdash; bridging the skills gap where hiring alone cannot.</p>
         </div>
       </div>
     </div>
@@ -245,9 +255,9 @@
   <section class="exec-section" id="ai-security" style="background: var(--bg-surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">AI Security</span>
-        <h2 class="section-title">Securing AI in the <span class="gradient-text">Enterprise</span></h2>
-        <p class="section-desc">AI is transforming every business function &mdash; but it also introduces an entirely new attack surface. From prompt injection to model poisoning to data exfiltration through LLM outputs, organizations deploying AI need purpose-built security controls. Phalanx Cyber provides open-source AI security tooling across the full AI lifecycle.</p>
+        <span class="section-tag" data-i18n="aisec.tag">AI Security</span>
+        <h2 class="section-title" data-i18n="aisec.title">Securing AI in the <span class="gradient-text">Enterprise</span></h2>
+        <p class="section-desc" data-i18n="aisec.desc">AI is transforming every business function &mdash; but it also introduces an entirely new attack surface. From prompt injection to model poisoning to data exfiltration through LLM outputs, organizations deploying AI need purpose-built security controls. Phalanx Cyber provides open-source AI security tooling across the full AI lifecycle.</p>
       </div>
 
       <!-- AI Threat Landscape -->
@@ -546,35 +556,35 @@
   <section class="exec-section" id="open-source-edge" style="background: var(--bg-surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">The Open-Source Edge</span>
-        <h2 class="section-title">Why Open Source <span class="gradient-text">Wins</span></h2>
-        <p class="section-desc">Open-source security tools give organizations full ownership of their detection logic, security data, and automation pipelines. Here is what that means in practice.</p>
+        <span class="section-tag" data-i18n="oss.tag">The Open-Source Edge</span>
+        <h2 class="section-title" data-i18n="oss.title">Why Open Source <span class="gradient-text">Wins</span></h2>
+        <p class="section-desc" data-i18n="oss.desc">Open-source security tools give organizations full ownership of their detection logic, security data, and automation pipelines. Here is what that means in practice.</p>
       </div>
 
       <div class="lockin-grid">
         <div class="lockin-card">
-          <h4>Full Transparency</h4>
-          <p>Every detection rule is visible, auditable, and explainable. Your team understands exactly what is being checked, why it matters, and how to tune it for your environment. No black-box detection logic.</p>
+          <h4 data-i18n="oss.c1.title">Full Transparency</h4>
+          <p data-i18n="oss.c1.text">Every detection rule is visible, auditable, and explainable. Your team understands exactly what is being checked, why it matters, and how to tune it for your environment. No black-box detection logic.</p>
         </div>
         <div class="lockin-card">
-          <h4>Complete Customization</h4>
-          <p>Every detection rule, compliance check, and scoring algorithm is open source. Your team can modify, extend, and optimize for your specific regulatory environment, tech stack, and risk appetite.</p>
+          <h4 data-i18n="oss.c2.title">Complete Customization</h4>
+          <p data-i18n="oss.c2.text">Every detection rule, compliance check, and scoring algorithm is open source. Your team can modify, extend, and optimize for your specific regulatory environment, tech stack, and risk appetite.</p>
         </div>
         <div class="lockin-card">
-          <h4>Universal Integration</h4>
-          <p>Standardized JSON/HTML/CSV output integrates with any SIEM, SOAR, ticketing, or BI platform. Structured data that works seamlessly with AI-driven automation pipelines.</p>
+          <h4 data-i18n="oss.c3.title">Universal Integration</h4>
+          <p data-i18n="oss.c3.text">Standardized JSON/HTML/CSV output integrates with any SIEM, SOAR, ticketing, or BI platform. Structured data that works seamlessly with AI-driven automation pipelines.</p>
         </div>
         <div class="lockin-card">
-          <h4>Instant Deployment</h4>
-          <p>Deploy new security capabilities in hours, not months. Clone a repo, run a scanner, get results immediately. Every tool is self-contained with zero external dependencies beyond Python.</p>
+          <h4 data-i18n="oss.c4.title">Instant Deployment</h4>
+          <p data-i18n="oss.c4.text">Deploy new security capabilities in hours, not months. Clone a repo, run a scanner, get results immediately. Every tool is self-contained with zero external dependencies beyond Python.</p>
         </div>
         <div class="lockin-card">
-          <h4>Transferable Skills</h4>
-          <p>Skills learned on open-source security tools transfer across organizations. Your team builds expertise in Python, security fundamentals, and detection engineering &mdash; skills that grow careers.</p>
+          <h4 data-i18n="oss.c5.title">Transferable Skills</h4>
+          <p data-i18n="oss.c5.text">Skills learned on open-source security tools transfer across organizations. Your team builds expertise in Python, security fundamentals, and detection engineering &mdash; skills that grow careers.</p>
         </div>
         <div class="lockin-card">
-          <h4>Community-Driven</h4>
-          <p>Open-source tools evolve with the community. Contribute rules, report issues, fork for your needs. Your security capability is an organizational asset that you own permanently.</p>
+          <h4 data-i18n="oss.c6.title">Community-Driven</h4>
+          <p data-i18n="oss.c6.text">Open-source tools evolve with the community. Contribute rules, report issues, fork for your needs. Your security capability is an organizational asset that you own permanently.</p>
         </div>
       </div>
     </div>
@@ -584,9 +594,9 @@
   <section class="pillars">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Coverage</span>
-        <h2 class="section-title">Six Pillars. <span class="gradient-text">Complete Coverage.</span></h2>
-        <p class="section-desc">Phalanx Cyber delivers 15 integrated, open-source security scanners organized across six strategic pillars &mdash; covering the full enterprise security landscape.</p>
+        <span class="section-tag" data-i18n="pillars.tag">Coverage</span>
+        <h2 class="section-title" data-i18n="pillars.title">Six Pillars. <span class="gradient-text">Complete Coverage.</span></h2>
+        <p class="section-desc" data-i18n="pillars.desc">Phalanx Cyber delivers 15 integrated, open-source security scanners organized across six strategic pillars &mdash; covering the full enterprise security landscape.</p>
       </div>
 
       <!-- Platform Architecture Hub Diagram -->
@@ -692,8 +702,8 @@
           <div class="pillar-card__icon">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="6" width="32" height="36" rx="3"/><path d="M16 16h16M16 24h12M16 32h8"/><circle cx="36" cy="36" r="8" fill="var(--bg)" stroke="#10B981" stroke-width="1.5"/><path d="M33 36l2 2 4-4" stroke="#10B981" stroke-width="1.5"/></svg>
           </div>
-          <h3 class="pillar-card__title">Application Security</h3>
-          <p class="pillar-card__desc">SAST scanning for Java, PHP, Python, MERN, and AI/ML applications. OWASP Top 10 coverage with dependency CVE analysis.</p>
+          <h3 class="pillar-card__title" data-i18n="pillars.appsec">Application Security</h3>
+          <p class="pillar-card__desc" data-i18n="pillars.appsec.desc">SAST scanning for Java, PHP, Python, MERN, and AI/ML applications. OWASP Top 10 coverage with dependency CVE analysis.</p>
           <div class="pillar-card__stats"><span><strong>5</strong> scanners</span><span><strong>150+</strong> rules</span></div>
           <div class="pillar-card__tools"><span class="tool-tag">Java</span><span class="tool-tag">PHP</span><span class="tool-tag">Python</span><span class="tool-tag">MERN</span><span class="tool-tag">LLM Top 10</span></div>
           <span class="pillar-card__replaces">OWASP Top 10 + Dependency CVE Analysis</span>
@@ -703,8 +713,8 @@
           <div class="pillar-card__icon">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 4C14 4 6 12 6 22c0 5 2 10 6 14h24c4-4 6-9 6-14C42 12 34 4 24 4z"/><circle cx="18" cy="22" r="3"/><circle cx="30" cy="22" r="3"/><path d="M18 32h12"/></svg>
           </div>
-          <h3 class="pillar-card__title">Cloud Security</h3>
-          <p class="pillar-card__desc">CSPM and IaC scanning across AWS, Azure, and GCP. CIS Benchmark compliance with live API audits and Terraform/CloudFormation analysis.</p>
+          <h3 class="pillar-card__title" data-i18n="pillars.cloud">Cloud Security</h3>
+          <p class="pillar-card__desc" data-i18n="pillars.cloud.desc">CSPM and IaC scanning across AWS, Azure, and GCP. CIS Benchmark compliance with live API audits and Terraform/CloudFormation analysis.</p>
           <div class="pillar-card__stats"><span><strong>3</strong> providers</span><span><strong>237+</strong> checks</span></div>
           <div class="pillar-card__tools"><span class="tool-tag">AWS</span><span class="tool-tag">Azure</span><span class="tool-tag">GCP</span><span class="tool-tag">Terraform</span><span class="tool-tag">CloudFormation</span></div>
           <span class="pillar-card__replaces">CIS Benchmarks + IaC + Live API Audits</span>
@@ -714,8 +724,8 @@
           <div class="pillar-card__icon">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="10" width="36" height="28" rx="4"/><path d="M6 18h36M14 26h8M14 32h12"/></svg>
           </div>
-          <h3 class="pillar-card__title">SaaS Security</h3>
-          <p class="pillar-card__desc">SSPM for Microsoft 365, ServiceNow, SAP SuccessFactors, and Tableau Cloud. Live API-driven configuration audits.</p>
+          <h3 class="pillar-card__title" data-i18n="pillars.saas">SaaS Security</h3>
+          <p class="pillar-card__desc" data-i18n="pillars.saas.desc">SSPM for Microsoft 365, ServiceNow, SAP SuccessFactors, and Tableau Cloud. Live API-driven configuration audits.</p>
           <div class="pillar-card__stats"><span><strong>4</strong> platforms</span><span><strong>165+</strong> controls</span></div>
           <div class="pillar-card__tools"><span class="tool-tag">M365</span><span class="tool-tag">ServiceNow</span><span class="tool-tag">SAP SF</span><span class="tool-tag">Tableau</span></div>
           <span class="pillar-card__replaces">Live API-Driven Configuration Auditing</span>
@@ -725,8 +735,8 @@
           <div class="pillar-card__icon">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="8" width="40" height="8" rx="2"/><rect x="4" y="20" width="40" height="8" rx="2"/><rect x="4" y="32" width="40" height="8" rx="2"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="24" r="2" fill="currentColor"/><circle cx="12" cy="36" r="2" fill="currentColor"/></svg>
           </div>
-          <h3 class="pillar-card__title">Infrastructure</h3>
-          <p class="pillar-card__desc">Network devices, firewalls, OS hardening, OT/ICS, Kubernetes, and enterprise applications. CIS Benchmarks for 7+ platforms.</p>
+          <h3 class="pillar-card__title" data-i18n="pillars.infra">Infrastructure</h3>
+          <p class="pillar-card__desc" data-i18n="pillars.infra.desc">Network devices, firewalls, OS hardening, OT/ICS, Kubernetes, and enterprise applications. CIS Benchmarks for 7+ platforms.</p>
           <div class="pillar-card__stats"><span><strong>9</strong> scanners</span><span><strong>1,800+</strong> controls</span></div>
           <div class="pillar-card__tools"><span class="tool-tag">Cisco</span><span class="tool-tag">Palo Alto</span><span class="tool-tag">Linux</span><span class="tool-tag">Windows</span><span class="tool-tag">K8s</span><span class="tool-tag">SAP</span></div>
           <span class="pillar-card__replaces">CIS Benchmarks for 7+ Platforms</span>
@@ -736,8 +746,8 @@
           <div class="pillar-card__icon">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 4l4 8 8 1-6 5 2 8-8-4-8 4 2-8-6-5 8-1z"/><circle cx="24" cy="36" r="8"/><path d="M20 36l3 3 5-5"/></svg>
           </div>
-          <h3 class="pillar-card__title">Threat Detection</h3>
-          <p class="pillar-card__desc">Splunk SIEM detection rules mapped to MITRE ATT&CK plus CrowdStrike Falcon EDR posture validation and red team auditing.</p>
+          <h3 class="pillar-card__title" data-i18n="pillars.threat">Threat Detection</h3>
+          <p class="pillar-card__desc" data-i18n="pillars.threat.desc">Splunk SIEM detection rules mapped to MITRE ATT&CK plus CrowdStrike Falcon EDR posture validation and red team auditing.</p>
           <div class="pillar-card__stats"><span><strong>3</strong> tools</span><span><strong>265+</strong> rules</span></div>
           <div class="pillar-card__tools"><span class="tool-tag">Splunk SPL</span><span class="tool-tag">MITRE ATT&CK</span><span class="tool-tag">CrowdStrike</span></div>
           <span class="pillar-card__replaces">MITRE ATT&CK Mapped Detection Engineering</span>
@@ -747,8 +757,8 @@
           <div class="pillar-card__icon">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="24" r="20"/><circle cx="24" cy="24" r="12"/><circle cx="24" cy="24" r="4"/><line x1="24" y1="4" x2="24" y2="8"/><line x1="24" y1="40" x2="24" y2="44"/><line x1="4" y1="24" x2="8" y2="24"/><line x1="40" y1="24" x2="44" y2="24"/></svg>
           </div>
-          <h3 class="pillar-card__title">Attack Surface</h3>
-          <p class="pillar-card__desc">External attack surface discovery, active vulnerability scanning with 32K+ CVEs, and DAST capabilities for web applications.</p>
+          <h3 class="pillar-card__title" data-i18n="pillars.asm">Attack Surface</h3>
+          <p class="pillar-card__desc" data-i18n="pillars.asm.desc">External attack surface discovery, active vulnerability scanning with 32K+ CVEs, and DAST capabilities for web applications.</p>
           <div class="pillar-card__stats"><span><strong>2</strong> tools</span><span><strong>870+</strong> rules</span></div>
           <div class="pillar-card__tools"><span class="tool-tag">EASM</span><span class="tool-tag">Active Scanner</span><span class="tool-tag">DAST</span><span class="tool-tag">32K CVEs</span></div>
           <span class="pillar-card__replaces">NVD-Synced with 32K+ CVEs + EPSS Scoring</span>
@@ -761,9 +771,9 @@
   <section class="exec-section" style="background: linear-gradient(180deg, var(--bg) 0%, var(--bg-surface) 100%);">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Strategic Questions</span>
-        <h2 class="section-title">Questions Every Security Leader Should <span class="gradient-text">Be Asking</span></h2>
-        <p class="section-desc">Cybersecurity strategy starts with the right questions. Here are the ones that help organizations evaluate whether open-source security tooling is the right fit.</p>
+        <span class="section-tag" data-i18n="board.tag">Strategic Questions</span>
+        <h2 class="section-title" data-i18n="board.title">Questions Every Security Leader Should <span class="gradient-text">Be Asking</span></h2>
+        <p class="section-desc" data-i18n="board.desc">Cybersecurity strategy starts with the right questions. Here are the ones that help organizations evaluate whether open-source security tooling is the right fit.</p>
       </div>
 
       <div class="board-grid">
@@ -795,9 +805,9 @@
   <section class="exec-section">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Industry Context</span>
-        <h2 class="section-title">The Shift Is <span class="gradient-text">Already Happening</span></h2>
-        <p class="section-desc">The convergence of open source, AI, and cloud-native architecture is creating new possibilities for how organizations approach cybersecurity. The industry data tells a compelling story.</p>
+        <span class="section-tag" data-i18n="context.tag">Industry Context</span>
+        <h2 class="section-title" data-i18n="context.title">The Shift Is <span class="gradient-text">Already Happening</span></h2>
+        <p class="section-desc" data-i18n="context.desc">The convergence of open source, AI, and cloud-native architecture is creating new possibilities for how organizations approach cybersecurity. The industry data tells a compelling story.</p>
       </div>
 
       <div class="context-grid">
@@ -825,9 +835,9 @@
   <section class="compliance" style="border-top: 1px solid var(--border);">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Governance</span>
-        <h2 class="section-title">Framework <span class="gradient-text">Coverage</span></h2>
-        <p class="section-desc">Open source does not mean non-compliant. Phalanx Cyber's 2,800+ controls map directly to the regulatory frameworks your auditors require.</p>
+        <span class="section-tag" data-i18n="compliance.tag">Governance</span>
+        <h2 class="section-title" data-i18n="compliance.title">Framework <span class="gradient-text">Coverage</span></h2>
+        <p class="section-desc" data-i18n="compliance.desc">Open source does not mean non-compliant. Phalanx Cyber's 2,800+ controls map directly to the regulatory frameworks your auditors require.</p>
       </div>
       <div class="compliance__grid stagger">
         <div class="compliance__item reveal"><strong>CIS Benchmarks</strong><span>Cloud, OS, network, and Kubernetes hardening guides</span></div>
@@ -846,35 +856,35 @@
   <section class="exec-section" style="background:linear-gradient(180deg, var(--bg) 0%, var(--bg-surface) 100%);border-top:1px solid var(--border)">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Business Resilience</span>
-        <h2 class="section-title">Strengthen Your Organization. <span class="gradient-text">Reduce Exposure.</span></h2>
-        <p class="section-desc">Security should accelerate your business, not slow it down. A unified, automated approach to risk management delivers clarity for leadership, confidence for stakeholders, and tangible returns on every security investment.</p>
+        <span class="section-tag" data-i18n="resilience.tag">Business Resilience</span>
+        <h2 class="section-title" data-i18n="resilience.title">Strengthen Your Organization. <span class="gradient-text">Reduce Exposure.</span></h2>
+        <p class="section-desc" data-i18n="resilience.desc">Security should accelerate your business, not slow it down. A unified, automated approach to risk management delivers clarity for leadership, confidence for stakeholders, and tangible returns on every security investment.</p>
       </div>
 
       <div class="lockin-grid">
         <div class="lockin-card">
-          <h4>Quantify &amp; Communicate Risk</h4>
-          <p>Translate technical vulnerabilities into business language. Give your board and executives a clear, data-driven view of where risk exists, how it is trending, and what actions will have the greatest impact on reducing exposure.</p>
+          <h4 data-i18n="resilience.c1.title">Quantify &amp; Communicate Risk</h4>
+          <p data-i18n="resilience.c1.text">Translate technical vulnerabilities into business language. Give your board and executives a clear, data-driven view of where risk exists, how it is trending, and what actions will have the greatest impact on reducing exposure.</p>
         </div>
         <div class="lockin-card">
-          <h4>Consolidate onto One Platform</h4>
-          <p>Stop managing a patchwork of disconnected tools. Bring security scanning, compliance validation, and posture management into a single, open platform &mdash; reducing operational friction and freeing your team to focus on what matters.</p>
+          <h4 data-i18n="resilience.c2.title">Consolidate onto One Platform</h4>
+          <p data-i18n="resilience.c2.text">Stop managing a patchwork of disconnected tools. Bring security scanning, compliance validation, and posture management into a single, open platform &mdash; reducing operational friction and freeing your team to focus on what matters.</p>
         </div>
         <div class="lockin-card">
-          <h4>Automate with Confidence</h4>
-          <p>Eliminate manual, repetitive security workflows. Automated scanning, AI-augmented triage, and structured reporting let your security program scale without proportionally scaling headcount or budget.</p>
+          <h4 data-i18n="resilience.c3.title">Automate with Confidence</h4>
+          <p data-i18n="resilience.c3.text">Eliminate manual, repetitive security workflows. Automated scanning, AI-augmented triage, and structured reporting let your security program scale without proportionally scaling headcount or budget.</p>
         </div>
         <div class="lockin-card">
-          <h4>Accelerate Business Outcomes</h4>
-          <p>Security that is embedded into development and operations becomes an enabler, not a bottleneck. Faster release cycles, cleaner audit trails, and proactive risk elimination drive agility across every business unit.</p>
+          <h4 data-i18n="resilience.c4.title">Accelerate Business Outcomes</h4>
+          <p data-i18n="resilience.c4.text">Security that is embedded into development and operations becomes an enabler, not a bottleneck. Faster release cycles, cleaner audit trails, and proactive risk elimination drive agility across every business unit.</p>
         </div>
         <div class="lockin-card">
-          <h4>Deliver Measurable Cost Savings</h4>
-          <p>Eliminate redundant tool licenses, reduce breach-related costs, and lower the total cost of your security program. Open-source foundations mean you invest in capability and talent, not vendor margins.</p>
+          <h4 data-i18n="resilience.c5.title">Deliver Measurable Cost Savings</h4>
+          <p data-i18n="resilience.c5.text">Eliminate redundant tool licenses, reduce breach-related costs, and lower the total cost of your security program. Open-source foundations mean you invest in capability and talent, not vendor margins.</p>
         </div>
         <div class="lockin-card">
-          <h4>Build Lasting Resilience</h4>
-          <p>True security is not a product you buy &mdash; it is a discipline you build. A unified platform with transparent controls, continuous monitoring, and AI-driven intelligence creates an organization that adapts faster than threats evolve.</p>
+          <h4 data-i18n="resilience.c6.title">Build Lasting Resilience</h4>
+          <p data-i18n="resilience.c6.text">True security is not a product you buy &mdash; it is a discipline you build. A unified platform with transparent controls, continuous monitoring, and AI-driven intelligence creates an organization that adapts faster than threats evolve.</p>
         </div>
       </div>
     </div>
@@ -885,11 +895,11 @@
     <div class="container">
       <div class="cta-section__inner">
         <div class="cta-section__glow"></div>
-        <h2>Ready to Explore Open-Source Security?</h2>
-        <p>Discover what 2,800+ transparent security controls, AI-ready automation, and full source ownership can do for your organization. Every scanner, every rule, every report &mdash; fully open, fully yours.</p>
+        <h2 data-i18n="cta.title">Ready to Explore Open-Source Security?</h2>
+        <p data-i18n="cta.text">Discover what 2,800+ transparent security controls, AI-ready automation, and full source ownership can do for your organization. Every scanner, every rule, every report &mdash; fully open, fully yours.</p>
         <div class="cta-section__actions">
-          <a href="about.html#contact" class="btn btn--primary btn--lg">Schedule a Strategy Session &rarr;</a>
-          <a href="https://github.com/Krishcalin" class="btn btn--ghost btn--lg" target="_blank" rel="noopener">Explore on GitHub</a>
+          <a href="about.html#contact" class="btn btn--primary btn--lg" data-i18n="cta.btn1">Schedule a Strategy Session &rarr;</a>
+          <a href="https://github.com/Krishcalin" class="btn btn--ghost btn--lg" target="_blank" rel="noopener" data-i18n="cta.btn2">Explore on GitHub</a>
         </div>
       </div>
     </div>
@@ -939,5 +949,6 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/translations.js"></script>
 </body>
 </html>
