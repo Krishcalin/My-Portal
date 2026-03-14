@@ -134,6 +134,11 @@ function initScrollReveal() {
     '.product-detail',
     '.pillar-section',
     '.about-card',
+    '.exec-card',
+    '.ai-card',
+    '.board-card',
+    '.context-card',
+    '.lockin-card',
   ];
 
   selectors.forEach(sel => {
@@ -144,7 +149,7 @@ function initScrollReveal() {
 
   // Add stagger class to grids
   document.querySelectorAll(
-    '.pillars__grid, .showcase__grid, .capabilities__grid, .compliance__grid, .about-section__grid'
+    '.pillars__grid, .showcase__grid, .capabilities__grid, .compliance__grid, .about-section__grid, .ai-grid, .exec-grid, .board-grid, .context-grid, .lockin-grid'
   ).forEach(grid => {
     grid.classList.add('stagger');
   });
