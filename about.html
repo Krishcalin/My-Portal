@@ -314,6 +314,158 @@
         </div>
       </div>
 
+      <!-- Repository Network Constellation Diagram -->
+      <div class="diagram-container--wide" style="max-width:900px;margin:48px auto">
+        <svg viewBox="0 0 900 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="rg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#7B61FF"/></linearGradient>
+            <filter id="rgl"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <!-- Background constellation lines (subtle connections between clusters) -->
+          <line x1="150" y1="150" x2="350" y2="100" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
+          <line x1="350" y1="100" x2="550" y2="140" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
+          <line x1="550" y1="140" x2="750" y2="120" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
+          <line x1="150" y1="350" x2="350" y2="380" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
+          <line x1="350" y1="380" x2="550" y2="360" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
+          <line x1="550" y1="360" x2="750" y2="370" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
+          <line x1="150" y1="150" x2="150" y2="350" stroke="url(#rg1)" stroke-width="0.3" opacity="0.1"/>
+          <line x1="750" y1="120" x2="750" y2="370" stroke="url(#rg1)" stroke-width="0.3" opacity="0.1"/>
+
+          <!-- Cluster 1: Application Security (top-left) -->
+          <circle cx="150" cy="150" r="45" fill="#111827" stroke="#10B981" stroke-width="1.5" filter="url(#rgl)"/>
+          <text x="150" y="145" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="9" font-weight="700">AppSec</text>
+          <text x="150" y="160" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">5 repos</text>
+          <!-- Satellite repos -->
+          <circle cx="90" cy="100" r="16" fill="#0A0E1A" stroke="#10B981" stroke-width="0.8" opacity="0.7"/>
+          <text x="90" y="103" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="5">SAST</text>
+          <line x1="105" y1="108" x2="130" y2="130" stroke="#10B981" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="80" cy="170" r="16" fill="#0A0E1A" stroke="#10B981" stroke-width="0.8" opacity="0.7"/>
+          <text x="80" y="173" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="5">DAST</text>
+          <line x1="96" y1="165" x2="120" y2="158" stroke="#10B981" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="120" cy="210" r="16" fill="#0A0E1A" stroke="#10B981" stroke-width="0.8" opacity="0.7"/>
+          <text x="120" y="213" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="5">API</text>
+          <line x1="130" y1="198" x2="142" y2="182" stroke="#10B981" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="200" cy="100" r="16" fill="#0A0E1A" stroke="#10B981" stroke-width="0.8" opacity="0.7"/>
+          <text x="200" y="103" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="5">AI-SPM</text>
+          <line x1="190" y1="112" x2="170" y2="130" stroke="#10B981" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="210" cy="190" r="16" fill="#0A0E1A" stroke="#10B981" stroke-width="0.8" opacity="0.7"/>
+          <text x="210" y="193" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="5">RAI</text>
+          <line x1="198" y1="182" x2="175" y2="170" stroke="#10B981" stroke-width="0.5" opacity="0.4"/>
+
+          <!-- Cluster 2: Cloud Security (top-center) -->
+          <circle cx="350" cy="100" r="45" fill="#111827" stroke="#00D4FF" stroke-width="1.5" filter="url(#rgl)"/>
+          <text x="350" y="95" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="9" font-weight="700">Cloud</text>
+          <text x="350" y="110" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">5 repos</text>
+          <circle cx="300" cy="50" r="16" fill="#0A0E1A" stroke="#00D4FF" stroke-width="0.8" opacity="0.7"/>
+          <text x="300" y="53" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="5">AWS</text>
+          <line x1="314" y1="58" x2="330" y2="75" stroke="#00D4FF" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="400" cy="45" r="16" fill="#0A0E1A" stroke="#00D4FF" stroke-width="0.8" opacity="0.7"/>
+          <text x="400" y="48" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="5">Azure</text>
+          <line x1="390" y1="57" x2="370" y2="75" stroke="#00D4FF" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="310" cy="155" r="16" fill="#0A0E1A" stroke="#00D4FF" stroke-width="0.8" opacity="0.7"/>
+          <text x="310" y="158" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="5">GCP</text>
+          <line x1="322" y1="146" x2="335" y2="130" stroke="#00D4FF" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="400" cy="155" r="16" fill="#0A0E1A" stroke="#00D4FF" stroke-width="0.8" opacity="0.7"/>
+          <text x="400" y="158" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="5">CDR</text>
+          <line x1="388" y1="145" x2="370" y2="128" stroke="#00D4FF" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="280" cy="105" r="16" fill="#0A0E1A" stroke="#00D4FF" stroke-width="0.8" opacity="0.7"/>
+          <text x="280" y="108" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="5">K8s</text>
+          <line x1="295" y1="102" x2="310" y2="100" stroke="#00D4FF" stroke-width="0.5" opacity="0.4"/>
+
+          <!-- Cluster 3: SaaS Security (top-right) -->
+          <circle cx="550" cy="140" r="40" fill="#111827" stroke="#7B61FF" stroke-width="1.5" filter="url(#rgl)"/>
+          <text x="550" y="135" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="9" font-weight="700">SaaS</text>
+          <text x="550" y="150" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">5 repos</text>
+          <circle cx="510" cy="85" r="16" fill="#0A0E1A" stroke="#7B61FF" stroke-width="0.8" opacity="0.7"/>
+          <text x="510" y="88" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="5">M365</text>
+          <line x1="520" y1="96" x2="535" y2="115" stroke="#7B61FF" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="600" cy="90" r="16" fill="#0A0E1A" stroke="#7B61FF" stroke-width="0.8" opacity="0.7"/>
+          <text x="600" y="93" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="5">SNOW</text>
+          <line x1="588" y1="100" x2="570" y2="118" stroke="#7B61FF" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="500" cy="180" r="16" fill="#0A0E1A" stroke="#7B61FF" stroke-width="0.8" opacity="0.7"/>
+          <text x="500" y="183" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="5">SAP SF</text>
+          <line x1="514" y1="172" x2="530" y2="160" stroke="#7B61FF" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="610" cy="175" r="16" fill="#0A0E1A" stroke="#7B61FF" stroke-width="0.8" opacity="0.7"/>
+          <text x="610" y="178" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="5">Tableau</text>
+          <line x1="598" y1="166" x2="575" y2="158" stroke="#7B61FF" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="560" cy="195" r="14" fill="#0A0E1A" stroke="#7B61FF" stroke-width="0.8" opacity="0.6"/>
+          <text x="560" y="198" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="5">Ariba</text>
+          <line x1="555" y1="182" x2="552" y2="170" stroke="#7B61FF" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- Cluster 4: Infrastructure (far right) -->
+          <circle cx="750" cy="120" r="45" fill="#111827" stroke="#F59E0B" stroke-width="1.5" filter="url(#rgl)"/>
+          <text x="750" y="115" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="9" font-weight="700">Infra</text>
+          <text x="750" y="130" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">7 repos</text>
+          <circle cx="700" cy="60" r="16" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.7"/>
+          <text x="700" y="63" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">Cisco</text>
+          <line x1="712" y1="70" x2="730" y2="92" stroke="#F59E0B" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="810" cy="70" r="16" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.7"/>
+          <text x="810" y="73" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">PAN-OS</text>
+          <line x1="798" y1="80" x2="775" y2="98" stroke="#F59E0B" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="830" cy="140" r="16" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.7"/>
+          <text x="830" y="143" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">Linux</text>
+          <line x1="815" y1="138" x2="795" y2="130" stroke="#F59E0B" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="810" cy="185" r="16" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.7"/>
+          <text x="810" y="188" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">Win</text>
+          <line x1="798" y1="176" x2="778" y2="152" stroke="#F59E0B" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="700" cy="175" r="16" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.7"/>
+          <text x="700" y="178" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">OT/ICS</text>
+          <line x1="712" y1="166" x2="730" y2="150" stroke="#F59E0B" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="740" cy="190" r="14" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.6"/>
+          <text x="740" y="193" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">SAP</text>
+          <line x1="742" y1="177" x2="748" y2="165" stroke="#F59E0B" stroke-width="0.5" opacity="0.3"/>
+
+          <!-- Cluster 5: Threat Detection (bottom-left) -->
+          <circle cx="150" cy="350" r="40" fill="#111827" stroke="#EF4444" stroke-width="1.5" filter="url(#rgl)"/>
+          <text x="150" y="345" text-anchor="middle" fill="#EF4444" font-family="Inter,sans-serif" font-size="9" font-weight="700">Threat</text>
+          <text x="150" y="360" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">4 repos</text>
+          <circle cx="90" cy="310" r="16" fill="#0A0E1A" stroke="#EF4444" stroke-width="0.8" opacity="0.7"/>
+          <text x="90" y="313" text-anchor="middle" fill="#EF4444" font-family="Inter,sans-serif" font-size="5">DetEng</text>
+          <line x1="104" y1="318" x2="125" y2="332" stroke="#EF4444" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="200" cy="310" r="16" fill="#0A0E1A" stroke="#EF4444" stroke-width="0.8" opacity="0.7"/>
+          <text x="200" y="313" text-anchor="middle" fill="#EF4444" font-family="Inter,sans-serif" font-size="5">RedTm</text>
+          <line x1="190" y1="322" x2="172" y2="335" stroke="#EF4444" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="100" cy="400" r="16" fill="#0A0E1A" stroke="#EF4444" stroke-width="0.8" opacity="0.7"/>
+          <text x="100" y="403" text-anchor="middle" fill="#EF4444" font-family="Inter,sans-serif" font-size="5">EDR</text>
+          <line x1="114" y1="394" x2="132" y2="375" stroke="#EF4444" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="200" cy="400" r="16" fill="#0A0E1A" stroke="#EF4444" stroke-width="0.8" opacity="0.7"/>
+          <text x="200" y="403" text-anchor="middle" fill="#EF4444" font-family="Inter,sans-serif" font-size="5">AD Atk</text>
+          <line x1="188" y1="390" x2="168" y2="372" stroke="#EF4444" stroke-width="0.5" opacity="0.4"/>
+
+          <!-- Cluster 6: Risk & Attack Surface (bottom-center) -->
+          <circle cx="400" cy="380" r="42" fill="#111827" stroke="#06B6D4" stroke-width="1.5" filter="url(#rgl)"/>
+          <text x="400" y="375" text-anchor="middle" fill="#06B6D4" font-family="Inter,sans-serif" font-size="9" font-weight="700">Risk &amp; ASM</text>
+          <text x="400" y="390" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">4 repos</text>
+          <circle cx="340" cy="430" r="16" fill="#0A0E1A" stroke="#06B6D4" stroke-width="0.8" opacity="0.7"/>
+          <text x="340" y="433" text-anchor="middle" fill="#06B6D4" font-family="Inter,sans-serif" font-size="5">EASM</text>
+          <line x1="353" y1="420" x2="378" y2="405" stroke="#06B6D4" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="460" cy="430" r="16" fill="#0A0E1A" stroke="#06B6D4" stroke-width="0.8" opacity="0.7"/>
+          <text x="460" y="433" text-anchor="middle" fill="#06B6D4" font-family="Inter,sans-serif" font-size="5">VulnMgmt</text>
+          <line x1="447" y1="420" x2="422" y2="405" stroke="#06B6D4" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="350" cy="330" r="16" fill="#0A0E1A" stroke="#06B6D4" stroke-width="0.8" opacity="0.7"/>
+          <text x="350" y="333" text-anchor="middle" fill="#06B6D4" font-family="Inter,sans-serif" font-size="5">CRQ</text>
+          <line x1="362" y1="340" x2="380" y2="358" stroke="#06B6D4" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="445" cy="340" r="16" fill="#0A0E1A" stroke="#06B6D4" stroke-width="0.8" opacity="0.7"/>
+          <text x="445" y="343" text-anchor="middle" fill="#06B6D4" font-family="Inter,sans-serif" font-size="5">Portal</text>
+          <line x1="435" y1="350" x2="418" y2="365" stroke="#06B6D4" stroke-width="0.5" opacity="0.4"/>
+
+          <!-- Animated orbital particles -->
+          <circle r="2" fill="#00D4FF" opacity="0.6">
+            <animateMotion dur="15s" repeatCount="indefinite" path="M150,150 Q350,50 550,140 Q750,230 750,370 Q550,450 350,380 Q150,310 150,150"/>
+            <animate attributeName="opacity" values="0;0.8;0.8;0" dur="15s" repeatCount="indefinite"/>
+          </circle>
+          <circle r="2" fill="#7B61FF" opacity="0.6">
+            <animateMotion dur="18s" repeatCount="indefinite" path="M750,120 Q550,50 350,100 Q150,200 150,350 Q350,450 550,360 Q750,250 750,120" begin="3s"/>
+            <animate attributeName="opacity" values="0;0.8;0.8;0" dur="18s" repeatCount="indefinite" begin="3s"/>
+          </circle>
+
+          <!-- Center label -->
+          <rect x="355" y="240" width="190" height="36" rx="18" fill="#111827" stroke="url(#rg1)" stroke-width="1" opacity="0.9"/>
+          <text x="450" y="263" text-anchor="middle" fill="url(#rg1)" font-family="Inter,sans-serif" font-size="10" font-weight="700">30 Repos &middot; 50K+ Lines of Code</text>
+        </svg>
+      </div>
+
       <!-- Repository categories -->
       <div style="margin-top:64px">
         <h3 style="font-size:1.3rem;font-weight:700;margin-bottom:32px;text-align:center">Complete Repository Catalogue</h3>

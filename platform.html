@@ -334,6 +334,80 @@
         <p class="section-desc">Open-source security tools produce structured, machine-readable output &mdash; making them ideal inputs for AI-driven automation pipelines. The combination of transparent tooling and AI creates a powerful force multiplier.</p>
       </div>
 
+      <!-- AI Augmentation Cycle Diagram -->
+      <div class="diagram-container" style="max-width:750px">
+        <svg viewBox="0 0 750 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ag1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#7B61FF"/></linearGradient>
+            <linearGradient id="ag2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00D4FF" stop-opacity="0.4"/><stop offset="100%" stop-color="#7B61FF" stop-opacity="0.4"/></linearGradient>
+            <filter id="agl"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <!-- Central AI Brain -->
+          <circle cx="375" cy="200" r="70" fill="#111827" stroke="url(#ag1)" stroke-width="2" filter="url(#agl)"/>
+          <circle cx="375" cy="200" r="60" fill="none" stroke="url(#ag1)" stroke-width="0.5" opacity="0.3" stroke-dasharray="4 3">
+            <animateTransform attributeName="transform" type="rotate" from="0 375 200" to="360 375 200" dur="20s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Brain neural network -->
+          <circle cx="365" cy="185" r="4" fill="#00D4FF" opacity="0.6"/><circle cx="385" cy="185" r="4" fill="#7B61FF" opacity="0.6"/>
+          <circle cx="355" cy="200" r="4" fill="#00D4FF" opacity="0.5"/><circle cx="375" cy="195" r="5" fill="url(#ag1)" opacity="0.8"/><circle cx="395" cy="200" r="4" fill="#7B61FF" opacity="0.5"/>
+          <circle cx="365" cy="215" r="4" fill="#00D4FF" opacity="0.6"/><circle cx="385" cy="215" r="4" fill="#7B61FF" opacity="0.6"/>
+          <line x1="365" y1="185" x2="375" y2="195" stroke="#00D4FF" stroke-width="0.8" opacity="0.4"/>
+          <line x1="385" y1="185" x2="375" y2="195" stroke="#7B61FF" stroke-width="0.8" opacity="0.4"/>
+          <line x1="355" y1="200" x2="375" y2="195" stroke="#00D4FF" stroke-width="0.8" opacity="0.4"/>
+          <line x1="395" y1="200" x2="375" y2="195" stroke="#7B61FF" stroke-width="0.8" opacity="0.4"/>
+          <line x1="365" y1="215" x2="375" y2="195" stroke="#00D4FF" stroke-width="0.8" opacity="0.4"/>
+          <line x1="385" y1="215" x2="375" y2="195" stroke="#7B61FF" stroke-width="0.8" opacity="0.4"/>
+          <line x1="365" y1="185" x2="385" y2="215" stroke="url(#ag1)" stroke-width="0.5" opacity="0.2"/>
+          <line x1="385" y1="185" x2="365" y2="215" stroke="url(#ag1)" stroke-width="0.5" opacity="0.2"/>
+          <text x="375" y="245" text-anchor="middle" fill="#F9FAFB" font-family="Inter,sans-serif" font-size="12" font-weight="700">AI Engine</text>
+          <text x="375" y="260" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="9">Claude &middot; GPT &middot; Llama</text>
+
+          <!-- Input: Scan Data (left) -->
+          <rect x="40" y="160" width="130" height="80" rx="10" fill="#111827" stroke="#10B981" stroke-width="1.5" filter="url(#agl)"/>
+          <text x="105" y="192" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="10" font-weight="700">Scan Output</text>
+          <text x="105" y="208" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">JSON &middot; 2,800+ rules</text>
+          <text x="105" y="222" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">15 scanners &middot; 6 domains</text>
+          <!-- Arrow to center -->
+          <path d="M170 200 L305 200" stroke="#10B981" stroke-width="1.5" stroke-dasharray="4 3"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="1.5s" repeatCount="indefinite"/></path>
+          <polygon points="300,195 310,200 300,205" fill="#10B981"/>
+          <circle r="3" fill="#10B981"><animateMotion dur="2s" repeatCount="indefinite" path="M170,200 L305,200"/><animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite"/></circle>
+
+          <!-- Output 1: Triage (top right) -->
+          <rect x="530" y="50" width="130" height="65" rx="10" fill="#111827" stroke="#00D4FF" stroke-width="1.5"/>
+          <text x="595" y="78" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="10" font-weight="700">Smart Triage</text>
+          <text x="595" y="94" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">Prioritize by EPSS, CVSS</text>
+          <text x="595" y="106" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">Deduplicate &middot; Correlate</text>
+          <path d="M435 170 L540 90" stroke="#00D4FF" stroke-width="1.5" stroke-dasharray="4 3"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="1.5s" repeatCount="indefinite"/></path>
+          <polygon points="536,85 545,88 538,94" fill="#00D4FF"/>
+
+          <!-- Output 2: Rules (right) -->
+          <rect x="540" y="168" width="130" height="65" rx="10" fill="#111827" stroke="#7B61FF" stroke-width="1.5"/>
+          <text x="605" y="196" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="10" font-weight="700">Custom Rules</text>
+          <text x="605" y="212" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">AI-generated detection</text>
+          <text x="605" y="224" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">YARA &middot; SPL &middot; SAST</text>
+          <path d="M445 200 L540 200" stroke="#7B61FF" stroke-width="1.5" stroke-dasharray="4 3"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="1.5s" repeatCount="indefinite"/></path>
+          <polygon points="535,195 545,200 535,205" fill="#7B61FF"/>
+
+          <!-- Output 3: Playbooks (bottom right) -->
+          <rect x="530" y="290" width="130" height="65" rx="10" fill="#111827" stroke="#A855F7" stroke-width="1.5"/>
+          <text x="595" y="318" text-anchor="middle" fill="#A855F7" font-family="Inter,sans-serif" font-size="10" font-weight="700">Playbooks</text>
+          <text x="595" y="334" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">IR runbooks &middot; Fix PRs</text>
+          <text x="595" y="346" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">Board reports &middot; IaC patches</text>
+          <path d="M435 230 L540 310" stroke="#A855F7" stroke-width="1.5" stroke-dasharray="4 3"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="1.5s" repeatCount="indefinite"/></path>
+          <polygon points="536,306 545,312 538,316" fill="#A855F7"/>
+
+          <!-- Feedback loop arrow (from Rules back to Scan) -->
+          <path d="M605 168 C605 30 105 30 105 160" stroke="url(#ag1)" stroke-width="1" stroke-dasharray="4 4" fill="none" opacity="0.3">
+            <animate attributeName="stroke-dashoffset" from="0" to="-16" dur="3s" repeatCount="indefinite"/>
+          </path>
+          <text x="355" y="25" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8" opacity="0.5">AI-generated rules feed back into scanners</text>
+
+          <!-- Title -->
+          <text x="375" y="410" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="10">Open-source scan data + AI models = autonomous security operations</text>
+        </svg>
+      </div>
+
       <div class="ai-grid">
         <div class="ai-card">
           <div class="ai-card__number">01</div>
