@@ -1721,6 +1721,56 @@ button { cursor: pointer; font: inherit; border: none; background: none; color: 
   font-size: 0.75rem;
 }
 
+/* Certification badges row */
+.cert-badges {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.cert-badge {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.3s;
+}
+.cert-badge:hover {
+  border-color: var(--border-hover);
+}
+.cert-badge__icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gradient-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cert-badge strong {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.cert-badge span:not(.cert-badge__icon) {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 960px) {
+  .cert-badges { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .cert-badges { grid-template-columns: 1fr; }
+}
+
 /* ================================================================
    ANIMATIONS (scroll reveal)
    ================================================================ */
