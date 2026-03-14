@@ -1,5 +1,5 @@
 /* ============================================================
-   SkyHigh Scanner — Main JavaScript
+   Phalanx Cyber — Main JavaScript
    Navigation, scroll effects, stat counters, product filtering,
    scroll reveal animations
    ============================================================ */
