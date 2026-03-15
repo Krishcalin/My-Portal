@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybersecurity Strategy &mdash; Phalanx Cyber</title>
+  <meta name="description" content="A comprehensive cybersecurity strategy framework for organizations, drawing from NIST, MITRE ATT&CK, OWASP, ISO 27001, GDPR, Cloud Security Alliance, and cloud-native security frameworks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <style>
+    .lang-btn{padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:700;letter-spacing:0.03em;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .2s}
+    .lang-btn:hover{border-color:var(--border-hover);color:var(--text)}
+    .lang-btn.active{background:var(--gradient);color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(0,212,255,0.2)}
+
+    /* Strategy page styles */
+    .strat-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin:48px 0}
+    .strat-stat{text-align:center;padding:32px 20px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg)}
+    .strat-stat__number{display:block;font-size:2.2rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+    .strat-stat__label{font-size:0.85rem;color:var(--text-muted);line-height:1.4}
+
+    .pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:48px}
+    .pillar{padding:32px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);transition:border-color 0.3s,transform 0.3s}
+    .pillar:hover{border-color:var(--border-hover);transform:translateY(-4px)}
+    .pillar__icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:1.5rem}
+    .pillar__title{font-size:1.15rem;font-weight:700;margin-bottom:12px}
+    .pillar__desc{font-size:0.9rem;color:var(--text-secondary);line-height:1.7;margin-bottom:16px}
+    .pillar__list{list-style:none;padding:0;margin:0}
+    .pillar__list li{font-size:0.82rem;color:var(--text-muted);padding:6px 0;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px}
+
+    .fw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;margin-top:48px}
+    .fw-card{padding:28px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);transition:border-color 0.3s}
+    .fw-card:hover{border-color:var(--border-hover)}
+    .fw-card__tag{display:inline-block;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:4px 10px;border-radius:20px;margin-bottom:14px}
+    .fw-card__title{font-size:1.05rem;font-weight:700;margin-bottom:10px}
+    .fw-card__desc{font-size:0.85rem;color:var(--text-secondary);line-height:1.7;margin-bottom:14px}
+    .fw-card__scope{font-size:0.78rem;color:var(--text-muted);line-height:1.6}
+
+    .mandate-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:48px}
+    .mandate{position:relative;padding:32px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+    .mandate::before{content:attr(data-step);position:absolute;top:16px;right:20px;font-size:4rem;font-weight:900;opacity:0.06;line-height:1}
+    .mandate__title{font-size:1.1rem;font-weight:700;margin-bottom:12px}
+    .mandate__desc{font-size:0.88rem;color:var(--text-secondary);line-height:1.7;margin-bottom:16px}
+    .mandate__detail{font-size:0.82rem;color:var(--text-muted);line-height:1.6;padding:12px 16px;background:rgba(0,212,255,0.03);border-left:3px solid var(--accent-1);border-radius:0 8px 8px 0}
+
+    .threat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:48px}
+    .threat-card{padding:28px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg)}
+    .threat-card__icon{font-size:1.3rem;margin-bottom:12px}
+    .threat-card__title{font-size:1rem;font-weight:700;margin-bottom:10px}
+    .threat-card__desc{font-size:0.85rem;color:var(--text-secondary);line-height:1.7}
+
+    .cloud-fw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+    .cloud-fw{padding:28px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);text-align:center}
+    .cloud-fw__logo{font-size:2rem;margin-bottom:12px}
+    .cloud-fw__name{font-size:1rem;font-weight:700;margin-bottom:8px}
+    .cloud-fw__desc{font-size:0.82rem;color:var(--text-secondary);line-height:1.6;margin-bottom:12px}
+    .cloud-fw__pillars{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+    .cloud-fw__pill{font-size:0.7rem;padding:3px 10px;border-radius:20px;background:rgba(0,212,255,0.08);color:var(--accent-1);border:1px solid rgba(0,212,255,0.15)}
+
+    .maturity-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:48px}
+    .maturity-card{padding:24px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);text-align:center}
+    .maturity-card__pct{font-size:2rem;font-weight:800;margin-bottom:6px}
+    .maturity-card__label{font-size:0.82rem;color:var(--text-muted);line-height:1.5}
+    .maturity-card__bar{height:4px;border-radius:2px;background:var(--border);margin-top:14px;overflow:hidden}
+    .maturity-card__fill{height:100%;border-radius:2px}
+
+    .sync-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:48px}
+    .sync-card{padding:28px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);text-align:center}
+    .sync-card__icon{font-size:2.2rem;margin-bottom:16px}
+    .sync-card__title{font-size:1.05rem;font-weight:700;margin-bottom:10px}
+    .sync-card__desc{font-size:0.85rem;color:var(--text-secondary);line-height:1.7}
+
+    .cta-banner{text-align:center;padding:64px 32px;background:linear-gradient(135deg,rgba(0,212,255,0.05),rgba(123,97,255,0.05));border:1px solid var(--border);border-radius:var(--radius-lg);margin-top:48px}
+    .cta-banner__title{font-size:1.6rem;font-weight:800;margin-bottom:12px}
+    .cta-banner__desc{font-size:1rem;color:var(--text-secondary);max-width:600px;margin:0 auto 28px}
+
+    .ref-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:32px}
+    .ref-item{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);font-size:0.85rem;color:var(--text-secondary);transition:border-color 0.2s}
+    .ref-item:hover{border-color:var(--border-hover)}
+    .ref-item__dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+    @media(max-width:960px){
+      .strat-stat-grid{grid-template-columns:repeat(2,1fr)}
+      .pillar-grid,.mandate-grid,.cloud-fw-grid,.sync-grid{grid-template-columns:1fr}
+      .threat-grid,.maturity-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:640px){
+      .strat-stat-grid{grid-template-columns:1fr}
+      .fw-grid{grid-template-columns:1fr}
+      .maturity-grid{grid-template-columns:repeat(2,1fr)}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ NAVIGATION ============ -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner container">
+      <a href="index.html" class="nav__logo" style="gap:12px">
+        <svg class="nav__logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:34px;height:34px">
+          <defs>
+            <linearGradient id="shieldGrad" x1="4" y1="2" x2="32" y2="34"><stop stop-color="#00D4FF"/><stop offset="1" stop-color="#7B61FF"/></linearGradient>
+            <linearGradient id="shieldFill" x1="4" y1="2" x2="32" y2="34"><stop stop-color="#00D4FF" stop-opacity="0.12"/><stop offset="1" stop-color="#7B61FF" stop-opacity="0.12"/></linearGradient>
+          </defs>
+          <path d="M18 2L4 9v9c0 8.5 5.6 16.4 14 18 8.4-1.6 14-9.5 14-18V9L18 2z" fill="url(#shieldFill)" stroke="url(#shieldGrad)" stroke-width="1.5"/>
+          <path d="M18 7L9 12v6c0 5.8 3.8 11.2 9 12.3 5.2-1.1 9-6.5 9-12.3v-6L18 7z" fill="none" stroke="url(#shieldGrad)" stroke-width="0.8" opacity="0.5"/>
+          <line x1="12" y1="15" x2="24" y2="15" stroke="url(#shieldGrad)" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="13" y1="19" x2="23" y2="19" stroke="url(#shieldGrad)" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="14" y1="23" x2="22" y2="23" stroke="url(#shieldGrad)" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="11" cy="15" r="1.3" fill="#00D4FF"/><circle cx="25" cy="15" r="1.3" fill="#7B61FF"/>
+          <circle cx="12" cy="19" r="1.3" fill="#00D4FF" opacity="0.7"/><circle cx="24" cy="19" r="1.3" fill="#7B61FF" opacity="0.7"/>
+          <circle cx="13" cy="23" r="1.3" fill="#00D4FF" opacity="0.5"/><circle cx="23" cy="23" r="1.3" fill="#7B61FF" opacity="0.5"/>
+        </svg>
+        <div style="display:flex;flex-direction:column;line-height:1.1">
+          <span style="font-size:1.6rem;font-weight:800;letter-spacing:-0.02em">Phalanx<span class="nav__logo-accent">Cyber</span></span>
+          <span style="font-size:0.7rem;font-weight:500;color:var(--text-muted);letter-spacing:0.04em;margin-top:3px">Open-Source Security Tools</span>
+        </div>
+      </a>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="strategy.html" style="color:var(--text)">Strategy</a></li>
+        <li><a href="index.html#catalogue">Tools</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <div class="nav__actions">
+        <div style="display:flex;gap:4px;margin-right:8px">
+          <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+          <button class="lang-btn" data-lang="nl" onclick="setLang('nl')">NL</button>
+          <button class="lang-btn" data-lang="de" onclick="setLang('de')">DE</button>
+        </div>
+        <a href="https://github.com/Krishcalin" class="btn btn--ghost" target="_blank" rel="noopener" style="gap:6px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href="about.html#contact" class="btn btn--primary">Contact</a>
+      </div>
+      <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- ============ PAGE HERO ============ -->
+  <section class="page-hero">
+    <div class="page-hero__glow"></div>
+    <div class="container" style="position:relative">
+      <span class="section-tag" data-i18n="strat.hero.tag">Cybersecurity Strategy</span>
+      <h1 class="section-title" style="font-size:clamp(2rem,4.5vw,3.2rem)" data-i18n="strat.hero.title">A Risk-Based Approach to<br><span class="gradient-text">Enterprise Cybersecurity</span></h1>
+      <p class="section-desc" style="max-width:740px;margin:0 auto" data-i18n="strat.hero.desc">Organizations spent over $200 billion on cybersecurity in 2024, yet breaches continue to rise. The answer is not more spending &mdash; it is smarter strategy. This page presents a comprehensive, framework-aligned cybersecurity strategy informed by industry research, global standards, and 24 years of practitioner experience.</p>
+    </div>
+  </section>
+
+  <!-- ============ THE THREAT LANDSCAPE ============ -->
+  <section class="about-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="strat.landscape.tag">The Challenge</span>
+        <h2 class="section-title" data-i18n="strat.landscape.title">Why Cybersecurity Strategy <span class="gradient-text">Must Evolve</span></h2>
+        <p class="section-desc" data-i18n="strat.landscape.desc">The digital attack surface has expanded exponentially. Cloud adoption, remote work, IoT proliferation, AI-powered attacks, and third-party dependencies have rendered perimeter-based security obsolete. Organizations need a risk-based, resilience-first approach.</p>
+      </div>
+
+      <div class="strat-stat-grid">
+        <div class="strat-stat">
+          <span class="strat-stat__number">$210B+</span>
+          <span class="strat-stat__label">Global cybersecurity spend projected by 2026</span>
+        </div>
+        <div class="strat-stat">
+          <span class="strat-stat__number">60%</span>
+          <span class="strat-stat__label">Companies experienced an AI-powered cyberattack in the past year</span>
+        </div>
+        <div class="strat-stat">
+          <span class="strat-stat__number">72%</span>
+          <span class="strat-stat__label">Firms faced AI-powered phishing attacks in 2024</span>
+        </div>
+        <div class="strat-stat">
+          <span class="strat-stat__number">7%</span>
+          <span class="strat-stat__label">Companies have actually deployed AI-enabled defense tools</span>
+        </div>
+      </div>
+
+      <div class="threat-grid">
+        <div class="threat-card">
+          <div class="threat-card__icon" style="color:#EF4444">&#9888;</div>
+          <div class="threat-card__title">Expanding Attack Surface</div>
+          <div class="threat-card__desc">Cloud workloads, remote endpoints, IoT devices, and third-party integrations have dissolved the traditional security perimeter. Every API, SaaS tenant, and container is now a potential entry point. Organizations running 40&ndash;70 security tools simultaneously face complexity that is itself a vulnerability.</div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-card__icon" style="color:#F59E0B">&#9889;</div>
+          <div class="threat-card__title">AI-Powered Threats</div>
+          <div class="threat-card__desc">Adversaries are leveraging generative AI for sophisticated phishing, polymorphic malware, deepfakes, and automated vulnerability exploitation. A $25 million fraud was triggered by a deepfake video call impersonating a CFO. Yet 69% of organizations report difficulty hiring talent with AI-cybersecurity expertise.</div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-card__icon" style="color:#7B61FF">&#128279;</div>
+          <div class="threat-card__title">Supply Chain &amp; Third-Party Risk</div>
+          <div class="threat-card__desc">SolarWinds, Log4Shell, and MOVEit demonstrated that third-party and software supply chain attacks can bypass even mature security programs. Only 28% of companies achieve the highest maturity score in third-party cyber risk management. Vendor risk is now a board-level concern.</div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-card__icon" style="color:#00D4FF">&#128196;</div>
+          <div class="threat-card__title">Regulatory Pressure</div>
+          <div class="threat-card__desc">GDPR, NIS2, DORA, SEC cyber disclosure rules, and cross-border data flow regulations have raised the stakes for non-compliance from reputational damage to existential fines. Tougher regulatory oversight and soaring breach costs are elevating cybersecurity to the boardroom agenda.</div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-card__icon" style="color:#10B981">&#128736;</div>
+          <div class="threat-card__title">The IT-Security-Business Disconnect</div>
+          <div class="threat-card__desc">Digital innovations often outpace the measures companies take to safeguard their systems. IT teams, cybersecurity experts, and business leaders operate with different goals, work independently, and speak different languages. Many leaders still treat cybersecurity as an IT line item rather than a strategic imperative.</div>
+        </div>
+        <div class="threat-card">
+          <div class="threat-card__icon" style="color:#EC4899">&#128200;</div>
+          <div class="threat-card__title">Maturity Gaps Persist</div>
+          <div class="threat-card__desc">Despite growing investment, only 25% of companies achieve highest maturity in application security, and only 22% do so in data protection or software supply chain risk management. The gap between compliance checkbox and actual resilience remains dangerously wide.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INDUSTRY MATURITY SNAPSHOT ============ -->
+  <section class="exec-section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Industry Maturity</span>
+        <h2 class="section-title">Where Organizations <span class="gradient-text">Stand Today</span></h2>
+        <p class="section-desc">Global cybersecurity surveys reveal that while overall maturity is improving, critical gaps remain. The biggest gains have been in governance and resilience &mdash; but offensive capabilities and AI adoption are lagging dangerously behind the threat landscape.</p>
+      </div>
+
+      <div class="maturity-grid">
+        <div class="maturity-card">
+          <div class="maturity-card__pct" style="color:#10B981">+8pp</div>
+          <div class="maturity-card__label">Improvement in cybersecurity governance, risk &amp; compliance</div>
+          <div class="maturity-card__bar"><div class="maturity-card__fill" style="width:78%;background:#10B981"></div></div>
+        </div>
+        <div class="maturity-card">
+          <div class="maturity-card__pct" style="color:#00D4FF">+8pp</div>
+          <div class="maturity-card__label">Improvement in business continuity &amp; resilience scores</div>
+          <div class="maturity-card__bar"><div class="maturity-card__fill" style="width:75%;background:#00D4FF"></div></div>
+        </div>
+        <div class="maturity-card">
+          <div class="maturity-card__pct" style="color:#F59E0B">25%</div>
+          <div class="maturity-card__label">Achieved highest maturity in application security</div>
+          <div class="maturity-card__bar"><div class="maturity-card__fill" style="width:25%;background:#F59E0B"></div></div>
+        </div>
+        <div class="maturity-card">
+          <div class="maturity-card__pct" style="color:#EF4444">22%</div>
+          <div class="maturity-card__label">Achieved highest maturity in data protection</div>
+          <div class="maturity-card__bar"><div class="maturity-card__fill" style="width:22%;background:#EF4444"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THREE TRANSFORMATION MANDATES ============ -->
+  <section class="about-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="strat.mandates.tag">Transformation Framework</span>
+        <h2 class="section-title" data-i18n="strat.mandates.title">Three Mandates for <span class="gradient-text">Cybersecurity Transformation</span></h2>
+        <p class="section-desc" data-i18n="strat.mandates.desc">Industry research with the world's largest organizations has revealed three broad mandates that drive effective cybersecurity transformation &mdash; shifting from maturity-based checklists to a risk-based, resilience-first model.</p>
+      </div>
+
+      <div class="mandate-grid">
+        <div class="mandate" data-step="01">
+          <div class="mandate__title" style="color:var(--accent-1)">1. Prioritize Risk</div>
+          <div class="mandate__desc">Stop trying to protect everything equally. Identify where the business creates value, analyze the threat landscape against those assets, and allocate security investment where risk reduction is greatest. Companies that adopt risk-based strategies outperform because they protect what matters most.</div>
+          <div class="mandate__detail">Organizations that reorder security initiatives according to a risk-based approach have achieved up to <strong>7.5&times; greater risk reduction</strong> at <strong>no added cost</strong> &mdash; simply by focusing on what matters most to the business.</div>
+        </div>
+        <div class="mandate" data-step="02">
+          <div class="mandate__title" style="color:var(--accent-2)">2. Reduce Complexity</div>
+          <div class="mandate__desc">Standardize and codify infrastructure, consolidate security vendors, and automate control-engineering processes. The industry trend toward vendor consolidation has accelerated, with more organizations planning to reduce their security tool sprawl than expand it.</div>
+          <div class="mandate__detail">Complexity is the enemy of security. Organizations running <strong>40&ndash;70 security tools</strong> simultaneously face diminishing returns. Consolidation delivers better visibility, faster response, and lower operational cost.</div>
+        </div>
+        <div class="mandate" data-step="03">
+          <div class="mandate__title" style="color:#10B981">3. Invest in Talent</div>
+          <div class="mandate__desc">Use a talent-to-value protection approach: identify the roles that reduce the most risk, fill them first, and align security hiring to business growth aspirations. The CISO must evolve from technologist to business partner who brings operational context to risk.</div>
+          <div class="mandate__detail"><strong>69% of organizations</strong> report difficulty hiring talent with AI-cybersecurity expertise. Only <strong>5% have significantly increased</strong> cybersecurity budgets in response to AI-driven threats &mdash; a dangerous gap.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SYNCHRONIZED DEFENSE ============ -->
+  <section class="exec-section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Synchronized Defense</span>
+        <h2 class="section-title">Aligning Business, IT &amp; <span class="gradient-text">Security Teams</span></h2>
+        <p class="section-desc">The most effective cybersecurity organizations are not defined by their tools &mdash; they are defined by the alignment between their business leaders, IT teams, and security functions. Cybersecurity must be reframed as a business discipline, not a technical silo.</p>
+      </div>
+
+      <div class="sync-grid">
+        <div class="sync-card">
+          <div class="sync-card__icon">&#127891;</div>
+          <div class="sync-card__title">Business Leaders</div>
+          <div class="sync-card__desc">Focus on strategic priorities: revenue growth, customer engagement, and operational efficiency. Must develop technical fluency to assess risks and prioritize investments &mdash; rather than over-relying on IT and security teams without sufficient oversight.</div>
+        </div>
+        <div class="sync-card">
+          <div class="sync-card__icon">&#9881;</div>
+          <div class="sync-card__title">IT &amp; Engineering</div>
+          <div class="sync-card__desc">Own the infrastructure, platforms, and development pipelines. Must embed security by design into every architecture decision, coordinate IT recovery with business continuity, and operate with centralized accountability.</div>
+        </div>
+        <div class="sync-card">
+          <div class="sync-card__icon">&#128737;</div>
+          <div class="sync-card__title">Security &amp; CISO</div>
+          <div class="sync-card__desc">Evolve from a technical gatekeeper to a strategic enabler. The CISO must communicate risk in the language of the business, align security investments to value creation, and position cybersecurity as a competitive advantage &mdash; not a brake on innovation.</div>
+        </div>
+      </div>
+
+      <div style="margin-top:36px;padding:24px 28px;background:rgba(0,212,255,0.03);border:1px solid rgba(0,212,255,0.1);border-radius:var(--radius-lg);text-align:center">
+        <p style="font-size:0.92rem;color:var(--text-secondary);line-height:1.7;max-width:700px;margin:0 auto">
+          <strong style="color:var(--text)">The synchronized approach:</strong> Align incentives across business, IT, and security. Embed cybersecurity and resiliency within the broader business strategy. Protect the most critical business services, test risk scenarios, and ensure effective training, awareness, and communication. This is a <em>people and organization</em> challenge as much as a technical one.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SIX STRATEGIC PILLARS ============ -->
+  <section class="about-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="strat.pillars.tag">Strategic Pillars</span>
+        <h2 class="section-title" data-i18n="strat.pillars.title">Six Pillars of a <span class="gradient-text">Modern Cyber Defense</span></h2>
+        <p class="section-desc" data-i18n="strat.pillars.desc">A comprehensive cybersecurity strategy must address six interconnected domains. Each pillar maps to industry frameworks and is supported by open-source tools from the Phalanx Cyber collection.</p>
+      </div>
+
+      <div class="pillar-grid">
+        <div class="pillar">
+          <div class="pillar__icon" style="background:rgba(0,212,255,0.1);color:#00D4FF">&#128274;</div>
+          <div class="pillar__title">Identity &amp; Zero Trust</div>
+          <div class="pillar__desc">Shift from perimeter-based to identity-centric security. Every user, device, and workload must be continuously verified. Zero Trust Architecture enforces least-privilege access with granular policies. Projected spend on zero-trust network access is growing 10%+ annually.</div>
+          <ul class="pillar__list">
+            <li><span class="ref-item__dot" style="background:#00D4FF"></span>NIST SP 800-207 (Zero Trust Architecture)</li>
+            <li><span class="ref-item__dot" style="background:#00D4FF"></span>CISA Zero Trust Maturity Model</li>
+            <li><span class="ref-item__dot" style="background:#00D4FF"></span>Microsoft Entra ID / Conditional Access</li>
+            <li><span class="ref-item__dot" style="background:#00D4FF"></span>Tool: M365 SSPM Scanner</li>
+          </ul>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar__icon" style="background:rgba(123,97,255,0.1);color:#7B61FF">&#128187;</div>
+          <div class="pillar__title">Application Security</div>
+          <div class="pillar__desc">Shift security left into the development lifecycle. Static analysis (SAST), dynamic testing (DAST), API security, and software composition analysis must be embedded into CI/CD pipelines. Only 25% of organizations achieve highest maturity here.</div>
+          <ul class="pillar__list">
+            <li><span class="ref-item__dot" style="background:#7B61FF"></span>OWASP Top 10 (Web, API, LLM)</li>
+            <li><span class="ref-item__dot" style="background:#7B61FF"></span>NIST SSDF (Secure Software Development)</li>
+            <li><span class="ref-item__dot" style="background:#7B61FF"></span>CWE / SANS Top 25</li>
+            <li><span class="ref-item__dot" style="background:#7B61FF"></span>Tools: SAST, DAST, API Security Scanner</li>
+          </ul>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar__icon" style="background:rgba(16,185,129,0.1);color:#10B981">&#9729;</div>
+          <div class="pillar__title">Cloud &amp; Infrastructure Security</div>
+          <div class="pillar__desc">Secure cloud workloads, containers, and hybrid infrastructure with CSPM, KSPM, and CIS hardening. Misconfiguration remains the #1 cloud breach vector. Many organizations lack strong central oversight and governance of cloud use.</div>
+          <ul class="pillar__list">
+            <li><span class="ref-item__dot" style="background:#10B981"></span>CSA Cloud Controls Matrix (CCM)</li>
+            <li><span class="ref-item__dot" style="background:#10B981"></span>CIS Benchmarks (AWS, Azure, GCP, K8s)</li>
+            <li><span class="ref-item__dot" style="background:#10B981"></span>ISO 27017 / ISO 27018</li>
+            <li><span class="ref-item__dot" style="background:#10B981"></span>Tools: AWS, Azure, GCP, KSPM Scanners</li>
+          </ul>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar__icon" style="background:rgba(239,68,68,0.1);color:#EF4444">&#128680;</div>
+          <div class="pillar__title">Threat Detection &amp; Response</div>
+          <div class="pillar__desc">Build adversary-informed detection capabilities. Map detection rules to MITRE ATT&CK techniques, operationalize threat intelligence, and build playbooks for rapid incident response. AI-augmented SOC operations are becoming essential to match the speed of AI-powered attacks.</div>
+          <ul class="pillar__list">
+            <li><span class="ref-item__dot" style="background:#EF4444"></span>MITRE ATT&CK Framework</li>
+            <li><span class="ref-item__dot" style="background:#EF4444"></span>NIST SP 800-61 (Incident Response)</li>
+            <li><span class="ref-item__dot" style="background:#EF4444"></span>Sigma / KQL Detection Rules</li>
+            <li><span class="ref-item__dot" style="background:#EF4444"></span>Tools: Detection Engineering, CDR Scanner</li>
+          </ul>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar__icon" style="background:rgba(245,158,11,0.1);color:#F59E0B">&#9878;</div>
+          <div class="pillar__title">Governance, Risk &amp; Compliance</div>
+          <div class="pillar__desc">Establish a risk governance framework that connects security controls to business outcomes. Cyber-mature organizations distinguish themselves through increased accountability, centralized decision-making, and coordination between IT recovery and business continuity.</div>
+          <ul class="pillar__list">
+            <li><span class="ref-item__dot" style="background:#F59E0B"></span>ISO 27001:2022 / ISO 27002</li>
+            <li><span class="ref-item__dot" style="background:#F59E0B"></span>NIST CSF 2.0 (Govern, Identify, Protect, Detect, Respond, Recover)</li>
+            <li><span class="ref-item__dot" style="background:#F59E0B"></span>GDPR / NIS2 / DORA / SOC 2</li>
+            <li><span class="ref-item__dot" style="background:#F59E0B"></span>PCI DSS v4.0 / HIPAA</li>
+          </ul>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar__icon" style="background:rgba(6,182,212,0.1);color:#06B6D4">&#128737;</div>
+          <div class="pillar__title">Cyber Resilience &amp; Continuity</div>
+          <div class="pillar__desc">Assume breach. Build resilience through robust backup, disaster recovery, business continuity planning, tabletop exercises, and the ability to operate through a cyber event. A risk-based approach provides precision over blanket coverage, focusing on critical systems to deliver resilience without slowing innovation.</div>
+          <ul class="pillar__list">
+            <li><span class="ref-item__dot" style="background:#06B6D4"></span>NIST SP 800-34 (Contingency Planning)</li>
+            <li><span class="ref-item__dot" style="background:#06B6D4"></span>ISO 22301 (Business Continuity)</li>
+            <li><span class="ref-item__dot" style="background:#06B6D4"></span>MITRE D3FEND / MITRE Engage</li>
+            <li><span class="ref-item__dot" style="background:#06B6D4"></span>NIST SP 800-160 (Cyber Resiliency)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FRAMEWORKS & STANDARDS ============ -->
+  <section class="exec-section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="strat.frameworks.tag">Frameworks &amp; Standards</span>
+        <h2 class="section-title" data-i18n="strat.frameworks.title">The <span class="gradient-text">Framework Landscape</span></h2>
+        <p class="section-desc" data-i18n="strat.frameworks.desc">No single framework covers every dimension of cybersecurity. A mature strategy layers multiple frameworks &mdash; each addressing specific domains, audiences, and regulatory requirements.</p>
+      </div>
+
+      <div class="fw-grid">
+        <div class="fw-card">
+          <span class="fw-card__tag" style="background:rgba(0,212,255,0.1);color:#00D4FF">Risk Management</span>
+          <div class="fw-card__title">NIST Cybersecurity Framework 2.0</div>
+          <div class="fw-card__desc">The gold standard for enterprise cybersecurity governance. CSF 2.0 adds "Govern" as a sixth core function, elevating cybersecurity to board-level strategic discussion.</div>
+          <div class="fw-card__scope"><strong>Core Functions:</strong> Govern &middot; Identify &middot; Protect &middot; Detect &middot; Respond &middot; Recover</div>
+        </div>
+        <div class="fw-card">
+          <span class="fw-card__tag" style="background:rgba(239,68,68,0.1);color:#EF4444">Threat Intelligence</span>
+          <div class="fw-card__title">MITRE ATT&CK Framework</div>
+          <div class="fw-card__desc">A globally-accessible knowledge base of adversary tactics, techniques, and procedures (TTPs). The foundation for adversary-informed defense and detection engineering.</div>
+          <div class="fw-card__scope"><strong>Coverage:</strong> 14 Tactics &middot; 200+ Techniques &middot; Enterprise, Mobile, ICS matrices</div>
+        </div>
+        <div class="fw-card">
+          <span class="fw-card__tag" style="background:rgba(123,97,255,0.1);color:#7B61FF">Application Security</span>
+          <div class="fw-card__title">OWASP Foundation</div>
+          <div class="fw-card__desc">The definitive resource for application security. OWASP Top 10 projects cover web, API, mobile, LLM, and serverless security risks with prescriptive remediation guidance.</div>
+          <div class="fw-card__scope"><strong>Projects:</strong> Web Top 10 &middot; API Top 10 &middot; LLM Top 10 &middot; ASVS &middot; SAMM &middot; Testing Guide</div>
+        </div>
+        <div class="fw-card">
+          <span class="fw-card__tag" style="background:rgba(245,158,11,0.1);color:#F59E0B">Governance</span>
+          <div class="fw-card__title">ISO/IEC 27001:2022</div>
+          <div class="fw-card__desc">The international standard for Information Security Management Systems (ISMS). Provides a systematic approach to managing sensitive information through risk assessment and control implementation.</div>
+          <div class="fw-card__scope"><strong>Controls:</strong> 93 controls across 4 themes (Organizational, People, Physical, Technological)</div>
+        </div>
+        <div class="fw-card">
+          <span class="fw-card__tag" style="background:rgba(16,185,129,0.1);color:#10B981">Privacy &amp; Data Protection</span>
+          <div class="fw-card__title">GDPR / NIS2 / DORA</div>
+          <div class="fw-card__desc">The EU's regulatory trifecta for cybersecurity and data protection. GDPR governs data privacy, NIS2 mandates security for essential services, and DORA ensures digital operational resilience for financial services.</div>
+          <div class="fw-card__scope"><strong>Scope:</strong> Data Protection &middot; Incident Reporting &middot; Supply Chain Security &middot; Operational Resilience</div>
+        </div>
+        <div class="fw-card">
+          <span class="fw-card__tag" style="background:rgba(6,182,212,0.1);color:#06B6D4">Cloud Security</span>
+          <div class="fw-card__title">Cloud Security Alliance (CSA)</div>
+          <div class="fw-card__desc">The Cloud Controls Matrix (CCM) and STAR program provide a cloud-specific security governance framework. CAIQ and CCM map to ISO 27001, NIST, and PCI DSS for cross-framework alignment.</div>
+          <div class="fw-card__scope"><strong>Domains:</strong> 17 control domains &middot; 197 control specifications &middot; STAR Levels 1&ndash;3</div>
+        </div>
+        <div class="fw-card">
+          <span class="fw-card__tag" style="background:rgba(249,115,22,0.1);color:#F97316">Hardening</span>
+          <div class="fw-card__title">CIS Benchmarks &amp; Controls</div>
+          <div class="fw-card__desc">Prescriptive hardening guides for 100+ technology platforms. CIS Controls v8 provides 18 prioritized safeguards organized into three Implementation Groups (IG1, IG2, IG3).</div>
+          <div class="fw-card__scope"><strong>Coverage:</strong> OS &middot; Cloud &middot; Network &middot; Database &middot; Containers &middot; SaaS &middot; Mobile</div>
+        </div>
+        <div class="fw-card">
+          <span class="fw-card__tag" style="background:rgba(236,72,153,0.1);color:#EC4899">Payment Security</span>
+          <div class="fw-card__title">PCI DSS v4.0</div>
+          <div class="fw-card__desc">The payment industry's security standard for organizations handling cardholder data. v4.0 introduces customized approach validation and continuous security process requirements.</div>
+          <div class="fw-card__scope"><strong>Requirements:</strong> 12 principal requirements &middot; 6 objectives &middot; Customized validation approach</div>
+        </div>
+        <div class="fw-card">
+          <span class="fw-card__tag" style="background:rgba(168,85,247,0.1);color:#A855F7">OT / ICS Security</span>
+          <div class="fw-card__title">IEC 62443</div>
+          <div class="fw-card__desc">The standard for Industrial Automation and Control Systems (IACS) security. Defines security levels for zones and conduits in operational technology environments, from power grids to manufacturing floors.</div>
+          <div class="fw-card__scope"><strong>Structure:</strong> General &middot; Policies &amp; Procedures &middot; System &middot; Component levels (SL 1&ndash;4)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOUD-NATIVE SECURITY FRAMEWORKS ============ -->
+  <section class="about-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="strat.cloud.tag">Cloud-Native Frameworks</span>
+        <h2 class="section-title" data-i18n="strat.cloud.title">OEM Security <span class="gradient-text">Frameworks &amp; Well-Architected</span></h2>
+        <p class="section-desc" data-i18n="strat.cloud.desc">Each major cloud provider offers a security-focused well-architected framework. These are not marketing material &mdash; they are engineering playbooks for building secure, resilient, and cost-efficient cloud environments.</p>
+      </div>
+
+      <div class="cloud-fw-grid">
+        <div class="cloud-fw">
+          <div class="cloud-fw__logo">&#9729;</div>
+          <div class="cloud-fw__name">AWS Well-Architected<br>Security Pillar</div>
+          <div class="cloud-fw__desc">Prescriptive guidance for securing AWS workloads across identity, detection, infrastructure protection, data protection, and incident response.</div>
+          <div class="cloud-fw__pillars">
+            <span class="cloud-fw__pill">IAM</span>
+            <span class="cloud-fw__pill">Detection</span>
+            <span class="cloud-fw__pill">Infra Protection</span>
+            <span class="cloud-fw__pill">Data Protection</span>
+            <span class="cloud-fw__pill">Incident Response</span>
+          </div>
+        </div>
+        <div class="cloud-fw">
+          <div class="cloud-fw__logo" style="color:#7B61FF">&#9830;</div>
+          <div class="cloud-fw__name">Azure Well-Architected<br>Security Pillar</div>
+          <div class="cloud-fw__desc">Microsoft's framework for designing secure Azure solutions, integrating Defender, Entra ID, Sentinel, and Azure Policy for comprehensive cloud posture management.</div>
+          <div class="cloud-fw__pillars">
+            <span class="cloud-fw__pill">Zero Trust</span>
+            <span class="cloud-fw__pill">Defense in Depth</span>
+            <span class="cloud-fw__pill">Governance</span>
+            <span class="cloud-fw__pill">DevSecOps</span>
+            <span class="cloud-fw__pill">Monitoring</span>
+          </div>
+        </div>
+        <div class="cloud-fw">
+          <div class="cloud-fw__logo" style="color:#F59E0B">&#9670;</div>
+          <div class="cloud-fw__name">Google Cloud<br>Architecture Framework</div>
+          <div class="cloud-fw__desc">Google's security blueprint emphasizing BeyondCorp (zero trust), workload identity federation, VPC service controls, and Security Command Center integration.</div>
+          <div class="cloud-fw__pillars">
+            <span class="cloud-fw__pill">BeyondCorp</span>
+            <span class="cloud-fw__pill">Workload Identity</span>
+            <span class="cloud-fw__pill">VPC Controls</span>
+            <span class="cloud-fw__pill">SCC</span>
+            <span class="cloud-fw__pill">Org Policies</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTINUOUS STRATEGY REVIEW ============ -->
+  <section class="exec-section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="strat.review.tag">Continuous Review</span>
+        <h2 class="section-title" data-i18n="strat.review.title">Strategy is Not <span class="gradient-text">a One-Time Event</span></h2>
+        <p class="section-desc" data-i18n="strat.review.desc">Leading organizations adopt a three-step continuous review process to ensure cybersecurity strategy remains aligned to evolving threats, business priorities, and technology capabilities.</p>
+      </div>
+
+      <div class="mandate-grid">
+        <div class="mandate" data-step="A">
+          <div class="mandate__title" style="color:var(--accent-1)">Validate Cyber Controls</div>
+          <div class="mandate__desc">Continuously test and validate that existing security controls are effective against the current threat landscape. Red team exercises, breach simulation, and control validation ensure readiness &mdash; not just compliance.</div>
+          <div class="mandate__detail"><strong>Tools:</strong> CrowdStrike Red Team Validation, CrowdStrike Falcon EDR Scanner, Detection Engineering (Sigma/KQL)</div>
+        </div>
+        <div class="mandate" data-step="B">
+          <div class="mandate__title" style="color:var(--accent-2)">Challenge Cyber Strategy</div>
+          <div class="mandate__desc">Regularly refresh your cybersecurity road map by evaluating emerging capabilities: AI-augmented SOC, CNAPP convergence, identity-first security, and automated remediation. Challenge assumptions quarterly. Reframe cybersecurity as an enabler of growth, not a brake on innovation.</div>
+          <div class="mandate__detail"><strong>Frameworks:</strong> NIST CSF 2.0, ISO 27001:2022, CIS Controls v8, MITRE ATT&CK Navigator</div>
+        </div>
+        <div class="mandate" data-step="C">
+          <div class="mandate__title" style="color:#10B981">Adopt Formal Review Cadence</div>
+          <div class="mandate__desc">Establish a formal program to continually review cyberstrategy, technologies, and processes at board level. The conversation must move beyond the server room to the boardroom &mdash; and the mindset must catch up with the stakes.</div>
+          <div class="mandate__detail"><strong>Board Agenda:</strong> Cyber risk appetite &middot; Investment prioritization &middot; Incident readiness &middot; Regulatory posture &middot; Third-party exposure</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TOOL MAPPING & CTA ============ -->
+  <section class="about-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Open-Source Implementation</span>
+        <h2 class="section-title">From Strategy to <span class="gradient-text">Execution</span></h2>
+        <p class="section-desc">Every strategic pillar above can be operationalized with the Phalanx Cyber open-source tool collection. 25 scanners, 2,800+ rules, zero licensing cost.</p>
+      </div>
+
+      <div class="cta-banner">
+        <div class="cta-banner__title">Strategy Without Execution is Hallucination</div>
+        <div class="cta-banner__desc">Browse the complete collection of open-source security scanners that operationalize every pillar of this cybersecurity strategy &mdash; from SAST to CSPM to detection engineering.</div>
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+          <a href="index.html#catalogue" class="btn btn--primary btn--lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            Browse All Tools
+          </a>
+          <a href="https://github.com/Krishcalin" target="_blank" rel="noopener" class="btn btn--ghost btn--lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- References -->
+      <div style="margin-top:64px">
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:8px">Frameworks &amp; Standards Referenced</h3>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:24px">The strategic frameworks and industry data referenced on this page are drawn from the following authoritative sources.</p>
+        <div class="ref-list">
+          <div class="ref-item"><span class="ref-item__dot" style="background:#7B61FF"></span>NIST Cybersecurity Framework 2.0 (February 2024)</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#7B61FF"></span>NIST SP 800-207 &mdash; Zero Trust Architecture</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#7B61FF"></span>NIST SP 800-61 &mdash; Incident Response</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#7B61FF"></span>NIST SP 800-160 &mdash; Cyber Resiliency</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#EF4444"></span>MITRE ATT&CK Framework v15</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#EF4444"></span>MITRE D3FEND &amp; MITRE Engage</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#10B981"></span>OWASP Top 10 (Web, API, LLM) &amp; OWASP SAMM</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#F59E0B"></span>ISO/IEC 27001:2022 &amp; ISO/IEC 27002:2022</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#F59E0B"></span>ISO 22301 &mdash; Business Continuity Management</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#10B981"></span>Cloud Security Alliance &mdash; CCM v4 &amp; STAR Program</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#06B6D4"></span>AWS Well-Architected Framework &mdash; Security Pillar</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#06B6D4"></span>Azure Well-Architected Framework &mdash; Security Pillar</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#06B6D4"></span>Google Cloud Architecture Framework &mdash; Security</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#A855F7"></span>IEC 62443 &mdash; Industrial Cybersecurity Standard</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#EC4899"></span>PCI DSS v4.0 &amp; CIS Controls v8 / CIS Benchmarks</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#EC4899"></span>EU GDPR / NIS2 Directive / DORA Regulation</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#00D4FF"></span>CISA Zero Trust Maturity Model</div>
+          <div class="ref-item"><span class="ref-item__dot" style="background:#00D4FF"></span>SANS / CWE Top 25 Most Dangerous Software Weaknesses</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__col footer__col--brand">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:28px">
+              <defs>
+                <linearGradient id="footerGrad" x1="4" y1="2" x2="32" y2="34"><stop stop-color="#00D4FF"/><stop offset="1" stop-color="#7B61FF"/></linearGradient>
+                <linearGradient id="footerFill" x1="4" y1="2" x2="32" y2="34"><stop stop-color="#00D4FF" stop-opacity="0.12"/><stop offset="1" stop-color="#7B61FF" stop-opacity="0.12"/></linearGradient>
+              </defs>
+              <path d="M18 2L4 9v9c0 8.5 5.6 16.4 14 18 8.4-1.6 14-9.5 14-18V9L18 2z" fill="url(#footerFill)" stroke="url(#footerGrad)" stroke-width="1.5"/>
+              <line x1="12" y1="15" x2="24" y2="15" stroke="url(#footerGrad)" stroke-width="1.8" stroke-linecap="round"/>
+              <line x1="13" y1="19" x2="23" y2="19" stroke="url(#footerGrad)" stroke-width="1.8" stroke-linecap="round"/>
+              <line x1="14" y1="23" x2="22" y2="23" stroke="url(#footerGrad)" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <span style="font-weight:800;font-size:1.2rem">Phalanx<span style="color:var(--accent-1)">Cyber</span></span>
+          </div>
+          <p style="color:var(--text-muted);font-size:0.85rem;line-height:1.7;max-width:280px">Open-source security tools built by a practitioner with 24+ years of experience. From application code to cloud infrastructure.</p>
+        </div>
+        <div class="footer__col">
+          <h4>Pages</h4>
+          <a href="strategy.html">Strategy</a>
+          <a href="index.html#catalogue">Tools</a>
+          <a href="about.html">About</a>
+          <a href="about.html#contact">Contact</a>
+        </div>
+        <div class="footer__col">
+          <h4>Links</h4>
+          <a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2026 Phalanx Cyber. All rights reserved.</span>
+        <span>www.phalanxcyber.io</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/translations.js"></script>
+</body>
+</html>
