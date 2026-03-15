@@ -10,6 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <style>
+    .lang-btn{padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:700;letter-spacing:0.03em;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .2s}
+    .lang-btn:hover{border-color:var(--border-hover);color:var(--text)}
+    .lang-btn.active{background:var(--gradient);color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(0,212,255,0.2)}
+  </style>
 </head>
 <body>
 
@@ -26,6 +31,11 @@
         <li><a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a></li>
       </ul>
       <div class="nav__actions">
+        <div style="display:flex;gap:4px;margin-right:8px">
+          <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+          <button class="lang-btn" data-lang="nl" onclick="setLang('nl')">NL</button>
+          <button class="lang-btn" data-lang="de" onclick="setLang('de')">DE</button>
+        </div>
         <a href="https://github.com/Krishcalin" class="btn btn--ghost" target="_blank" rel="noopener" style="gap:6px">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
           GitHub
@@ -40,9 +50,9 @@
   <section class="page-hero">
     <div class="page-hero__glow"></div>
     <div class="container" style="position:relative">
-      <span class="section-tag">About the Creator</span>
-      <h1 class="section-title" style="font-size:clamp(2rem,4.5vw,3.2rem)">Built by a Practitioner.<br><span class="gradient-text">Not a Product Company.</span></h1>
-      <p class="section-desc" style="max-width:700px;margin:0 auto">Phalanx Cyber is the work of a single cybersecurity strategist with 24+ years of hands-on engineering, product leadership, and enterprise security experience &mdash; demonstrating the power of deep practitioner expertise combined with AI-augmented development.</p>
+      <span class="section-tag" data-i18n="about.hero.tag">About the Creator</span>
+      <h1 class="section-title" style="font-size:clamp(2rem,4.5vw,3.2rem)" data-i18n="about.hero.title">Built by a Practitioner.<br><span class="gradient-text">Not a Product Company.</span></h1>
+      <p class="section-desc" style="max-width:700px;margin:0 auto" data-i18n="about.hero.desc">Phalanx Cyber is the work of a single cybersecurity strategist with 24+ years of hands-on engineering, product leadership, and enterprise security experience &mdash; demonstrating the power of deep practitioner expertise combined with AI-augmented development.</p>
     </div>
   </section>
 
@@ -89,41 +99,12 @@
   <section class="exec-section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Career Journey</span>
-        <h2 class="section-title">24 Years of <span class="gradient-text">Building &amp; Defending</span></h2>
-        <p class="section-desc">A career defined by the convergence of engineering depth, security expertise, and strategic business thinking &mdash; across industries, geographies, and technology eras.</p>
+        <span class="section-tag" data-i18n="about.career.tag">Career Journey</span>
+        <h2 class="section-title" data-i18n="about.career.title">24 Years of <span class="gradient-text">Building &amp; Defending</span></h2>
+        <p class="section-desc" data-i18n="about.career.desc">A career defined by the convergence of engineering depth, security expertise, and strategic business thinking &mdash; across industries, geographies, and technology eras.</p>
       </div>
 
       <div class="timeline">
-        <div class="timeline__item">
-          <div class="timeline__marker"></div>
-          <div class="timeline__content">
-            <span class="timeline__period">Present</span>
-            <h4>CISO at Premier Power Utility Company</h4>
-            <p class="timeline__location">Kolkata, India</p>
-            <p>Leading cybersecurity strategy and operations for one of India's large power generation and distribution conglomerates. Responsible for securing critical infrastructure spanning IT and OT environments, including power plant SCADA systems, enterprise SAP landscapes, and cloud workloads. Driving the adoption of open-source security tooling and AI-augmented security operations across the organization.</p>
-          </div>
-        </div>
-
-        <div class="timeline__item">
-          <div class="timeline__marker"></div>
-          <div class="timeline__content">
-            <span class="timeline__period">Earlier Career</span>
-            <h4>Global Security Leadership &mdash; London, Amsterdam, New Delhi</h4>
-            <p class="timeline__location">United Kingdom &middot; Netherlands &middot; India</p>
-            <p>Over two decades of progressive cybersecurity leadership across international markets. Roles spanning security engineering, threat intelligence operations, penetration testing, security architecture, and enterprise security program development. Built and led security teams, designed security architectures for large-scale environments, and drove security transformation programs across regulated industries.</p>
-          </div>
-        </div>
-
-        <div class="timeline__item">
-          <div class="timeline__marker"></div>
-          <div class="timeline__content">
-            <span class="timeline__period">1999-2000</span>
-            <h4>Indian Institute of Technology, Kharagpur</h4>
-            <p class="timeline__location">West Bengal, India</p>
-            <p>Advanced studies at IIT Kharagpur, India's premier engineering institution (established 1951, consistently ranked among Asia's top engineering schools). The rigorous engineering foundation at IIT shaped a first-principles approach to problem-solving that defines the architecture of the Phalanx Cyber platform &mdash; building security tools from the ground up with full transparency and control.</p>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -132,9 +113,9 @@
   <section class="about-section">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Expertise</span>
-        <h2 class="section-title">The <span class="gradient-text">Three Lenses</span></h2>
-        <p class="section-desc">What makes Krishnendu's approach distinctive is the ability to operate across three domains that are rarely combined in a single practitioner: deep engineering, product thinking, and business strategy.</p>
+        <span class="section-tag" data-i18n="about.expertise.tag">Expertise</span>
+        <h2 class="section-title" data-i18n="about.expertise.title">The <span class="gradient-text">Three Lenses</span></h2>
+        <p class="section-desc" data-i18n="about.expertise.desc">What makes Krishnendu's approach distinctive is the ability to operate across three domains that are rarely combined in a single practitioner: deep engineering, product thinking, and business strategy.</p>
       </div>
 
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
@@ -178,9 +159,9 @@
   <section class="exec-section" style="background:linear-gradient(180deg, var(--bg) 0%, var(--bg-surface) 50%, var(--bg) 100%);">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Thought Leadership</span>
-        <h2 class="section-title">Published <span class="gradient-text">Research &amp; Writing</span></h2>
-        <p class="section-desc">Krishnendu regularly publishes technical research and strategic analysis on LinkedIn, covering red teaming, threat intelligence, AI in security, and enterprise defense strategies.</p>
+        <span class="section-tag" data-i18n="about.thought.tag">Thought Leadership</span>
+        <h2 class="section-title" data-i18n="about.thought.title">Published <span class="gradient-text">Research &amp; Writing</span></h2>
+        <p class="section-desc" data-i18n="about.thought.desc">Krishnendu regularly publishes technical research and strategic analysis on LinkedIn, covering red teaming, threat intelligence, AI in security, and enterprise defense strategies.</p>
       </div>
 
       <div class="ai-grid">
@@ -229,9 +210,9 @@
   <section class="about-section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Open-Source Portfolio</span>
-        <h2 class="section-title"><span class="gradient-text">30 Repositories.</span> One Vision.</h2>
-        <p class="section-desc">Every repository on GitHub is personally built by Krishnendu &mdash; from architecture design to the last line of code. Together, they form the most comprehensive open-source enterprise security platform available today.</p>
+        <span class="section-tag" data-i18n="about.portfolio.tag">Open-Source Portfolio</span>
+        <h2 class="section-title" data-i18n="about.portfolio.title"><span class="gradient-text">30 Repositories.</span> One Vision.</h2>
+        <p class="section-desc" data-i18n="about.portfolio.desc">Every repository on GitHub is personally built by Krishnendu &mdash; from architecture design to the last line of code. Together, they form the most comprehensive open-source enterprise security platform available today.</p>
       </div>
 
       <div class="about-section__grid">
@@ -492,8 +473,8 @@
   <section class="about-section">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Credentials</span>
-        <h2 class="section-title">Education &amp; <span class="gradient-text">Certifications</span></h2>
+        <span class="section-tag" data-i18n="about.creds.tag">Credentials</span>
+        <h2 class="section-title" data-i18n="about.creds.title">Education &amp; <span class="gradient-text">Certifications</span></h2>
       </div>
 
       <div class="capabilities__grid">
@@ -587,9 +568,9 @@
   <section class="about-section" id="contact" style="background:var(--bg-surface);border-top:1px solid var(--border)">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Contact</span>
-        <h2 class="section-title">Start the <span class="gradient-text">Conversation</span></h2>
-        <p class="section-desc">If you would like to connect, drop me an email and I will try to respond back. We can always set up a meeting to discuss further.</p>
+        <span class="section-tag" data-i18n="about.contact.tag">Contact</span>
+        <h2 class="section-title" data-i18n="about.contact.title">Start the <span class="gradient-text">Conversation</span></h2>
+        <p class="section-desc" data-i18n="about.contact.desc">If you would like to connect, drop me an email and I will try to respond back. We can always set up a meeting to discuss further.</p>
       </div>
 
       <div style="text-align:center;margin-top:16px">
@@ -643,5 +624,6 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/translations.js"></script>
 </body>
 </html>
