@@ -224,7 +224,8 @@ button { cursor: pointer; font: inherit; border: none; background: none; color: 
   transition: all 0.25s ease;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
-.nav__dropdown:hover .nav__dropdown-panel {
+.nav__dropdown:hover .nav__dropdown-panel,
+.nav__dropdown.open .nav__dropdown-panel {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
@@ -234,7 +235,8 @@ button { cursor: pointer; font: inherit; border: none; background: none; color: 
   grid-template-columns: 1fr 1fr 1.2fr;
   gap: 24px;
 }
-.nav__dropdown-col h4 {
+.nav__dropdown-col h4,
+.nav__dropdown-col h5 {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;

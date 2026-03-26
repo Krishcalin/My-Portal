@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initStatCounters();
   initScrollReveal();
   initHeroParticles();
+  initMegaMenu();
 });
 
 /* ---- NAVIGATION ---- */
@@ -294,6 +295,19 @@ _style.textContent = `
   }
 `;
 document.head.appendChild(_style);
+
+/* ---- MEGA MENU ---- */
+function initMegaMenu() {
+  document.querySelectorAll('.nav__dropdown').forEach(dd => {
+    let timer;
+    dd.addEventListener('mouseenter', () => { clearTimeout(timer); dd.classList.add('open'); });
+    dd.addEventListener('mouseleave', () => { timer = setTimeout(() => dd.classList.remove('open'), 200); });
+    // close on panel link click
+    dd.querySelectorAll('.nav__dropdown-panel a').forEach(a => {
+      a.addEventListener('click', () => dd.classList.remove('open'));
+    });
+  });
+}
 
 /* ---- HERO PARTICLES ---- */
 function initHeroParticles() {
