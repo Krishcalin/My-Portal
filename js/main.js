@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initToolCatalogue();
   initStatCounters();
   initScrollReveal();
+  initHeroParticles();
 });
 
 /* ---- NAVIGATION ---- */
@@ -293,6 +294,63 @@ _style.textContent = `
   }
 `;
 document.head.appendChild(_style);
+
+/* ---- HERO PARTICLES ---- */
+function initHeroParticles() {
+  const canvas = document.getElementById('heroParticles');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, particles;
+  const COLORS = ['rgba(0,212,255,', 'rgba(123,97,255,', 'rgba(168,85,247,'];
+  function resize() {
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+  function spawn() {
+    particles = [];
+    const count = Math.min(Math.floor(w * h / 12000), 80);
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w, y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.8 + 0.5,
+        c: COLORS[Math.floor(Math.random() * COLORS.length)],
+        a: Math.random() * 0.5 + 0.2,
+      });
+    }
+  }
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    for (const p of particles) {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.c + p.a + ')';
+      ctx.fill();
+    }
+    // draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = 'rgba(0,212,255,' + (0.08 * (1 - dist / 120)) + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  resize(); spawn(); draw();
+  window.addEventListener('resize', () => { resize(); spawn(); });
+}
 
 /* ---- SMOOTH SCROLL for hash links ---- */
 document.addEventListener('click', (e) => {
