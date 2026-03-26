@@ -353,6 +353,29 @@ const TOOLS = [
     ]
   },
 
+  {
+    id: "oracle-ebs-scanner",
+    name: "Oracle EBS Security Audit",
+    tagline: "Live DB + offline CSV security audit for Oracle E-Business Suite R12.x with 68 checks across 10 domains, SoD detection, and 17+ CWE mappings",
+    category: "saas",
+    tags: ["Oracle", "EBS", "R12", "SoD", "SOX", "CIS", "PCI-DSS", "Audit", "Database"],
+    stats: { checks: 68, categories: 10, cwes: "17+", loc: "4,775" },
+    version: "1.0.0",
+    language: "Python",
+    github: "https://github.com/Krishcalin/Oracle-EBS-Security-Audit",
+    status: "public",
+    icon: "saas",
+    highlights: [
+      "Dual-mode: Live DB scanner (oracledb) + Offline CSV scanner (zero dependencies) with 20 SQL export queries provided",
+      "10 audit domains: User Security (8), Password & Auth (6), Profile Options (10), Responsibility & Access (6), Segregation of Duties (6), Concurrent Programs (4), Audit Trail (5), Database Security (10), Patching & Versions (4), Workflow & Approvals (4)",
+      "Segregation of Duties: 6 conflict pairs — AP/AR, AP/PO, GL/AP, PO/INV, Admin/AP, HR/AP",
+      "Database hardening: DBA role grants, PUBLIC privileges, UTL_FILE_DIR, remote OS auth, password verify function, default accounts",
+      "Audit trail validation: 13 critical tables (AP, GL, PO, AR, INV, PER, PAY), sign-on audit level, DB-level auditing",
+      "SOX, CIS Oracle DB Benchmark, NIST 800-53, PCI-DSS v4.0, HIPAA, ISO 27001 compliance alignment",
+      "JSON + HTML (Catppuccin Mocha dark theme with filters) + console reports, CI/CD exit-code gating"
+    ]
+  },
+
   // ── Infrastructure Security ───────────────────────────────────
   {
     id: "fortinet-scanner",
