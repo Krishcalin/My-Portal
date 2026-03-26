@@ -8,9 +8,9 @@
   var translations = {
     /* ---- HERO ---- */
     'hero.badge': {
-      nl: '<span class="hero__badge-dot"></span>29 Open-Source Beveiligingstools',
-      de: '<span class="hero__badge-dot"></span>29 Open-Source Sicherheitstools',
-      en: '<span class="hero__badge-dot"></span>29 Open-Source Security Tools'
+      nl: '<span class="hero__badge-dot"></span>39 Open-Source Beveiligingstools',
+      de: '<span class="hero__badge-dot"></span>39 Open-Source Sicherheitstools',
+      en: '<span class="hero__badge-dot"></span>39 Open-Source Security Tools'
     },
     'hero.title': {
       nl: 'Open-Source<br><span class="gradient-text">Beveiligingstools</span>',
@@ -18,9 +18,9 @@
       en: 'Open-Source<br><span class="gradient-text">Security Tools</span>'
     },
     'hero.subtitle': {
-      nl: '29 scanners voor applicatiecode, cloudinfrastructuur, SaaS-platforms, netwerkapparaten, dreigingsdetectie en risicokwantificering. 4.500+ beveiligingsregels over 15+ compliance-frameworks. Gebouwd door een practitioner. Gratis voor altijd.',
-      de: '28 Scanner für Anwendungscode, Cloud-Infrastruktur, SaaS-Plattformen, Netzwerkgeräte, Bedrohungserkennung und Risikoquantifizierung. 4.500+ Sicherheitsregeln über 15+ Compliance-Frameworks. Von einem Praktiker entwickelt. Für immer kostenlos.',
-      en: '29 scanners covering application code, cloud infrastructure, SaaS platforms, network devices, threat detection, and risk quantification. 4,500+ security rules across 15+ compliance frameworks. Built by a practitioner. Free forever.'
+      nl: '39 tools voor applicatiecode, cloudinfrastructuur, SaaS-platforms, netwerkapparaten, dreigingsdetectie, red teaming en risicokwantificering. 5.500+ beveiligingsregels over 20+ compliance-frameworks. Gebouwd door een practitioner. Gratis voor altijd.',
+      de: '39 Tools für Anwendungscode, Cloud-Infrastruktur, SaaS-Plattformen, Netzwerkgeräte, Bedrohungserkennung, Red Teaming und Risikoquantifizierung. 5.500+ Sicherheitsregeln über 20+ Compliance-Frameworks. Von einem Praktiker entwickelt. Für immer kostenlos.',
+      en: '39 tools covering application code, cloud infrastructure, SaaS platforms, network devices, threat detection, red teaming, and risk quantification. 5,500+ security rules across 20+ compliance frameworks. Built by a practitioner. Free forever.'
     },
     'hero.cta1': {
       nl: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> Bekijk tools',
@@ -116,9 +116,9 @@
       en: 'Open-Source Portfolio'
     },
     'about.portfolio.title': {
-      nl: '<span class="gradient-text">30 Repositories.</span> Eén visie.',
-      de: '<span class="gradient-text">30 Repositories.</span> Eine Vision.',
-      en: '<span class="gradient-text">30 Repositories.</span> One Vision.'
+      nl: '<span class="gradient-text">31 Repositories.</span> Eén visie.',
+      de: '<span class="gradient-text">31 Repositories.</span> Eine Vision.',
+      en: '<span class="gradient-text">31 Repositories.</span> One Vision.'
     },
     'about.portfolio.desc': {
       nl: 'Elke repository op GitHub is persoonlijk gebouwd door Krishnendu &mdash; van architectuurontwerp tot de laatste regel code. Samen vormen ze het meest uitgebreide open-source enterprise beveiligingsplatform dat vandaag beschikbaar is.',
