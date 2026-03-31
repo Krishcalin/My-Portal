@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Security Scanner &mdash; Sample Report | Phalanx Cyber</title>
+<meta name="description" content="Dual-mode AWS security scanner with IaC analysis (Terraform + CloudFormation) and live API auditing across 25+ services.">
+<style>
+/* ---- RESET ---- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0A0E1A;--bg-surface:#111827;--bg-card:rgba(17,24,39,0.6);
+  --bg-glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --text:#F9FAFB;--text-secondary:#9CA3AF;--text-muted:#6B7280;
+  --accent-1:#00D4FF;--accent-2:#7B61FF;
+  --gradient:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+  --radius:12px;--radius-sm:8px;
+  --sev-critical:#EF4444;--sev-high:#F59E0B;--sev-medium:#3B82F6;
+  --sev-low:#22C55E;--sev-info:#6B7280;
+}
+
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:var(--accent-1);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---- LAYOUT ---- */
+.container{max-width:1280px;margin:0 auto;padding:0 24px}
+
+/* ---- BACK NAV ---- */
+.back-nav{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 0}
+.back-nav .container{display:flex;align-items:center;justify-content:space-between}
+.back-nav a{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:0.9rem;color:var(--text-secondary);transition:color 0.2s}
+.back-nav a:hover{color:var(--accent-1);text-decoration:none}
+.back-nav__brand{font-weight:800;font-size:1.1rem;color:var(--text)}
+.back-nav__brand span{color:var(--accent-1)}
+
+/* ---- HERO HEADER ---- */
+.report-hero{position:relative;padding:80px 0 60px;overflow:hidden}
+.report-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,212,255,0.08),transparent 70%)}
+.report-hero__badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);font-size:0.8rem;font-weight:600;color:var(--accent-1);margin-bottom:20px}
+.report-hero__badge::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent-1);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.report-hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.2;margin-bottom:12px}
+.report-hero h1 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.report-hero__sub{color:var(--text-secondary);font-size:1.05rem;max-width:680px;margin-bottom:32px}
+
+/* ---- META GRID ---- */
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:0}
+.meta-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;backdrop-filter:blur(8px)}
+.meta-card__label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:4px}
+.meta-card__value{font-size:0.95rem;font-weight:600;color:var(--text);word-break:break-all}
+
+/* ---- SEVERITY DASHBOARD ---- */
+.dashboard{padding:48px 0}
+.section-title{font-size:1.4rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.section-title svg{color:var(--accent-1)}
+
+.sev-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:40px}
+@media(max-width:768px){.sev-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.sev-grid{grid-template-columns:repeat(2,1fr)}}
+.sev-card{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;text-align:center;overflow:hidden;cursor:pointer;transition:all 0.25s}
+.sev-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.15)}
+.sev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sev-card[data-sev="CRITICAL"]::before{background:var(--sev-critical)}
+.sev-card[data-sev="HIGH"]::before{background:var(--sev-high)}
+.sev-card[data-sev="MEDIUM"]::before{background:var(--sev-medium)}
+.sev-card[data-sev="LOW"]::before{background:var(--sev-low)}
+.sev-card[data-sev="INFO"]::before{background:var(--sev-info)}
+.sev-card__count{font-size:2.2rem;font-weight:800;line-height:1}
+.sev-card[data-sev="CRITICAL"] .sev-card__count{color:var(--sev-critical)}
+.sev-card[data-sev="HIGH"] .sev-card__count{color:var(--sev-high)}
+.sev-card[data-sev="MEDIUM"] .sev-card__count{color:var(--sev-medium)}
+.sev-card[data-sev="LOW"] .sev-card__count{color:var(--sev-low)}
+.sev-card[data-sev="INFO"] .sev-card__count{color:var(--sev-info)}
+.sev-card__label{font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-top:6px}
+.sev-card.active{border-color:rgba(0,212,255,0.4);background:rgba(0,212,255,0.06)}
+
+/* ---- POSTURE SCORE ---- */
+.posture{display:flex;align-items:center;gap:40px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:32px;margin-bottom:40px}
+@media(max-width:640px){.posture{flex-direction:column;text-align:center}}
+.posture__ring{position:relative;width:120px;height:120px;flex-shrink:0}
+.posture__ring svg{transform:rotate(-90deg)}
+.posture__ring circle{fill:none;stroke-width:8}
+.posture__ring .bg{stroke:rgba(255,255,255,0.06)}
+.posture__ring .fg{stroke:var(--sev-critical);stroke-linecap:round;stroke-dasharray:339.292;stroke-dashoffset:339.29;transition:stroke-dashoffset 1.5s ease}
+.posture__score{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.posture__score-num{font-size:2rem;font-weight:800;color:var(--sev-critical)}
+.posture__score-max{font-size:0.75rem;color:var(--text-muted)}
+.posture__text h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
+.posture__text .grade{display:inline-block;padding:2px 10px;border-radius:4px;font-weight:700;font-size:0.85rem;background:rgba(239,68,68,0.15);color:var(--sev-critical);margin-left:8px}
+.posture__text p{color:var(--text-secondary);font-size:0.9rem;line-height:1.6;margin-top:8px}
+
+/* ---- CATEGORY BAR CHART ---- */
+.cat-chart{margin-bottom:40px}
+.cat-bar{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.cat-bar__label{width:180px;text-align:right;font-size:0.82rem;color:var(--text-secondary);flex-shrink:0}
+@media(max-width:640px){.cat-bar__label{width:120px;font-size:0.75rem}}
+.cat-bar__track{flex:1;height:28px;background:rgba(255,255,255,0.04);border-radius:4px;overflow:hidden;position:relative}
+.cat-bar__fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;font-size:0.75rem;font-weight:700;color:#fff;transition:width 0.8s ease}
+.cat-bar__count{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--text-muted)}
+
+/* ---- FILTERS ---- */
+.filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px;align-items:center}
+.filter-select,.filter-search{background:var(--bg-surface);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:var(--radius-sm);font-size:0.85rem;font-family:inherit;transition:border-color 0.2s}
+.filter-select:focus,.filter-search:focus{outline:none;border-color:var(--accent-1)}
+.filter-search{flex:1;min-width:200px}
+.filter-count{margin-left:auto;font-size:0.85rem;color:var(--text-muted)}
+
+/* ---- FINDINGS ---- */
+.findings-section{padding-bottom:60px}
+.finding{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;transition:border-color 0.2s}
+.finding:hover{border-color:rgba(255,255,255,0.12)}
+.finding__header{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;user-select:none}
+.finding__sev{display:inline-flex;align-items:center;justify-content:center;padding:4px 10px;border-radius:4px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;flex-shrink:0;min-width:72px}
+.finding__sev--CRITICAL{background:rgba(239,68,68,0.15);color:var(--sev-critical)}
+.finding__sev--HIGH{background:rgba(245,158,11,0.15);color:var(--sev-high)}
+.finding__sev--MEDIUM{background:rgba(59,130,246,0.15);color:var(--sev-medium)}
+.finding__sev--LOW{background:rgba(34,197,94,0.15);color:var(--sev-low)}
+.finding__sev--INFO{background:rgba(107,114,128,0.15);color:var(--sev-info)}
+.finding__id{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.8rem;color:var(--accent-1);font-weight:600;flex-shrink:0;min-width:120px}
+.finding__name{font-size:0.9rem;font-weight:600;flex:1}
+.finding__chevron{color:var(--text-muted);transition:transform 0.2s;flex-shrink:0}
+.finding.open .finding__chevron{transform:rotate(180deg)}
+.finding__body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
+.finding.open .finding__body{display:block}
+.finding__grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:640px){.finding__grid{grid-template-columns:1fr}}
+.finding__field{padding:14px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.04)}
+.finding__field-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px}
+.finding__field-value{font-size:0.85rem;color:var(--text-secondary);line-height:1.5}
+.finding__field-value code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.82rem;background:rgba(0,212,255,0.08);color:var(--accent-1);padding:2px 6px;border-radius:3px}
+.finding__field--full{grid-column:1/-1}
+.finding__field--rec{border-left:3px solid var(--accent-1)}
+.finding__field--issue{border-left:3px solid var(--sev-high)}
+.finding__cwe{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:4px;background:rgba(123,97,255,0.12);color:var(--accent-2);font-size:0.78rem;font-weight:600;font-family:'JetBrains Mono','Fira Code',monospace}
+
+/* ---- COMPLIANCE ---- */
+.compliance{padding:40px 0 60px}
+.compliance-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.compliance-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center}
+.compliance-card__name{font-weight:700;font-size:0.9rem;margin-bottom:4px}
+.compliance-card__desc{font-size:0.75rem;color:var(--text-muted);line-height:1.4}
+
+/* ---- FOOTER ---- */
+.report-footer{border-top:1px solid var(--border);padding:32px 0;text-align:center;color:var(--text-muted);font-size:0.82rem}
+.report-footer a{color:var(--accent-1)}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeIn 0.4s ease both}
+
+/* ---- PRINT ---- */
+@media print{
+  body{background:#fff;color:#111}
+  .back-nav,.filters{display:none}
+  .finding__body{display:block!important}
+  .finding{break-inside:avoid}
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ======== BACK NAV ======== -->
+<nav class="back-nav">
+  <div class="container">
+    <a href="index.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Portal
+    </a>
+    <div class="back-nav__brand">Phalanx<span>Cyber</span></div>
+  </div>
+</nav>
+
+<!-- ======== HERO ======== -->
+<header class="report-hero">
+  <div class="container">
+    <div class="report-hero__badge">Sample Security Audit Report</div>
+    <h1>AWS Security <span>Scanner</span></h1>
+    <p class="report-hero__sub">
+      Dual-mode AWS security scanner with IaC analysis (Terraform + CloudFormation) and live API auditing across 25+ services.
+      41 findings generated by the open-source scanner.
+    </p>
+    <div class="meta-grid">
+      <div class="meta-card">
+        <div class="meta-card__label">Mode</div>
+        <div class="meta-card__value">IaC Offline Scan (Terraform)</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-card__label">Scanner</div>
+        <div class="meta-card__value">aws_offline_scanner.py v1.1.0</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-card__label">Scan Date</div>
+        <div class="meta-card__value">2026-03-31</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ======== SEVERITY DASHBOARD ======== -->
+<section class="dashboard">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Finding Summary
+    </h2>
+
+    <div class="sev-grid">
+      <div class="sev-card" data-sev="CRITICAL" onclick="filterBySev('CRITICAL')">
+        <div class="sev-card__count">6</div>
+        <div class="sev-card__label">Critical</div>
+      </div>
+      <div class="sev-card" data-sev="HIGH" onclick="filterBySev('HIGH')">
+        <div class="sev-card__count">23</div>
+        <div class="sev-card__label">High</div>
+      </div>
+      <div class="sev-card" data-sev="MEDIUM" onclick="filterBySev('MEDIUM')">
+        <div class="sev-card__count">11</div>
+        <div class="sev-card__label">Medium</div>
+      </div>
+      <div class="sev-card" data-sev="LOW" onclick="filterBySev('LOW')">
+        <div class="sev-card__count">1</div>
+        <div class="sev-card__label">Low</div>
+      </div>
+      <div class="sev-card" data-sev="INFO" onclick="filterBySev('INFO')">
+        <div class="sev-card__count">0</div>
+        <div class="sev-card__label">Info</div>
+      </div>
+    </div>
+
+    <!-- Posture Score -->
+    <div class="posture">
+      <div class="posture__ring">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle class="bg" cx="60" cy="60" r="54"/>
+          <circle class="fg" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="posture__score">
+          <div class="posture__score-num">0</div>
+          <div class="posture__score-max">/ 100</div>
+        </div>
+      </div>
+      <div class="posture__text">
+        <h3>Security Posture <span class="grade">F &mdash; Critical</span></h3>
+        <p>6 critical findings require immediate attention. 23 high-severity issues compound the risk. 11 medium-severity findings should be addressed in the next sprint. 1 low-severity item are informational or best-practice recommendations.</p>
+      </div>
+    </div>
+
+    <!-- Category Breakdown Chart -->
+    <h2 class="section-title" style="margin-top:16px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+      Findings by Category
+    </h2>
+    <div class="cat-chart" id="catChart"></div>
+  </div>
+</section>
+
+<!-- ======== FINDINGS ======== -->
+<section class="findings-section">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Detailed Findings
+    </h2>
+
+    <div class="filters">
+      <select class="filter-select" id="sevFilter" onchange="applyFilters()">
+        <option value="">All Severities</option>
+        <option value="CRITICAL">Critical</option>
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+        <option value="INFO">Info</option>
+      </select>
+      <select class="filter-select" id="catFilter" onchange="applyFilters()">
+        <option value="">All Categories</option>
+      </select>
+      <input type="text" class="filter-search" id="searchFilter" placeholder="Search findings..." oninput="applyFilters()">
+      <span class="filter-count" id="filterCount">Showing 41 of 41</span>
+    </div>
+
+    <div id="findingsContainer"></div>
+  </div>
+</section>
+
+
+<!-- ======== COMPLIANCE ======== -->
+<section class="compliance">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Compliance Mapping
+    </h2>
+    <div class="compliance-grid">
+      <div class="compliance-card">
+        <div class="compliance-card__name">CIS AWS Foundations Benchmark v3.0</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-card__name">AWS Well-Architected</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-card__name">NIST SP 800-53</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======== FOOTER ======== -->
+<footer class="report-footer">
+  <div class="container">
+    Generated by <a href="https://github.com/Krishcalin/AWS-Security-Scanner" target="_blank" rel="noopener">AWS Security Scanner</a> &mdash;
+    part of the <a href="index.html">Phalanx Cyber</a> open-source security toolkit.
+    This is a sample report using synthetic test data.
+  </div>
+</footer>
+
+<script>
+/* ================================================================
+   FINDINGS DATA
+   ================================================================ */
+const FINDINGS = [{"rule_id": "AWS-CRED-TF-001", "name": "Hardcoded AWS access key ID in Terraform config", "category": "Credentials: Hardcoded Secrets", "severity": "CRITICAL", "description": "Hardcoded AWS access key IDs committed to version control expose the credentials to anyone with repository access.", "recommendation": "Remove hardcoded credentials. Use IAM roles, environment variables, or AWS Secrets Manager.", "source": "tests\\samples\\vulnerable_network.tf", "context": "access_key = \"AKIAIOSFODNN7EXAMPLE\"", "cwe": "CWE-798"}, {"rule_id": "AWS-VPC-TF-002", "name": "Subnet configured to assign public IP addresses automatically", "category": "VPC: Public Subnet", "severity": "MEDIUM", "description": "Subnets that auto-assign public IPs expose every launched instance to the internet by default.", "recommendation": "Set map_public_ip_on_launch = false. Explicitly assign Elastic IPs only where required.", "source": "tests\\samples\\vulnerable_network.tf", "context": "map_public_ip_on_launch = true", "cwe": "CWE-284"}, {"rule_id": "AWS-VPC-TF-002", "name": "Subnet configured to assign public IP addresses automatically", "category": "VPC: Public Subnet", "severity": "MEDIUM", "description": "Subnets that auto-assign public IPs expose every launched instance to the internet by default.", "recommendation": "Set map_public_ip_on_launch = false. Explicitly assign Elastic IPs only where required.", "source": "tests\\samples\\vulnerable_network.tf", "context": "map_public_ip_on_launch = true", "cwe": "CWE-284"}, {"rule_id": "AWS-SG-TF-001", "name": "Security Group allows SSH (22) from any IP", "category": "EC2: Security Group", "severity": "CRITICAL", "description": "A security group ingress rule permits SSH access from the entire internet (0.0.0.0/0 or ::/0), enabling brute-force and exploitation attacks.", "recommendation": "Restrict SSH access to specific trusted IP ranges or use AWS Systems Manager Session Manager to eliminate the need for SSH.", "source": "tests\\samples\\vulnerable_network.tf", "context": "cidr_blocks = [\"0.0.0.0/0\"]", "cwe": "CWE-284"}, {"rule_id": "AWS-SG-TF-001", "name": "Security Group allows SSH (22) from any IP", "category": "EC2: Security Group", "severity": "CRITICAL", "description": "A security group ingress rule permits SSH access from the entire internet (0.0.0.0/0 or ::/0), enabling brute-force and exploitation attacks.", "recommendation": "Restrict SSH access to specific trusted IP ranges or use AWS Systems Manager Session Manager to eliminate the need for SSH.", "source": "tests\\samples\\vulnerable_network.tf", "context": "cidr_blocks = [\"0.0.0.0/0\"]", "cwe": "CWE-284"}, {"rule_id": "AWS-SG-TF-001", "name": "Security Group allows SSH (22) from any IP", "category": "EC2: Security Group", "severity": "CRITICAL", "description": "A security group ingress rule permits SSH access from the entire internet (0.0.0.0/0 or ::/0), enabling brute-force and exploitation attacks.", "recommendation": "Restrict SSH access to specific trusted IP ranges or use AWS Systems Manager Session Manager to eliminate the need for SSH.", "source": "tests\\samples\\vulnerable_network.tf", "context": "cidr_blocks = [\"0.0.0.0/0\"]", "cwe": "CWE-284"}, {"rule_id": "AWS-SG-TF-001", "name": "Security Group allows SSH (22) from any IP", "category": "EC2: Security Group", "severity": "CRITICAL", "description": "A security group ingress rule permits SSH access from the entire internet (0.0.0.0/0 or ::/0), enabling brute-force and exploitation attacks.", "recommendation": "Restrict SSH access to specific trusted IP ranges or use AWS Systems Manager Session Manager to eliminate the need for SSH.", "source": "tests\\samples\\vulnerable_network.tf", "context": "cidr_blocks = [\"0.0.0.0/0\"]", "cwe": "CWE-284"}, {"rule_id": "AWS-S3-TF-002", "name": "S3 bucket ACL allows public read", "category": "S3: Public Access", "severity": "HIGH", "description": "Setting acl=public-read allows any internet user to list and download all bucket objects.", "recommendation": "Remove the public ACL. Use pre-signed URLs or CloudFront OAC for public content delivery.", "source": "tests\\samples\\vulnerable_network.tf", "context": "acl    = \"public-read\"", "cwe": "CWE-732"}, {"rule_id": "AWS-S3-TF-003", "name": "S3 Block Public ACLs disabled", "category": "S3: Public Access", "severity": "HIGH", "description": "Disabling block_public_acls allows public ACLs to be applied, potentially exposing objects.", "recommendation": "Set block_public_acls = true in aws_s3_bucket_public_access_block.", "source": "tests\\samples\\vulnerable_network.tf", "context": "block_public_acls       = false", "cwe": "CWE-732"}, {"rule_id": "AWS-S3-TF-004", "name": "S3 Block Public Policy disabled", "category": "S3: Public Access", "severity": "HIGH", "description": "Disabling block_public_policy allows bucket policies granting public access to be applied.", "recommendation": "Set block_public_policy = true in aws_s3_bucket_public_access_block.", "source": "tests\\samples\\vulnerable_network.tf", "context": "block_public_policy     = false", "cwe": "CWE-732"}, {"rule_id": "AWS-S3-TF-005", "name": "S3 Ignore Public ACLs disabled", "category": "S3: Public Access", "severity": "HIGH", "description": "Setting ignore_public_acls=false means existing public ACLs on objects remain active.", "recommendation": "Set ignore_public_acls = true to ignore any public ACLs on the bucket and objects.", "source": "tests\\samples\\vulnerable_network.tf", "context": "ignore_public_acls      = false", "cwe": "CWE-732"}, {"rule_id": "AWS-S3-TF-006", "name": "S3 Restrict Public Buckets disabled", "category": "S3: Public Access", "severity": "HIGH", "description": "Disabling restrict_public_buckets allows cross-account policies granting public access.", "recommendation": "Set restrict_public_buckets = true to block public and cross-account access policies.", "source": "tests\\samples\\vulnerable_network.tf", "context": "restrict_public_buckets = false", "cwe": "CWE-732"}, {"rule_id": "AWS-EC2-TF-001", "name": "EC2 IMDSv1 enabled — instance metadata service token not required", "category": "EC2: Instance Metadata", "severity": "HIGH", "description": "IMDSv1 allows any code running on the instance to access instance metadata and IAM credentials without authentication, enabling SSRF-to-credential-theft attacks.", "recommendation": "Set http_tokens = 'required' in metadata_options to enforce IMDSv2 and prevent SSRF attacks.", "source": "tests\\samples\\vulnerable_network.tf", "context": "http_tokens                 = \"optional\"", "cwe": "CWE-306"}, {"rule_id": "AWS-EC2-TF-003", "name": "EC2 instance assigned public IP address", "category": "EC2: Public Exposure", "severity": "MEDIUM", "description": "Directly assigning a public IP increases attack surface. Instances should use NAT gateways or load balancers for outbound/inbound traffic.", "recommendation": "Use private subnets for EC2 instances. Route traffic through NAT gateways and application load balancers.", "source": "tests\\samples\\vulnerable_network.tf", "context": "associate_public_ip_address = true", "cwe": "CWE-749"}, {"rule_id": "AWS-EC2-TF-002", "name": "EBS volume not encrypted", "category": "EC2: Encryption", "severity": "HIGH", "description": "Unencrypted EBS volumes expose data if the underlying storage is compromised or the snapshot is shared.", "recommendation": "Set encrypted = true on all EBS volumes. Enable account-level EBS encryption by default in AWS settings.", "source": "tests\\samples\\vulnerable_network.tf", "context": "encrypted   = false", "cwe": "CWE-311"}, {"rule_id": "AWS-EC2-TF-002", "name": "EBS volume not encrypted", "category": "EC2: Encryption", "severity": "HIGH", "description": "Unencrypted EBS volumes expose data if the underlying storage is compromised or the snapshot is shared.", "recommendation": "Set encrypted = true on all EBS volumes. Enable account-level EBS encryption by default in AWS settings.", "source": "tests\\samples\\vulnerable_network.tf", "context": "encrypted         = false", "cwe": "CWE-311"}, {"rule_id": "AWS-CRED-TF-002", "name": "Hardcoded password or secret in Terraform resource", "category": "Credentials: Hardcoded Secrets", "severity": "HIGH", "description": "Hardcoded passwords or secrets in Terraform files are exposed to anyone with access to the code repository.", "recommendation": "Use AWS Secrets Manager or SSM Parameter Store with data sources to inject secrets at runtime.", "source": "tests\\samples\\vulnerable_network.tf", "context": "password               = \"Password123!\"", "cwe": "CWE-798"}, {"rule_id": "AWS-RDS-TF-001", "name": "RDS instance publicly accessible", "category": "RDS: Public Access", "severity": "HIGH", "description": "Making the RDS instance publicly accessible exposes the database endpoint to the internet, enabling brute-force and injection attacks.", "recommendation": "Set publicly_accessible = false. Place RDS instances in private subnets accessible only from application tier.", "source": "tests\\samples\\vulnerable_network.tf", "context": "publicly_accessible = true", "cwe": "CWE-284"}, {"rule_id": "AWS-EC2-TF-002", "name": "EBS volume not encrypted", "category": "EC2: Encryption", "severity": "HIGH", "description": "Unencrypted EBS volumes expose data if the underlying storage is compromised or the snapshot is shared.", "recommendation": "Set encrypted = true on all EBS volumes. Enable account-level EBS encryption by default in AWS settings.", "source": "tests\\samples\\vulnerable_network.tf", "context": "storage_encrypted = false", "cwe": "CWE-311"}, {"rule_id": "AWS-RDS-TF-002", "name": "RDS storage not encrypted", "category": "RDS: Encryption", "severity": "HIGH", "description": "Unencrypted RDS storage exposes database data if the underlying storage is compromised or snapshots are shared.", "recommendation": "Set storage_encrypted = true and specify a KMS key with kms_key_id.", "source": "tests\\samples\\vulnerable_network.tf", "context": "storage_encrypted = false", "cwe": "CWE-311"}, {"rule_id": "AWS-RDS-TF-005", "name": "RDS automated backup retention disabled (0 days)", "category": "RDS: Backup", "severity": "MEDIUM", "description": "Setting backup_retention_period=0 disables automated backups, preventing point-in-time recovery.", "recommendation": "Set backup_retention_period to at least 7 days (35 for compliance-sensitive workloads).", "source": "tests\\samples\\vulnerable_network.tf", "context": "backup_retention_period = 0", "cwe": "CWE-693"}, {"rule_id": "AWS-RDS-TF-003", "name": "RDS deletion protection disabled", "category": "RDS: Availability", "severity": "MEDIUM", "description": "Without deletion protection, the database can be accidentally or maliciously deleted, causing data loss.", "recommendation": "Set deletion_protection = true for all production RDS instances.", "source": "tests\\samples\\vulnerable_network.tf", "context": "deletion_protection = false", "cwe": "CWE-693"}, {"rule_id": "AWS-RDS-TF-006", "name": "RDS Multi-AZ not enabled — single point of failure", "category": "RDS: Availability", "severity": "LOW", "description": "Single-AZ RDS instances have no automatic failover, causing downtime during maintenance or AZ failures.", "recommendation": "Set multi_az = true for production databases to enable automatic failover.", "source": "tests\\samples\\vulnerable_network.tf", "context": "multi_az = false", "cwe": "CWE-693"}, {"rule_id": "AWS-RDS-TF-004", "name": "RDS final snapshot skipped — data loss risk on deletion", "category": "RDS: Backup", "severity": "MEDIUM", "description": "Setting skip_final_snapshot=true means no backup is taken before the database is destroyed, risking permanent data loss.", "recommendation": "Set skip_final_snapshot = false and specify a final_snapshot_identifier.", "source": "tests\\samples\\vulnerable_network.tf", "context": "skip_final_snapshot = true", "cwe": "CWE-693"}, {"rule_id": "AWS-CT-TF-001", "name": "CloudTrail log file validation disabled", "category": "CloudTrail: Audit Logging", "severity": "HIGH", "description": "Without log file validation, CloudTrail logs can be silently tampered with, undermining audit integrity.", "recommendation": "Set enable_log_file_validation = true to enable SHA-256 hash validation of log files.", "source": "tests\\samples\\vulnerable_network.tf", "context": "enable_log_file_validation = false", "cwe": "CWE-345"}, {"rule_id": "AWS-CT-TF-002", "name": "CloudTrail not configured as multi-region trail", "category": "CloudTrail: Audit Logging", "severity": "MEDIUM", "description": "A single-region CloudTrail misses API activity in other regions, creating blind spots for attackers.", "recommendation": "Set is_multi_region_trail = true to capture API activity in all AWS regions.", "source": "tests\\samples\\vulnerable_network.tf", "context": "is_multi_region_trail = false", "cwe": "CWE-778"}, {"rule_id": "AWS-CT-TF-003", "name": "CloudTrail global service events not included", "category": "CloudTrail: Audit Logging", "severity": "MEDIUM", "description": "Excluding global services (IAM, STS, CloudFront) from CloudTrail creates blind spots for IAM activity.", "recommendation": "Set include_global_service_events = true to capture IAM, STS, and CloudFront API calls.", "source": "tests\\samples\\vulnerable_network.tf", "context": "include_global_service_events = false", "cwe": "CWE-778"}, {"rule_id": "AWS-KMS-TF-001", "name": "KMS key automatic rotation disabled", "category": "KMS: Key Management", "severity": "HIGH", "description": "Without automatic rotation, long-lived KMS keys increase the blast radius of key compromise.", "recommendation": "Set enable_key_rotation = true to rotate KMS symmetric keys annually.", "source": "tests\\samples\\vulnerable_network.tf", "context": "enable_key_rotation = false", "cwe": "CWE-324"}, {"rule_id": "AWS-CF-TF-001", "name": "CloudFront viewer protocol policy allows plain HTTP", "category": "CloudFront: Transport Security", "severity": "HIGH", "description": "Allowing HTTP exposes content and cookies to interception during transit.", "recommendation": "Set viewer_protocol_policy = 'redirect-to-https' or 'https-only'.", "source": "tests\\samples\\vulnerable_network.tf", "context": "viewer_protocol_policy = \"allow-all\"", "cwe": "CWE-319"}, {"rule_id": "AWS-CF-TF-002", "name": "CloudFront minimum TLS version below TLSv1.2", "category": "CloudFront: Transport Security", "severity": "HIGH", "description": "TLS 1.0 and 1.1 are deprecated with known vulnerabilities (BEAST, POODLE). Connections using old TLS versions can be attacked.", "recommendation": "Set minimum_protocol_version = 'TLSv1.2_2021' or higher.", "source": "tests\\samples\\vulnerable_network.tf", "context": "minimum_protocol_version       = \"TLSv1\"", "cwe": "CWE-326"}, {"rule_id": "AWS-ECACHE-TF-001", "name": "ElastiCache at-rest encryption disabled", "category": "ElastiCache: Encryption", "severity": "HIGH", "description": "Unencrypted ElastiCache data is exposed if the underlying storage is compromised.", "recommendation": "Set at_rest_encryption_enabled = true for all ElastiCache replication groups.", "source": "tests\\samples\\vulnerable_network.tf", "context": "at_rest_encryption_enabled = false", "cwe": "CWE-311"}, {"rule_id": "AWS-ECACHE-TF-002", "name": "ElastiCache in-transit encryption disabled", "category": "ElastiCache: Encryption", "severity": "HIGH", "description": "Without in-transit encryption, data between application and cache is sent in plaintext over the network.", "recommendation": "Set transit_encryption_enabled = true and configure auth_token for Redis clusters.", "source": "tests\\samples\\vulnerable_network.tf", "context": "transit_encryption_enabled = false", "cwe": "CWE-319"}, {"rule_id": "AWS-ECS-TF-001", "name": "ECS container running in privileged mode", "category": "ECS: Container Security", "severity": "CRITICAL", "description": "A privileged container has root access to the host EC2 instance, enabling full host compromise.", "recommendation": "Remove privileged = true. Use task IAM roles for specific AWS permissions instead of privileged mode.", "source": "tests\\samples\\vulnerable_network.tf", "context": "privileged = true", "cwe": "CWE-250"}, {"rule_id": "AWS-OS-TF-001", "name": "OpenSearch domain does not enforce HTTPS", "category": "OpenSearch: Transport Security", "severity": "HIGH", "description": "Allowing HTTP connections to OpenSearch exposes search queries and indexed data to interception.", "recommendation": "Set enforce_https = true in domain_endpoint_options.", "source": "tests\\samples\\vulnerable_network.tf", "context": "enforce_https = false", "cwe": "CWE-319"}, {"rule_id": "AWS-CRED-TF-002", "name": "Hardcoded password or secret in Terraform resource", "category": "Credentials: Hardcoded Secrets", "severity": "HIGH", "description": "Hardcoded passwords or secrets in Terraform files are exposed to anyone with access to the code repository.", "recommendation": "Use AWS Secrets Manager or SSM Parameter Store with data sources to inject secrets at runtime.", "source": "tests\\samples\\vulnerable_network.tf", "context": "master_password    = \"Redshift123!\"", "cwe": "CWE-798"}, {"rule_id": "AWS-RDS-TF-001", "name": "RDS instance publicly accessible", "category": "RDS: Public Access", "severity": "HIGH", "description": "Making the RDS instance publicly accessible exposes the database endpoint to the internet, enabling brute-force and injection attacks.", "recommendation": "Set publicly_accessible = false. Place RDS instances in private subnets accessible only from application tier.", "source": "tests\\samples\\vulnerable_network.tf", "context": "publicly_accessible = true", "cwe": "CWE-284"}, {"rule_id": "AWS-EC2-TF-002", "name": "EBS volume not encrypted", "category": "EC2: Encryption", "severity": "HIGH", "description": "Unencrypted EBS volumes expose data if the underlying storage is compromised or the snapshot is shared.", "recommendation": "Set encrypted = true on all EBS volumes. Enable account-level EBS encryption by default in AWS settings.", "source": "tests\\samples\\vulnerable_network.tf", "context": "encrypted = false", "cwe": "CWE-311"}, {"rule_id": "AWS-ECR-TF-001", "name": "ECR repository uses mutable image tags", "category": "ECR: Container Registry", "severity": "MEDIUM", "description": "Mutable image tags allow container images to be silently replaced, enabling supply chain attacks.", "recommendation": "Set image_tag_mutability = 'IMMUTABLE' to prevent image tag overwriting.", "source": "tests\\samples\\vulnerable_network.tf", "context": "image_tag_mutability = \"MUTABLE\"", "cwe": "CWE-829"}, {"rule_id": "AWS-CFG-TF-001", "name": "AWS Config recorder does not record all resource types", "category": "Config: Coverage", "severity": "MEDIUM", "description": "Limiting Config to specific resource types creates blind spots in compliance monitoring and change tracking.", "recommendation": "Set all_supported = true and include_global_resource_types = true inside the recording_group block.", "source": "tests\\samples\\vulnerable_network.tf", "context": "all_supported = false", "cwe": "CWE-778"}, {"rule_id": "AWS-CFG-TF-002", "name": "AWS Config recorder excludes global resource types (IAM)", "category": "Config: Coverage", "severity": "MEDIUM", "description": "Excluding global resources (e.g., IAM) from Config leaves critical identity changes untracked.", "recommendation": "Set include_global_resource_types = true inside the recording_group block.", "source": "tests\\samples\\vulnerable_network.tf", "context": "include_global_resource_types = false", "cwe": "CWE-778"}, {"rule_id": "AWS-SM-TF-001", "name": "SageMaker notebook instance allows direct internet access", "category": "SageMaker: Network", "severity": "HIGH", "description": "Enabling direct internet access for a SageMaker notebook allows data exfiltration and bypasses VPC security controls.", "recommendation": "Set direct_internet_access = 'Disabled' and route traffic through a VPC with a NAT gateway.", "source": "tests\\samples\\vulnerable_network.tf", "context": "direct_internet_access = \"Enabled\"", "cwe": "CWE-284"}];
+
+/* ================================================================
+   RENDER
+   ================================================================ */
+const SEV_ORDER = {CRITICAL:0,HIGH:1,MEDIUM:2,LOW:3,INFO:4};
+const SEV_COLORS = {CRITICAL:'var(--sev-critical)',HIGH:'var(--sev-high)',MEDIUM:'var(--sev-medium)',LOW:'var(--sev-low)',INFO:'var(--sev-info)'};
+
+// Category chart
+(function renderCatChart(){
+  const cats = {};
+  FINDINGS.forEach(f => { cats[f.category] = (cats[f.category]||0) + 1 });
+  const sorted = Object.entries(cats).sort((a,b) => b[1]-a[1]);
+  if(!sorted.length) return;
+  const max = sorted[0][1];
+  const barColors = ['#EF4444','#F59E0B','#3B82F6','#8B5CF6','#22C55E','#EC4899','#06B6D4','#F97316','#14B8A6','#A855F7'];
+  const container = document.getElementById('catChart');
+  container.innerHTML = sorted.map(([cat, count], i) => {
+    const pct = Math.round((count / max) * 100);
+    return `<div class="cat-bar animate-in" style="animation-delay:${i*60}ms">
+      <div class="cat-bar__label">${cat}</div>
+      <div class="cat-bar__track">
+        <div class="cat-bar__fill" style="width:${pct}%;background:${barColors[i%barColors.length]}">${count}</div>
+      </div>
+    </div>`;
+  }).join('');
+})();
+
+// Populate category filter
+(function populateCatFilter(){
+  const cats = [...new Set(FINDINGS.map(f=>f.category))].sort();
+  const sel = document.getElementById('catFilter');
+  cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o) });
+})();
+
+// Render findings
+function renderFindings(list){
+  const container = document.getElementById('findingsContainer');
+  if(!list.length){
+    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:40px 0">No findings match the current filters.</p>';
+    return;
+  }
+  container.innerHTML = list.map((f, i) => `
+    <div class="finding animate-in" data-sev="${f.severity}" data-cat="${f.category}" style="animation-delay:${Math.min(i*20,400)}ms">
+      <div class="finding__header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="finding__sev finding__sev--${f.severity}">${f.severity}</span>
+        <span class="finding__id">${f.rule_id}</span>
+        <span class="finding__name">${escHtml(f.name)}</span>
+        <svg class="finding__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="finding__body">
+        <div class="finding__grid">
+          <div class="finding__field finding__field--full finding__field--issue">
+            <div class="finding__field-label">Issue</div>
+            <div class="finding__field-value">${escHtml(f.description)}</div>
+          </div>
+          <div class="finding__field finding__field--full finding__field--rec">
+            <div class="finding__field-label">Recommendation</div>
+            <div class="finding__field-value">${escHtml(f.recommendation)}</div>
+          </div>
+          ${f.context ? `<div class="finding__field">
+            <div class="finding__field-label">Context</div>
+            <div class="finding__field-value"><code>${escHtml(f.context)}</code></div>
+          </div>` : ''}
+          ${f.source ? `<div class="finding__field">
+            <div class="finding__field-label">Source</div>
+            <div class="finding__field-value"><code>${escHtml(f.source)}</code></div>
+          </div>` : ''}
+          ${f.cwe ? `<div class="finding__field">
+            <div class="finding__field-label">Weakness</div>
+            <div class="finding__field-value"><span class="finding__cwe">${f.cwe}</span></div>
+          </div>` : ''}
+          <div class="finding__field">
+            <div class="finding__field-label">Category</div>
+            <div class="finding__field-value">${escHtml(f.category)}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+
+// Initial render
+renderFindings(FINDINGS);
+
+// Filters
+function applyFilters(){
+  const sev = document.getElementById('sevFilter').value;
+  const cat = document.getElementById('catFilter').value;
+  const q = document.getElementById('searchFilter').value.toLowerCase();
+
+  // Reset sev card highlights
+  document.querySelectorAll('.sev-card').forEach(c => c.classList.remove('active'));
+  if(sev) document.querySelector(`.sev-card[data-sev="${sev}"]`)?.classList.add('active');
+
+  const filtered = FINDINGS.filter(f => {
+    if(sev && f.severity !== sev) return false;
+    if(cat && f.category !== cat) return false;
+    if(q && !((f.rule_id||'')+' '+(f.name||'')+' '+(f.description||'')+' '+(f.context||'')+' '+(f.cwe||'')+' '+(f.category||'')).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  renderFindings(filtered);
+  document.getElementById('filterCount').textContent = `Showing ${filtered.length} of ${FINDINGS.length}`;
+}
+
+function filterBySev(sev){
+  const sel = document.getElementById('sevFilter');
+  sel.value = sel.value === sev ? '' : sev;
+  applyFilters();
+  document.querySelector('.findings-section').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>

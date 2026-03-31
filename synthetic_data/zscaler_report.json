@@ -1,0 +1,247 @@
+{
+  "scanner": "zscaler_security_scanner",
+  "version": "1.0.0",
+  "generated": "2026-03-31T14:22:08",
+  "target": "demo-corp.zscaler.net",
+  "findings_count": 29,
+  "summary": {
+    "CRITICAL": 4,
+    "HIGH": 9,
+    "MEDIUM": 11,
+    "LOW": 5
+  },
+  "findings": [
+    {
+      "rule_id": "ZS-ZIA-001",
+      "name": "URL filtering policy allows uncategorized websites",
+      "category": "ZIA URL Filtering",
+      "severity": "HIGH",
+      "description": "The default URL filtering policy allows access to uncategorized websites. Newly registered or uncategorized domains are commonly used for phishing and malware distribution.",
+      "recommendation": "Block or caution access to uncategorized URLs. Create an exception process for legitimate uncategorized sites requiring business justification."
+    },
+    {
+      "rule_id": "ZS-ZIA-002",
+      "name": "URL filtering does not block newly registered domains",
+      "category": "ZIA URL Filtering",
+      "severity": "HIGH",
+      "description": "No policy rule blocks access to domains registered within the last 30 days. Over 70% of phishing domains are used within 48 hours of registration.",
+      "recommendation": "Add a URL filtering rule to block domains registered within the last 30 days. Create an exception workflow for legitimate newly registered domains."
+    },
+    {
+      "rule_id": "ZS-ZIA-003",
+      "name": "Social media file sharing not restricted",
+      "category": "ZIA URL Filtering",
+      "severity": "MEDIUM",
+      "description": "URL filtering allows full access to social media platforms without restricting file upload/download capabilities. This enables data exfiltration via social channels.",
+      "recommendation": "Apply granular social media controls: allow browsing but block file uploads. Use cloud application controls for platform-specific restrictions."
+    },
+    {
+      "rule_id": "ZS-SSL-001",
+      "name": "SSL inspection not enabled for all traffic",
+      "category": "SSL Inspection",
+      "severity": "CRITICAL",
+      "description": "SSL inspection is enabled for only 45% of web traffic. Categories excluded from inspection include financial services, healthcare, and miscellaneous. Threats in encrypted traffic go undetected.",
+      "recommendation": "Enable SSL inspection for all traffic categories. Add only legally required exemptions (e.g., banking sites in regulated regions). Deploy the Zscaler root CA to all endpoints."
+    },
+    {
+      "rule_id": "ZS-SSL-002",
+      "name": "SSL inspection certificate uses SHA-1 signature",
+      "category": "SSL Inspection",
+      "severity": "HIGH",
+      "description": "The SSL inspection CA certificate uses SHA-1 for its signature algorithm. SHA-1 is cryptographically weak and deprecated by all major browsers.",
+      "recommendation": "Regenerate the SSL inspection CA certificate with SHA-256 or SHA-384 signature. Redistribute the new CA to all managed endpoints."
+    },
+    {
+      "rule_id": "ZS-SSL-003",
+      "name": "SSL inspection bypass for cloud storage services",
+      "category": "SSL Inspection",
+      "severity": "HIGH",
+      "description": "Cloud storage services (Google Drive, OneDrive, Dropbox, Box) are excluded from SSL inspection. These are common vectors for malware delivery and data exfiltration.",
+      "recommendation": "Enable SSL inspection for cloud storage services. Use CASB inline policies for granular upload/download controls on inspected traffic."
+    },
+    {
+      "rule_id": "ZS-DLP-001",
+      "name": "DLP policies not covering PII patterns",
+      "category": "Data Loss Prevention",
+      "severity": "CRITICAL",
+      "description": "DLP engines are active but no policies are configured for personally identifiable information (PII) patterns such as SSN, passport numbers, or national IDs.",
+      "recommendation": "Configure DLP dictionaries and engines for PII detection: SSN (US), national IDs, passport numbers, date of birth patterns. Apply to web and cloud app traffic."
+    },
+    {
+      "rule_id": "ZS-DLP-002",
+      "name": "DLP notification rules not configured",
+      "category": "Data Loss Prevention",
+      "severity": "MEDIUM",
+      "description": "DLP policy violations are logged but no notification rules are configured. Security team is not alerted in real-time when sensitive data exfiltration is detected.",
+      "recommendation": "Configure DLP notification rules to alert the security team via email and SIEM integration. Set immediate alerts for critical DLP violations."
+    },
+    {
+      "rule_id": "ZS-DLP-003",
+      "name": "DLP exact data match not configured for financial data",
+      "category": "Data Loss Prevention",
+      "severity": "MEDIUM",
+      "description": "Exact Data Match (EDM) is not configured for financial data such as credit card numbers, IBAN, and SWIFT codes. Pattern-based detection alone has higher false-positive rates.",
+      "recommendation": "Configure EDM profiles for structured financial data. Upload indexed datasets of credit card BINs and account number patterns for precise detection."
+    },
+    {
+      "rule_id": "ZS-FW-001",
+      "name": "Firewall rule allows outbound traffic on non-standard ports",
+      "category": "Cloud Firewall",
+      "severity": "HIGH",
+      "description": "Default firewall policy allows outbound traffic on all ports. No restrictions on high-risk ports commonly used by C2 frameworks (4444, 8080, 8443, 1337).",
+      "recommendation": "Implement an explicit deny-all outbound firewall rule. Create allow rules only for required ports (80, 443, and business-specific ports)."
+    },
+    {
+      "rule_id": "ZS-FW-002",
+      "name": "DNS tunneling detection not enabled",
+      "category": "Cloud Firewall",
+      "severity": "HIGH",
+      "description": "DNS traffic is not inspected for tunneling activity. DNS tunneling is used for data exfiltration and C2 communication while evading traditional security controls.",
+      "recommendation": "Enable DNS tunneling detection in the cloud firewall. Configure alerts for anomalous DNS query patterns including high-entropy subdomains."
+    },
+    {
+      "rule_id": "ZS-FW-003",
+      "name": "IPS signatures not updated to latest version",
+      "category": "Cloud Firewall",
+      "severity": "MEDIUM",
+      "description": "Cloud IPS is running signature version 2026.02 while the latest available is 2026.03. Missing 47 new detection signatures including recent zero-day exploit patterns.",
+      "recommendation": "Enable automatic IPS signature updates. Verify the update schedule is set to at least daily. Review and enable new signatures in detect or block mode."
+    },
+    {
+      "rule_id": "ZS-ZPA-001",
+      "name": "ZPA application segments using wildcard domains",
+      "category": "ZPA App Segments",
+      "severity": "CRITICAL",
+      "description": "3 application segments use wildcard domain patterns (*.internal.corp.com) exposing all subdomains through ZPA. This grants access to unintended internal applications.",
+      "recommendation": "Replace wildcard domain application segments with explicit FQDN entries. Enumerate specific applications and create individual segments with appropriate access policies."
+    },
+    {
+      "rule_id": "ZS-ZPA-002",
+      "name": "ZPA server groups with unhealthy connectors",
+      "category": "ZPA App Segments",
+      "severity": "HIGH",
+      "description": "2 server groups have connectors in unhealthy state for over 48 hours: 'DC-East-SG' (1 of 2 down) and 'AWS-Prod-SG' (2 of 3 down). Reduces redundancy and availability.",
+      "recommendation": "Investigate and restore unhealthy connectors. Ensure each server group has at minimum 2 healthy connectors. Set up connector health monitoring alerts."
+    },
+    {
+      "rule_id": "ZS-ZPA-003",
+      "name": "ZPA access policy allows broad user group access to sensitive apps",
+      "category": "ZPA Access Policies",
+      "severity": "HIGH",
+      "description": "Access policy 'Corporate-Access' grants the 'All Employees' group access to application segments including financial systems, HR applications, and admin consoles.",
+      "recommendation": "Implement least-privilege access policies. Create specific user groups for each application segment. Restrict sensitive application access to authorized teams only."
+    },
+    {
+      "rule_id": "ZS-ZPA-004",
+      "name": "ZPA posture profiles not enforced for high-security apps",
+      "category": "ZPA Access Policies",
+      "severity": "MEDIUM",
+      "description": "Device posture checks (OS version, disk encryption, AV status) are not enforced for access to 5 high-security application segments including finance and HR systems.",
+      "recommendation": "Create and enforce posture profiles requiring: current OS patches, disk encryption enabled, approved AV running, and domain-joined status for sensitive apps."
+    },
+    {
+      "rule_id": "ZS-TN-001",
+      "name": "Trusted network configuration includes overly broad IP ranges",
+      "category": "Trusted Networks",
+      "severity": "MEDIUM",
+      "description": "Trusted network 'Office-Networks' includes a /16 range (10.0.0.0/16) encompassing guest Wi-Fi, IoT networks, and visitor subnets alongside corporate endpoints.",
+      "recommendation": "Narrow trusted network definitions to specific corporate subnets. Exclude guest, IoT, and contractor networks from trusted ranges."
+    },
+    {
+      "rule_id": "ZS-TN-002",
+      "name": "Trusted network not enforcing Zscaler Client Connector",
+      "category": "Trusted Networks",
+      "severity": "MEDIUM",
+      "description": "When on trusted networks, Zscaler Client Connector tunneling is disabled. Users on the corporate network bypass Zscaler inspection entirely.",
+      "recommendation": "Enable ZCC tunnel even on trusted networks for consistent policy enforcement. Use location-aware policies rather than bypassing inspection."
+    },
+    {
+      "rule_id": "ZS-ADM-001",
+      "name": "Admin portal MFA not enforced",
+      "category": "Administration",
+      "severity": "CRITICAL",
+      "description": "The Zscaler admin portal does not enforce multi-factor authentication for administrator logins. Compromised admin credentials would grant full policy control.",
+      "recommendation": "Enable MFA for all Zscaler admin portal accounts. Configure SAML SSO with the corporate IdP that enforces MFA for admin access."
+    },
+    {
+      "rule_id": "ZS-ADM-002",
+      "name": "Excessive super admin accounts",
+      "category": "Administration",
+      "severity": "HIGH",
+      "description": "8 accounts have super admin privileges in the Zscaler admin portal. Recommended maximum is 3 super admin accounts for break-glass scenarios.",
+      "recommendation": "Reduce super admin accounts to 3 or fewer. Assign granular admin roles (read-only, policy admin, report viewer) based on job function."
+    },
+    {
+      "rule_id": "ZS-ADM-003",
+      "name": "Admin audit log retention set to 30 days",
+      "category": "Administration",
+      "severity": "MEDIUM",
+      "description": "Admin audit logs are retained for only 30 days. This is insufficient for compliance requirements and security investigation timelines.",
+      "recommendation": "Configure admin audit log export to SIEM or cloud storage with 12-month retention. Enable real-time log streaming for security monitoring."
+    },
+    {
+      "rule_id": "ZS-PAC-001",
+      "name": "PAC file allows direct internet access for specific domains",
+      "category": "Traffic Forwarding",
+      "severity": "MEDIUM",
+      "description": "The PAC file configuration includes 43 domains for direct internet access bypassing Zscaler. Some bypassed domains include cloud services that should be inspected.",
+      "recommendation": "Review and minimize PAC file bypass entries. Move cloud service inspection to Zscaler inline policies. Remove stale or unnecessary bypass entries."
+    },
+    {
+      "rule_id": "ZS-PAC-002",
+      "name": "GRE tunnel forwarding without redundancy",
+      "category": "Traffic Forwarding",
+      "severity": "MEDIUM",
+      "description": "2 office locations forward traffic via single GRE tunnel without a backup tunnel. Tunnel failure would result in complete loss of internet access or falling back to direct access.",
+      "recommendation": "Configure primary and secondary GRE tunnels for each location. Implement automatic failover. Consider IPSec tunnels as backup."
+    },
+    {
+      "rule_id": "ZS-LOG-001",
+      "name": "Web log streaming to SIEM not configured",
+      "category": "Logging & Monitoring",
+      "severity": "MEDIUM",
+      "description": "Nanolog Streaming Service (NSS) is not configured to forward web transaction logs to the corporate SIEM. Security event correlation with web traffic is not possible.",
+      "recommendation": "Configure NSS to stream web, firewall, and DNS logs to the SIEM. Enable log feeds for all transaction types including allowed and blocked."
+    },
+    {
+      "rule_id": "ZS-LOG-002",
+      "name": "Sandbox analysis results not integrated with alerting",
+      "category": "Logging & Monitoring",
+      "severity": "LOW",
+      "description": "Cloud Sandbox analysis results are available in the Zscaler dashboard but are not forwarded as alerts to the SOC. Malware detections may be missed.",
+      "recommendation": "Configure sandbox verdict notifications. Integrate sandbox results with SIEM alerting. Create automated incident workflows for confirmed malware verdicts."
+    },
+    {
+      "rule_id": "ZS-BW-001",
+      "name": "Bandwidth control not configured for streaming services",
+      "category": "Bandwidth Control",
+      "severity": "LOW",
+      "description": "No bandwidth throttling rules are configured for streaming video services (YouTube, Netflix, Twitch). These services consume disproportionate bandwidth.",
+      "recommendation": "Configure bandwidth control rules to limit streaming service bandwidth during business hours. Allow full bandwidth outside peak hours."
+    },
+    {
+      "rule_id": "ZS-ISO-001",
+      "name": "Browser isolation not enabled for high-risk categories",
+      "category": "Browser Isolation",
+      "severity": "LOW",
+      "description": "Cloud Browser Isolation is available but not configured for high-risk URL categories including newly registered domains, uncategorized sites, and webmail.",
+      "recommendation": "Enable Cloud Browser Isolation for high-risk URL categories. Configure isolation for email links and uncategorized URLs to prevent drive-by downloads."
+    },
+    {
+      "rule_id": "ZS-CASB-001",
+      "name": "Shadow IT discovery not reviewing unsanctioned apps",
+      "category": "CASB",
+      "severity": "LOW",
+      "description": "Shadow IT discovery has identified 156 unsanctioned cloud applications in use but no review workflow exists. Unsanctioned apps may lack security controls.",
+      "recommendation": "Establish a monthly shadow IT review process. Block high-risk unsanctioned apps. Create a self-service app request workflow for business-justified applications."
+    },
+    {
+      "rule_id": "ZS-CASB-002",
+      "name": "CASB inline policies not blocking sensitive file uploads to personal cloud storage",
+      "category": "CASB",
+      "severity": "LOW",
+      "description": "CASB inline policies monitor but do not block file uploads to personal instances of cloud storage (personal Google Drive, personal OneDrive).",
+      "recommendation": "Configure CASB tenant restrictions to differentiate corporate vs personal cloud storage instances. Block uploads to personal storage tenants."
+    }
+  ]
+}

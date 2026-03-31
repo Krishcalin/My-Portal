@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAP ABAP Vulnerability Analyzer &mdash; Sample Report | Phalanx Cyber</title>
+<meta name="description" content="Dual-mode scanner with 81 SAST rules for ABAP/CDS source code plus 30 live BTP API checks via XSUAA OAuth 2.0.">
+<style>
+/* ---- RESET ---- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0A0E1A;--bg-surface:#111827;--bg-card:rgba(17,24,39,0.6);
+  --bg-glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --text:#F9FAFB;--text-secondary:#9CA3AF;--text-muted:#6B7280;
+  --accent-1:#00D4FF;--accent-2:#7B61FF;
+  --gradient:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+  --radius:12px;--radius-sm:8px;
+  --sev-critical:#EF4444;--sev-high:#F59E0B;--sev-medium:#3B82F6;
+  --sev-low:#22C55E;--sev-info:#6B7280;
+}
+
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:var(--accent-1);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---- LAYOUT ---- */
+.container{max-width:1280px;margin:0 auto;padding:0 24px}
+
+/* ---- BACK NAV ---- */
+.back-nav{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 0}
+.back-nav .container{display:flex;align-items:center;justify-content:space-between}
+.back-nav a{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:0.9rem;color:var(--text-secondary);transition:color 0.2s}
+.back-nav a:hover{color:var(--accent-1);text-decoration:none}
+.back-nav__brand{font-weight:800;font-size:1.1rem;color:var(--text)}
+.back-nav__brand span{color:var(--accent-1)}
+
+/* ---- HERO HEADER ---- */
+.report-hero{position:relative;padding:80px 0 60px;overflow:hidden}
+.report-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,212,255,0.08),transparent 70%)}
+.report-hero__badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);font-size:0.8rem;font-weight:600;color:var(--accent-1);margin-bottom:20px}
+.report-hero__badge::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent-1);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.report-hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.2;margin-bottom:12px}
+.report-hero h1 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.report-hero__sub{color:var(--text-secondary);font-size:1.05rem;max-width:680px;margin-bottom:32px}
+
+/* ---- META GRID ---- */
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:0}
+.meta-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;backdrop-filter:blur(8px)}
+.meta-card__label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:4px}
+.meta-card__value{font-size:0.95rem;font-weight:600;color:var(--text);word-break:break-all}
+
+/* ---- SEVERITY DASHBOARD ---- */
+.dashboard{padding:48px 0}
+.section-title{font-size:1.4rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.section-title svg{color:var(--accent-1)}
+
+.sev-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:40px}
+@media(max-width:768px){.sev-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.sev-grid{grid-template-columns:repeat(2,1fr)}}
+.sev-card{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;text-align:center;overflow:hidden;cursor:pointer;transition:all 0.25s}
+.sev-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.15)}
+.sev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sev-card[data-sev="CRITICAL"]::before{background:var(--sev-critical)}
+.sev-card[data-sev="HIGH"]::before{background:var(--sev-high)}
+.sev-card[data-sev="MEDIUM"]::before{background:var(--sev-medium)}
+.sev-card[data-sev="LOW"]::before{background:var(--sev-low)}
+.sev-card[data-sev="INFO"]::before{background:var(--sev-info)}
+.sev-card__count{font-size:2.2rem;font-weight:800;line-height:1}
+.sev-card[data-sev="CRITICAL"] .sev-card__count{color:var(--sev-critical)}
+.sev-card[data-sev="HIGH"] .sev-card__count{color:var(--sev-high)}
+.sev-card[data-sev="MEDIUM"] .sev-card__count{color:var(--sev-medium)}
+.sev-card[data-sev="LOW"] .sev-card__count{color:var(--sev-low)}
+.sev-card[data-sev="INFO"] .sev-card__count{color:var(--sev-info)}
+.sev-card__label{font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-top:6px}
+.sev-card.active{border-color:rgba(0,212,255,0.4);background:rgba(0,212,255,0.06)}
+
+/* ---- POSTURE SCORE ---- */
+.posture{display:flex;align-items:center;gap:40px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:32px;margin-bottom:40px}
+@media(max-width:640px){.posture{flex-direction:column;text-align:center}}
+.posture__ring{position:relative;width:120px;height:120px;flex-shrink:0}
+.posture__ring svg{transform:rotate(-90deg)}
+.posture__ring circle{fill:none;stroke-width:8}
+.posture__ring .bg{stroke:rgba(255,255,255,0.06)}
+.posture__ring .fg{stroke:var(--sev-critical);stroke-linecap:round;stroke-dasharray:339.292;stroke-dashoffset:339.29;transition:stroke-dashoffset 1.5s ease}
+.posture__score{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.posture__score-num{font-size:2rem;font-weight:800;color:var(--sev-critical)}
+.posture__score-max{font-size:0.75rem;color:var(--text-muted)}
+.posture__text h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
+.posture__text .grade{display:inline-block;padding:2px 10px;border-radius:4px;font-weight:700;font-size:0.85rem;background:rgba(239,68,68,0.15);color:var(--sev-critical);margin-left:8px}
+.posture__text p{color:var(--text-secondary);font-size:0.9rem;line-height:1.6;margin-top:8px}
+
+/* ---- CATEGORY BAR CHART ---- */
+.cat-chart{margin-bottom:40px}
+.cat-bar{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.cat-bar__label{width:180px;text-align:right;font-size:0.82rem;color:var(--text-secondary);flex-shrink:0}
+@media(max-width:640px){.cat-bar__label{width:120px;font-size:0.75rem}}
+.cat-bar__track{flex:1;height:28px;background:rgba(255,255,255,0.04);border-radius:4px;overflow:hidden;position:relative}
+.cat-bar__fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;font-size:0.75rem;font-weight:700;color:#fff;transition:width 0.8s ease}
+.cat-bar__count{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--text-muted)}
+
+/* ---- FILTERS ---- */
+.filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px;align-items:center}
+.filter-select,.filter-search{background:var(--bg-surface);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:var(--radius-sm);font-size:0.85rem;font-family:inherit;transition:border-color 0.2s}
+.filter-select:focus,.filter-search:focus{outline:none;border-color:var(--accent-1)}
+.filter-search{flex:1;min-width:200px}
+.filter-count{margin-left:auto;font-size:0.85rem;color:var(--text-muted)}
+
+/* ---- FINDINGS ---- */
+.findings-section{padding-bottom:60px}
+.finding{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;transition:border-color 0.2s}
+.finding:hover{border-color:rgba(255,255,255,0.12)}
+.finding__header{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;user-select:none}
+.finding__sev{display:inline-flex;align-items:center;justify-content:center;padding:4px 10px;border-radius:4px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;flex-shrink:0;min-width:72px}
+.finding__sev--CRITICAL{background:rgba(239,68,68,0.15);color:var(--sev-critical)}
+.finding__sev--HIGH{background:rgba(245,158,11,0.15);color:var(--sev-high)}
+.finding__sev--MEDIUM{background:rgba(59,130,246,0.15);color:var(--sev-medium)}
+.finding__sev--LOW{background:rgba(34,197,94,0.15);color:var(--sev-low)}
+.finding__sev--INFO{background:rgba(107,114,128,0.15);color:var(--sev-info)}
+.finding__id{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.8rem;color:var(--accent-1);font-weight:600;flex-shrink:0;min-width:120px}
+.finding__name{font-size:0.9rem;font-weight:600;flex:1}
+.finding__chevron{color:var(--text-muted);transition:transform 0.2s;flex-shrink:0}
+.finding.open .finding__chevron{transform:rotate(180deg)}
+.finding__body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
+.finding.open .finding__body{display:block}
+.finding__grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:640px){.finding__grid{grid-template-columns:1fr}}
+.finding__field{padding:14px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.04)}
+.finding__field-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px}
+.finding__field-value{font-size:0.85rem;color:var(--text-secondary);line-height:1.5}
+.finding__field-value code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.82rem;background:rgba(0,212,255,0.08);color:var(--accent-1);padding:2px 6px;border-radius:3px}
+.finding__field--full{grid-column:1/-1}
+.finding__field--rec{border-left:3px solid var(--accent-1)}
+.finding__field--issue{border-left:3px solid var(--sev-high)}
+.finding__cwe{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:4px;background:rgba(123,97,255,0.12);color:var(--accent-2);font-size:0.78rem;font-weight:600;font-family:'JetBrains Mono','Fira Code',monospace}
+
+/* ---- COMPLIANCE ---- */
+.compliance{padding:40px 0 60px}
+.compliance-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.compliance-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center}
+.compliance-card__name{font-weight:700;font-size:0.9rem;margin-bottom:4px}
+.compliance-card__desc{font-size:0.75rem;color:var(--text-muted);line-height:1.4}
+
+/* ---- FOOTER ---- */
+.report-footer{border-top:1px solid var(--border);padding:32px 0;text-align:center;color:var(--text-muted);font-size:0.82rem}
+.report-footer a{color:var(--accent-1)}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeIn 0.4s ease both}
+
+/* ---- PRINT ---- */
+@media print{
+  body{background:#fff;color:#111}
+  .back-nav,.filters{display:none}
+  .finding__body{display:block!important}
+  .finding{break-inside:avoid}
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ======== BACK NAV ======== -->
+<nav class="back-nav">
+  <div class="container">
+    <a href="index.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Portal
+    </a>
+    <div class="back-nav__brand">Phalanx<span>Cyber</span></div>
+  </div>
+</nav>
+
+<!-- ======== HERO ======== -->
+<header class="report-hero">
+  <div class="container">
+    <div class="report-hero__badge">Sample Security Audit Report</div>
+    <h1>SAP ABAP Vulnerability <span>Analyzer</span></h1>
+    <p class="report-hero__sub">
+      Dual-mode scanner with 81 SAST rules for ABAP/CDS source code plus 30 live BTP API checks via XSUAA OAuth 2.0.
+      46 findings generated by the open-source scanner.
+    </p>
+    <div class="meta-grid">
+      <div class="meta-card">
+        <div class="meta-card__label">Mode</div>
+        <div class="meta-card__value">SAST (Static Analysis)</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-card__label">Scanner</div>
+        <div class="meta-card__value">abap_scanner.py v1.0.0</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-card__label">Scan Date</div>
+        <div class="meta-card__value">2026-03-31</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ======== SEVERITY DASHBOARD ======== -->
+<section class="dashboard">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Finding Summary
+    </h2>
+
+    <div class="sev-grid">
+      <div class="sev-card" data-sev="CRITICAL" onclick="filterBySev('CRITICAL')">
+        <div class="sev-card__count">15</div>
+        <div class="sev-card__label">Critical</div>
+      </div>
+      <div class="sev-card" data-sev="HIGH" onclick="filterBySev('HIGH')">
+        <div class="sev-card__count">26</div>
+        <div class="sev-card__label">High</div>
+      </div>
+      <div class="sev-card" data-sev="MEDIUM" onclick="filterBySev('MEDIUM')">
+        <div class="sev-card__count">4</div>
+        <div class="sev-card__label">Medium</div>
+      </div>
+      <div class="sev-card" data-sev="LOW" onclick="filterBySev('LOW')">
+        <div class="sev-card__count">1</div>
+        <div class="sev-card__label">Low</div>
+      </div>
+      <div class="sev-card" data-sev="INFO" onclick="filterBySev('INFO')">
+        <div class="sev-card__count">0</div>
+        <div class="sev-card__label">Info</div>
+      </div>
+    </div>
+
+    <!-- Posture Score -->
+    <div class="posture">
+      <div class="posture__ring">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle class="bg" cx="60" cy="60" r="54"/>
+          <circle class="fg" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="posture__score">
+          <div class="posture__score-num">0</div>
+          <div class="posture__score-max">/ 100</div>
+        </div>
+      </div>
+      <div class="posture__text">
+        <h3>Security Posture <span class="grade">F &mdash; Critical</span></h3>
+        <p>15 critical findings require immediate attention. 26 high-severity issues compound the risk. 4 medium-severity findings should be addressed in the next sprint. 1 low-severity item are informational or best-practice recommendations.</p>
+      </div>
+    </div>
+
+    <!-- Category Breakdown Chart -->
+    <h2 class="section-title" style="margin-top:16px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+      Findings by Category
+    </h2>
+    <div class="cat-chart" id="catChart"></div>
+  </div>
+</section>
+
+<!-- ======== FINDINGS ======== -->
+<section class="findings-section">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Detailed Findings
+    </h2>
+
+    <div class="filters">
+      <select class="filter-select" id="sevFilter" onchange="applyFilters()">
+        <option value="">All Severities</option>
+        <option value="CRITICAL">Critical</option>
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+        <option value="INFO">Info</option>
+      </select>
+      <select class="filter-select" id="catFilter" onchange="applyFilters()">
+        <option value="">All Categories</option>
+      </select>
+      <input type="text" class="filter-search" id="searchFilter" placeholder="Search findings..." oninput="applyFilters()">
+      <span class="filter-count" id="filterCount">Showing 46 of 46</span>
+    </div>
+
+    <div id="findingsContainer"></div>
+  </div>
+</section>
+
+
+<!-- ======== COMPLIANCE ======== -->
+<section class="compliance">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Compliance Mapping
+    </h2>
+    <div class="compliance-grid">
+      <div class="compliance-card">
+        <div class="compliance-card__name">SAP Security Baseline</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-card__name">CWE</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-card__name">OWASP Top 10</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======== FOOTER ======== -->
+<footer class="report-footer">
+  <div class="container">
+    Generated by <a href="https://github.com/Krishcalin/SAP-Code-Vulnerability-Analyzer" target="_blank" rel="noopener">SAP ABAP Vulnerability Analyzer</a> &mdash;
+    part of the <a href="index.html">Phalanx Cyber</a> open-source security toolkit.
+    This is a sample report using synthetic test data.
+  </div>
+</footer>
+
+<script>
+/* ================================================================
+   FINDINGS DATA
+   ================================================================ */
+const FINDINGS = [{"rule_id": "ABAP-SQLI-001", "name": "Dynamic WHERE clause from variable", "category": "SQL Injection", "severity": "CRITICAL", "description": "A SELECT, UPDATE, or DELETE statement uses a dynamic WHERE clause supplied via a variable. If the variable contains user-controlled input, an attacker can manipulate the query.", "recommendation": "Use static WHERE conditions with host variables (@variable) instead of dynamic WHERE (variable).", "source": "tests\\samples\\vulnerable_abap.abap", "context": "SELECT * FROM scarr WHERE (lv_where) INTO TABLE @DATA(lt_result).", "cwe": "CWE-89"}, {"rule_id": "ABAP-SQLI-002", "name": "String concatenation into SQL condition", "category": "SQL Injection", "severity": "CRITICAL", "description": "String concatenation is used to build part of an SQL statement, risking injection if any operand is user-controlled.", "recommendation": "Use parameterised Open SQL with host variables (@iv_param) instead of concatenating strings into queries.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CONCATENATE 'FIELD = ' iv_user_val INTO lv_cond.", "cwe": "CWE-89"}, {"rule_id": "ABAP-SQLI-001", "name": "Dynamic WHERE clause from variable", "category": "SQL Injection", "severity": "CRITICAL", "description": "A SELECT, UPDATE, or DELETE statement uses a dynamic WHERE clause supplied via a variable. If the variable contains user-controlled input, an attacker can manipulate the query.", "recommendation": "Use static WHERE conditions with host variables (@variable) instead of dynamic WHERE (variable).", "source": "tests\\samples\\vulnerable_abap.abap", "context": "SELECT * FROM sflight WHERE (lv_cond) INTO TABLE @DATA(lt_flights).", "cwe": "CWE-89"}, {"rule_id": "ABAP-SQLI-001", "name": "Dynamic WHERE clause from variable", "category": "SQL Injection", "severity": "CRITICAL", "description": "A SELECT, UPDATE, or DELETE statement uses a dynamic WHERE clause supplied via a variable. If the variable contains user-controlled input, an attacker can manipulate the query.", "recommendation": "Use static WHERE conditions with host variables (@variable) instead of dynamic WHERE (variable).", "source": "tests\\samples\\vulnerable_abap.abap", "context": "OPEN CURSOR lv_cursor FOR SELECT * FROM mara WHERE (lv_dyn_where).", "cwe": "CWE-89"}, {"rule_id": "ABAP-SQLI-005", "name": "OPEN CURSOR with dynamic WHERE", "category": "SQL Injection", "severity": "HIGH", "description": "OPEN CURSOR uses a dynamic WHERE clause which may be susceptible to SQL injection.", "recommendation": "Replace dynamic WHERE conditions with static Open SQL and host variables.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "OPEN CURSOR lv_cursor FOR SELECT * FROM mara WHERE (lv_dyn_where).", "cwe": "CWE-89"}, {"rule_id": "ABAP-SQLI-006", "name": "Dynamic ORDER BY clause", "category": "SQL Injection", "severity": "HIGH", "description": "Dynamic ORDER BY allows an attacker to influence query execution order, potentially leaking data via timing or error-based techniques.", "recommendation": "Use a static ORDER BY clause or validate the dynamic value against an allowlist.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "SELECT * FROM makt ORDER BY (lv_sort_field) INTO TABLE @DATA(lt_makt).", "cwe": "CWE-89"}, {"rule_id": "ABAP-CINJ-001", "name": "INSERT REPORT — runtime code injection", "category": "Code Injection", "severity": "CRITICAL", "description": "INSERT REPORT replaces the source code of an ABAP program at runtime. If the source table is influenced by user input, arbitrary code execution is possible.", "recommendation": "Avoid INSERT REPORT in application code. If unavoidable, enforce S_DEVELOP AUTHORITY-CHECK and input validation.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "INSERT REPORT lv_prog_name FROM lt_source.", "cwe": "CWE-94"}, {"rule_id": "ABAP-CINJ-002", "name": "GENERATE SUBROUTINE POOL — dynamic code generation", "category": "Code Injection", "severity": "CRITICAL", "description": "GENERATE SUBROUTINE POOL compiles and loads ABAP source at runtime, enabling arbitrary code execution if the source is tainted.", "recommendation": "Remove dynamic code generation. Use pre-built function modules or BAdIs instead.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "GENERATE SUBROUTINE POOL lt_code NAME lv_pool MESSAGE lv_msg.", "cwe": "CWE-94"}, {"rule_id": "ABAP-CINJ-003", "name": "Dynamic CALL FUNCTION from variable", "category": "Code Injection", "severity": "HIGH", "description": "CALL FUNCTION with a variable name (not a string literal) allows calling arbitrary function modules if the variable is user-controlled.", "recommendation": "Use a static function name or validate the variable against an allowlist. Add AUTHORITY-CHECK OBJECT 'S_RFC'.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL FUNCTION lv_func_name EXPORTING iv_data = lv_data.", "cwe": "CWE-94"}, {"rule_id": "ABAP-CINJ-004", "name": "Dynamic CALL TRANSACTION", "category": "Code Injection", "severity": "HIGH", "description": "CALL TRANSACTION with a variable transaction code allows execution of arbitrary transactions if the code is user-supplied.", "recommendation": "Validate the transaction code against an allowlist and add AUTHORITY-CHECK OBJECT 'S_TCODE'.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL TRANSACTION lv_tcode USING lt_bdc.", "cwe": "CWE-94"}, {"rule_id": "ABAP-AUTH-008", "name": "CALL TRANSACTION without S_TCODE check", "category": "Missing Authorization", "severity": "HIGH", "description": "A transaction is called without evidence of AUTHORITY-CHECK OBJECT 'S_TCODE' in the same code block.", "recommendation": "Add AUTHORITY-CHECK OBJECT 'S_TCODE' ID 'TCD' FIELD <tcode> before CALL TRANSACTION.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL TRANSACTION lv_tcode USING lt_bdc.", "cwe": "CWE-862"}, {"rule_id": "ABAP-CINJ-007", "name": "Dynamic XSLT/Simple Transformation", "category": "Code Injection", "severity": "CRITICAL", "description": "CALL TRANSFORMATION with a dynamic name can invoke arbitrary transformations, potentially executing malicious XSLT.", "recommendation": "Use static transformation names or validate against an allowlist.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL TRANSFORMATION lv_xslt_name SOURCE xml = lv_xml RESULT result = lv_out.", "cwe": "CWE-94"}, {"rule_id": "ABAP-CINJ-008", "name": "READ REPORT to extract source code", "category": "Code Injection", "severity": "HIGH", "description": "READ REPORT extracts ABAP source code into an internal table. Combined with INSERT REPORT, this enables code-tampering attacks.", "recommendation": "Restrict usage with AUTHORITY-CHECK OBJECT 'S_DEVELOP'. Review whether this pattern is truly needed.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "READ REPORT lv_report_name INTO lt_source_code.", "cwe": "CWE-94"}, {"rule_id": "ABAP-CMDI-001", "name": "Kernel call SYSTEM — direct OS command execution", "category": "OS Command Injection", "severity": "CRITICAL", "description": "The ABAP kernel call 'SYSTEM' executes operating-system commands directly. This is extremely dangerous if any parameter is user-controlled.", "recommendation": "Never use CALL 'SYSTEM'. Use SAP-managed APIs or allowlisted SM49 commands via SXPG_COMMAND_EXECUTE with proper authorization.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL 'SYSTEM' ID 'COMMAND' FIELD lv_cmd.", "cwe": "CWE-78"}, {"rule_id": "ABAP-CMDI-002", "name": "External command execution via SXPG_COMMAND_EXECUTE", "category": "OS Command Injection", "severity": "HIGH", "description": "SXPG_COMMAND_EXECUTE runs OS commands registered in SM49/SM69. If the command name or parameters are user-influenced, injection is possible.", "recommendation": "Ensure only pre-registered commands are callable, validate all parameters, and add AUTHORITY-CHECK OBJECT 'S_LOG_COM'.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL FUNCTION 'SXPG_COMMAND_EXECUTE'", "cwe": "CWE-78"}, {"rule_id": "ABAP-PATH-001", "name": "OPEN DATASET without path validation", "category": "Directory Traversal", "severity": "HIGH", "description": "OPEN DATASET opens a server-side file using a variable path. Without FILE_VALIDATE_NAME, an attacker may traverse directories.", "recommendation": "Always call FILE_VALIDATE_NAME before OPEN DATASET to validate the physical path against logical file names.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "OPEN DATASET lv_filename FOR INPUT IN BINARY MODE.", "cwe": "CWE-22"}, {"rule_id": "ABAP-PATH-002", "name": "DELETE DATASET without path validation", "category": "Directory Traversal", "severity": "HIGH", "description": "DELETE DATASET removes a server-side file. Without path validation, an attacker may delete arbitrary files.", "recommendation": "Validate the file path with FILE_VALIDATE_NAME and add AUTHORITY-CHECK OBJECT 'S_DATASET' before deletion.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "DELETE DATASET lv_file.", "cwe": "CWE-22"}, {"rule_id": "ABAP-PATH-003", "name": "TRANSFER without path validation", "category": "Directory Traversal", "severity": "HIGH", "description": "TRANSFER writes data to a file identified by a variable. Path traversal is possible if the variable is user-controlled.", "recommendation": "Validate the target path with FILE_VALIDATE_NAME before TRANSFER.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "TRANSFER lv_data TO lv_filepath.", "cwe": "CWE-22"}, {"rule_id": "ABAP-SQLI-002", "name": "String concatenation into SQL condition", "category": "SQL Injection", "severity": "CRITICAL", "description": "String concatenation is used to build part of an SQL statement, risking injection if any operand is user-controlled.", "recommendation": "Use parameterised Open SQL with host variables (@iv_param) instead of concatenating strings into queries.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CONCATENATE lv_base_dir '../../etc/passwd' INTO lv_full_path.", "cwe": "CWE-89"}, {"rule_id": "ABAP-PATH-004", "name": "Path traversal sequence in string", "category": "Directory Traversal", "severity": "MEDIUM", "description": "A path traversal sequence (../ or ..\\) is found in a string operation, indicating potential directory escape.", "recommendation": "Sanitise file paths by removing '..' sequences and validate against logical file names.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CONCATENATE lv_base_dir '../../etc/passwd' INTO lv_full_path.", "cwe": "CWE-22"}, {"rule_id": "ABAP-XSS-001", "name": "HTML output without cl_abap_format escaping", "category": "Cross-Site Scripting", "severity": "HIGH", "description": "HTTP response data is set without evidence of XSS escaping via cl_abap_format=>e_xss_ml or cl_http_utility=>escape_html.", "recommendation": "Escape all user-controlled output with: escape( val = data format = cl_abap_format=>e_xss_ml ).", "source": "tests\\samples\\vulnerable_abap.abap", "context": "lo_response->set_cdata( lv_user_html ).", "cwe": "CWE-79"}, {"rule_id": "ABAP-SQLI-002", "name": "String concatenation into SQL condition", "category": "SQL Injection", "severity": "CRITICAL", "description": "String concatenation is used to build part of an SQL statement, risking injection if any operand is user-controlled.", "recommendation": "Use parameterised Open SQL with host variables (@iv_param) instead of concatenating strings into queries.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CONCATENATE '<script>alert(' lv_user_input ')</script>' INTO lv_html.", "cwe": "CWE-89"}, {"rule_id": "ABAP-XSS-002", "name": "HTML tag concatenation with variable", "category": "Cross-Site Scripting", "severity": "HIGH", "description": "An HTML tag is concatenated with a variable, enabling reflected or stored XSS if the variable is user-controlled.", "recommendation": "Use server-side templating with automatic escaping. Apply cl_abap_format=>e_xss_ml to all dynamic values.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CONCATENATE '<script>alert(' lv_user_input ')</script>' INTO lv_html.", "cwe": "CWE-79"}, {"rule_id": "ABAP-XSS-005", "name": "cl_abap_browser show_html with dynamic content", "category": "Cross-Site Scripting", "severity": "HIGH", "description": "cl_abap_browser=>show_html renders HTML in the SAP GUI browser control. Unescaped dynamic content may trigger XSS.", "recommendation": "Escape all dynamic values before passing them to show_html.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "cl_abap_browser=>show_html( html_string = lv_dynamic_html ).", "cwe": "CWE-79"}, {"rule_id": "ABAP-AUTH-002", "name": "AUTHORITY-CHECK with DUMMY value", "category": "Missing Authorization", "severity": "HIGH", "description": "AUTHORITY-CHECK uses the DUMMY value, which always passes. This effectively disables the authorization check.", "recommendation": "Replace DUMMY with the actual authorization field values that should be checked.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "AUTHORITY-CHECK OBJECT 'S_DEVELOP' ID 'ACTVT' DUMMY.", "cwe": "CWE-862"}, {"rule_id": "ABAP-AUTH-003", "name": "SY-SUBRC not checked after AUTHORITY-CHECK", "category": "Missing Authorization", "severity": "HIGH", "description": "AUTHORITY-CHECK is present but SY-SUBRC is not checked immediately after. The authorization result is ignored.", "recommendation": "Always check SY-SUBRC immediately after AUTHORITY-CHECK and raise an exception or return on failure (SY-SUBRC <> 0).", "source": "tests\\samples\\vulnerable_abap.abap", "context": "AUTHORITY-CHECK OBJECT 'S_DEVELOP' ID 'ACTVT' DUMMY.", "cwe": "CWE-862"}, {"rule_id": "ABAP-AUTH-004", "name": "RFC call without prior AUTHORITY-CHECK", "category": "Missing Authorization", "severity": "HIGH", "description": "An RFC call is made to a remote destination without evidence of a preceding AUTHORITY-CHECK in the same block.", "recommendation": "Add AUTHORITY-CHECK OBJECT 'S_RFC' before making RFC calls.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL FUNCTION 'BAPI_USER_GET_DETAIL' DESTINATION 'RFC_DEST'", "cwe": "CWE-862"}, {"rule_id": "ABAP-AUTH-005", "name": "DELETE FROM table without AUTHORITY-CHECK", "category": "Missing Authorization", "severity": "HIGH", "description": "Database records are deleted without evidence of a preceding authorization check in the same code block.", "recommendation": "Add AUTHORITY-CHECK for the relevant authorization object before DELETE operations on business data.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "DELETE FROM ztable WHERE id = lv_id.", "cwe": "CWE-862"}, {"rule_id": "ABAP-AUTH-006", "name": "UPDATE table SET without AUTHORITY-CHECK", "category": "Missing Authorization", "severity": "HIGH", "description": "Database records are updated without evidence of a preceding authorization check.", "recommendation": "Add AUTHORITY-CHECK for the relevant authorization object before UPDATE operations.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "UPDATE ztable SET field1 = 'X' WHERE id = lv_id.", "cwe": "CWE-862"}, {"rule_id": "ABAP-AUTH-008", "name": "CALL TRANSACTION without S_TCODE check", "category": "Missing Authorization", "severity": "HIGH", "description": "A transaction is called without evidence of AUTHORITY-CHECK OBJECT 'S_TCODE' in the same code block.", "recommendation": "Add AUTHORITY-CHECK OBJECT 'S_TCODE' ID 'TCD' FIELD <tcode> before CALL TRANSACTION.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL TRANSACTION 'SE38' USING lt_bdc_data.", "cwe": "CWE-862"}, {"rule_id": "ABAP-CRED-001", "name": "Hardcoded password literal", "category": "Hardcoded Credentials", "severity": "CRITICAL", "description": "A password is hardcoded as a string literal in ABAP source code, exposing it to anyone with read access.", "recommendation": "Store credentials in the SAP Secure Store (SSF/SSFC) or use destination services. Never hardcode passwords.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "password = 'MyP@ssw0rd2024'.", "cwe": "CWE-798"}, {"rule_id": "ABAP-CRED-002", "name": "Hardcoded API key or token", "category": "Hardcoded Credentials", "severity": "CRITICAL", "description": "An API key, secret, or token is hardcoded in the source code.", "recommendation": "Use SAP Destination Service or BTP Credential Store for API keys and tokens.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "token = 'eyJhbGciOiJIUzI1NiJ9.abcdefghijk'.", "cwe": "CWE-798"}, {"rule_id": "ABAP-CRED-004", "name": "Hardcoded Basic auth header", "category": "Hardcoded Credentials", "severity": "HIGH", "description": "A Base64-encoded Basic authentication header is hardcoded, embedding credentials directly in source code.", "recommendation": "Use SAP Destination Service or compute the auth header at runtime from securely stored credentials.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "lo_http->set_request_header( name = 'Authorization' value = 'Basic YWRtaW46cGFzc3dvcmQ=' ).", "cwe": "CWE-798"}, {"rule_id": "ABAP-INFO-001", "name": "Overly broad exception catch (cx_root)", "category": "Information Disclosure", "severity": "MEDIUM", "description": "Catching cx_root swallows all exceptions indiscriminately, which may hide errors and expose internal details in error messages.", "recommendation": "Catch specific exception classes and sanitise any messages exposed to users.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CATCH cx_root INTO DATA(lx_err).", "cwe": "CWE-200"}, {"rule_id": "ABAP-INFO-004", "name": "Exception message exposed to user", "category": "Information Disclosure", "severity": "MEDIUM", "description": "An exception's text is directly displayed to the user via MESSAGE, potentially revealing internal implementation details.", "recommendation": "Display a generic error message to users. Log the full exception details server-side.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "MESSAGE lx_err->get_text( ) TYPE 'E'.", "cwe": "CWE-200"}, {"rule_id": "ABAP-INFO-002", "name": "BREAK-POINT left in production code", "category": "Information Disclosure", "severity": "LOW", "description": "A BREAK-POINT statement is present, which will halt execution in debug mode and may expose internal state.", "recommendation": "Remove all BREAK-POINT statements before transporting to production.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "BREAK-POINT.", "cwe": "CWE-200"}, {"rule_id": "ABAP-CONF-001", "name": "Anonymous SSL profile (no certificate validation)", "category": "Insecure Configuration", "severity": "HIGH", "description": "The ANONYM SSL profile disables certificate validation, enabling man-in-the-middle attacks.", "recommendation": "Use a named SSL client identity (e.g., DFAULT or a custom PSE) with proper certificate validation.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "EXPORTING url = lv_url ssl_id = 'ANONYM'", "cwe": "CWE-16"}, {"rule_id": "ABAP-CONF-002", "name": "HTTP (unencrypted) in connection URL", "category": "Insecure Configuration", "severity": "HIGH", "description": "An unencrypted HTTP URL is used for a connection, exposing data in transit to interception.", "recommendation": "Use HTTPS for all network connections to ensure data-in-transit encryption.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "DATA: lv_endpoint TYPE string VALUE 'http://api.internal.corp/service'.", "cwe": "CWE-16"}, {"rule_id": "ABAP-AUTH-004", "name": "RFC call without prior AUTHORITY-CHECK", "category": "Missing Authorization", "severity": "HIGH", "description": "An RFC call is made to a remote destination without evidence of a preceding AUTHORITY-CHECK in the same block.", "recommendation": "Add AUTHORITY-CHECK OBJECT 'S_RFC' before making RFC calls.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL FUNCTION 'RFC_READ_TABLE' DESTINATION lv_destination", "cwe": "CWE-862"}, {"rule_id": "ABAP-RFC-002", "name": "Dynamic RFC destination from variable", "category": "RFC Security", "severity": "HIGH", "description": "The RFC destination is supplied via a variable. If user-controlled, an attacker may redirect calls to a malicious system.", "recommendation": "Validate the destination name against an allowlist of configured RFC connections.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL FUNCTION 'RFC_READ_TABLE' DESTINATION lv_destination", "cwe": "CWE-284"}, {"rule_id": "ABAP-AUTH-004", "name": "RFC call without prior AUTHORITY-CHECK", "category": "Missing Authorization", "severity": "HIGH", "description": "An RFC call is made to a remote destination without evidence of a preceding AUTHORITY-CHECK in the same block.", "recommendation": "Add AUTHORITY-CHECK OBJECT 'S_RFC' before making RFC calls.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL FUNCTION 'Z_LONG_RUNNING' STARTING NEW TASK lv_task DESTINATION lv_dest.", "cwe": "CWE-862"}, {"rule_id": "ABAP-RFC-002", "name": "Dynamic RFC destination from variable", "category": "RFC Security", "severity": "HIGH", "description": "The RFC destination is supplied via a variable. If user-controlled, an attacker may redirect calls to a malicious system.", "recommendation": "Validate the destination name against an allowlist of configured RFC connections.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL FUNCTION 'Z_LONG_RUNNING' STARTING NEW TASK lv_task DESTINATION lv_dest.", "cwe": "CWE-284"}, {"rule_id": "ABAP-RFC-005", "name": "Async RFC without error handling", "category": "RFC Security", "severity": "MEDIUM", "description": "An asynchronous RFC call is made without evidence of RECEIVE RESULTS or error handling.", "recommendation": "Always handle RECEIVE RESULTS FROM FUNCTION and check SY-SUBRC for async RFC calls.", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CALL FUNCTION 'Z_LONG_RUNNING' STARTING NEW TASK lv_task DESTINATION lv_dest.", "cwe": "CWE-284"}, {"rule_id": "ABAP-DEP-CVE202340309", "name": "Vulnerable CommonCryptoLib 8.5.40", "category": "Vulnerable Dependency", "severity": "CRITICAL", "description": "SAP CommonCryptoLib missing authorization check allows privilege escalation.", "recommendation": "8.5.50+", "source": "tests\\samples\\vulnerable_abap.abap", "context": "CommonCryptoLib 8.5.40", "cwe": ""}, {"rule_id": "ABAP-DEP-CVE202349583", "name": "Vulnerable SAP_BASIS 750", "category": "Vulnerable Dependency", "severity": "CRITICAL", "description": "SAP_BASIS escalation via RFC — allows unauthorized remote function calls.", "recommendation": "Apply SAP Security Note 3411067", "source": "tests\\samples\\vulnerable_abap.abap", "context": "SAP_BASIS 750", "cwe": ""}, {"rule_id": "ABAP-DEP-CVE202222536", "name": "Vulnerable SAP_BASIS 750", "category": "Vulnerable Dependency", "severity": "CRITICAL", "description": "SAP NetWeaver AS — HTTP request smuggling via ICM allows session hijacking.", "recommendation": "Apply SAP Security Note 3123396", "source": "tests\\samples\\vulnerable_abap.abap", "context": "SAP_BASIS 750", "cwe": ""}];
+
+/* ================================================================
+   RENDER
+   ================================================================ */
+const SEV_ORDER = {CRITICAL:0,HIGH:1,MEDIUM:2,LOW:3,INFO:4};
+const SEV_COLORS = {CRITICAL:'var(--sev-critical)',HIGH:'var(--sev-high)',MEDIUM:'var(--sev-medium)',LOW:'var(--sev-low)',INFO:'var(--sev-info)'};
+
+// Category chart
+(function renderCatChart(){
+  const cats = {};
+  FINDINGS.forEach(f => { cats[f.category] = (cats[f.category]||0) + 1 });
+  const sorted = Object.entries(cats).sort((a,b) => b[1]-a[1]);
+  if(!sorted.length) return;
+  const max = sorted[0][1];
+  const barColors = ['#EF4444','#F59E0B','#3B82F6','#8B5CF6','#22C55E','#EC4899','#06B6D4','#F97316','#14B8A6','#A855F7'];
+  const container = document.getElementById('catChart');
+  container.innerHTML = sorted.map(([cat, count], i) => {
+    const pct = Math.round((count / max) * 100);
+    return `<div class="cat-bar animate-in" style="animation-delay:${i*60}ms">
+      <div class="cat-bar__label">${cat}</div>
+      <div class="cat-bar__track">
+        <div class="cat-bar__fill" style="width:${pct}%;background:${barColors[i%barColors.length]}">${count}</div>
+      </div>
+    </div>`;
+  }).join('');
+})();
+
+// Populate category filter
+(function populateCatFilter(){
+  const cats = [...new Set(FINDINGS.map(f=>f.category))].sort();
+  const sel = document.getElementById('catFilter');
+  cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o) });
+})();
+
+// Render findings
+function renderFindings(list){
+  const container = document.getElementById('findingsContainer');
+  if(!list.length){
+    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:40px 0">No findings match the current filters.</p>';
+    return;
+  }
+  container.innerHTML = list.map((f, i) => `
+    <div class="finding animate-in" data-sev="${f.severity}" data-cat="${f.category}" style="animation-delay:${Math.min(i*20,400)}ms">
+      <div class="finding__header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="finding__sev finding__sev--${f.severity}">${f.severity}</span>
+        <span class="finding__id">${f.rule_id}</span>
+        <span class="finding__name">${escHtml(f.name)}</span>
+        <svg class="finding__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="finding__body">
+        <div class="finding__grid">
+          <div class="finding__field finding__field--full finding__field--issue">
+            <div class="finding__field-label">Issue</div>
+            <div class="finding__field-value">${escHtml(f.description)}</div>
+          </div>
+          <div class="finding__field finding__field--full finding__field--rec">
+            <div class="finding__field-label">Recommendation</div>
+            <div class="finding__field-value">${escHtml(f.recommendation)}</div>
+          </div>
+          ${f.context ? `<div class="finding__field">
+            <div class="finding__field-label">Context</div>
+            <div class="finding__field-value"><code>${escHtml(f.context)}</code></div>
+          </div>` : ''}
+          ${f.source ? `<div class="finding__field">
+            <div class="finding__field-label">Source</div>
+            <div class="finding__field-value"><code>${escHtml(f.source)}</code></div>
+          </div>` : ''}
+          ${f.cwe ? `<div class="finding__field">
+            <div class="finding__field-label">Weakness</div>
+            <div class="finding__field-value"><span class="finding__cwe">${f.cwe}</span></div>
+          </div>` : ''}
+          <div class="finding__field">
+            <div class="finding__field-label">Category</div>
+            <div class="finding__field-value">${escHtml(f.category)}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+
+// Initial render
+renderFindings(FINDINGS);
+
+// Filters
+function applyFilters(){
+  const sev = document.getElementById('sevFilter').value;
+  const cat = document.getElementById('catFilter').value;
+  const q = document.getElementById('searchFilter').value.toLowerCase();
+
+  // Reset sev card highlights
+  document.querySelectorAll('.sev-card').forEach(c => c.classList.remove('active'));
+  if(sev) document.querySelector(`.sev-card[data-sev="${sev}"]`)?.classList.add('active');
+
+  const filtered = FINDINGS.filter(f => {
+    if(sev && f.severity !== sev) return false;
+    if(cat && f.category !== cat) return false;
+    if(q && !((f.rule_id||'')+' '+(f.name||'')+' '+(f.description||'')+' '+(f.context||'')+' '+(f.cwe||'')+' '+(f.category||'')).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  renderFindings(filtered);
+  document.getElementById('filterCount').textContent = `Showing ${filtered.length} of ${FINDINGS.length}`;
+}
+
+function filterBySev(sev){
+  const sel = document.getElementById('sevFilter');
+  sel.value = sel.value === sev ? '' : sev;
+  applyFilters();
+  document.querySelector('.findings-section').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>

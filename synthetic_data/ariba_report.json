@@ -1,0 +1,239 @@
+{
+  "scanner": "sap_ariba_security_scanner",
+  "version": "1.0.0",
+  "generated": "2026-03-31T14:22:08",
+  "target": "demo-corp.procurement.ariba.com",
+  "findings_count": 28,
+  "summary": {
+    "CRITICAL": 4,
+    "HIGH": 9,
+    "MEDIUM": 10,
+    "LOW": 5
+  },
+  "findings": [
+    {
+      "rule_id": "ARIBA-IAM-001",
+      "name": "Excessive users with Procurement Administrator role",
+      "category": "Identity & Access Management",
+      "severity": "CRITICAL",
+      "description": "18 users hold the Procurement Administrator role which grants full control over sourcing events, contracts, and supplier management. Recommended maximum is 5.",
+      "recommendation": "Review and reduce Procurement Administrator assignments. Create granular custom roles for category-specific procurement activities."
+    },
+    {
+      "rule_id": "ARIBA-IAM-002",
+      "name": "Dormant user accounts with active permissions",
+      "category": "Identity & Access Management",
+      "severity": "HIGH",
+      "description": "34 user accounts have not logged in for over 90 days but retain active roles including Contract Manager, Invoice Approver, and Sourcing Project Owner.",
+      "recommendation": "Implement automated account deactivation after 90 days of inactivity. Remove all role assignments from dormant accounts immediately."
+    },
+    {
+      "rule_id": "ARIBA-IAM-003",
+      "name": "Separation of duties violation in procurement workflow",
+      "category": "Identity & Access Management",
+      "severity": "CRITICAL",
+      "description": "5 users simultaneously hold Requisition Creator and Approval Manager roles, allowing them to create and approve their own purchase requests without independent review.",
+      "recommendation": "Implement SoD policies that prevent users from holding conflicting roles. Configure approval chains requiring a different approver for self-created requisitions."
+    },
+    {
+      "rule_id": "ARIBA-IAM-004",
+      "name": "Service accounts with interactive login capability",
+      "category": "Identity & Access Management",
+      "severity": "HIGH",
+      "description": "3 integration service accounts (svc_sap_erp, svc_fieldglass, svc_analytics) can perform interactive login. Service accounts should be restricted to API-only access.",
+      "recommendation": "Disable interactive login for all service accounts. Restrict authentication to OAuth client credentials grant or certificate-based auth."
+    },
+    {
+      "rule_id": "ARIBA-AUTH-001",
+      "name": "SAML SSO not enforced for all users",
+      "category": "Authentication",
+      "severity": "HIGH",
+      "description": "SAML SSO is configured but not enforced. 23% of users can authenticate with local Ariba credentials bypassing corporate IdP policies including MFA.",
+      "recommendation": "Enforce SAML SSO for all non-service accounts. Disable local authentication fallback. Ensure the IdP enforces MFA for Ariba access."
+    },
+    {
+      "rule_id": "ARIBA-AUTH-002",
+      "name": "Password policy allows weak passwords",
+      "category": "Authentication",
+      "severity": "HIGH",
+      "description": "Local password policy requires only 8 characters with no complexity requirements. This applies to accounts not using SSO and emergency access accounts.",
+      "recommendation": "Set minimum password length to 14 characters. Require uppercase, lowercase, numbers, and special characters. Enable password history (12 passwords)."
+    },
+    {
+      "rule_id": "ARIBA-AUTH-003",
+      "name": "Session timeout exceeds 60 minutes",
+      "category": "Authentication",
+      "severity": "MEDIUM",
+      "description": "User session idle timeout is set to 120 minutes. Extended sessions on shared or public devices increase risk of session hijacking.",
+      "recommendation": "Reduce session idle timeout to 30 minutes. Implement absolute session timeout of 8 hours regardless of activity."
+    },
+    {
+      "rule_id": "ARIBA-API-001",
+      "name": "API keys without rotation policy",
+      "category": "API Security",
+      "severity": "HIGH",
+      "description": "7 Ariba API application keys have not been rotated in over 180 days. Long-lived API keys increase the window of exposure if compromised.",
+      "recommendation": "Implement a 90-day API key rotation policy. Use OAuth 2.0 with short-lived tokens instead of static API keys where possible."
+    },
+    {
+      "rule_id": "ARIBA-API-002",
+      "name": "API rate limiting not configured",
+      "category": "API Security",
+      "severity": "MEDIUM",
+      "description": "No rate limiting is configured on the Ariba API endpoints. This allows potential abuse through excessive API calls for data extraction.",
+      "recommendation": "Configure API rate limits per application key. Set thresholds for requests per minute and daily quotas. Implement exponential backoff requirements."
+    },
+    {
+      "rule_id": "ARIBA-API-003",
+      "name": "API integration using deprecated authentication method",
+      "category": "API Security",
+      "severity": "MEDIUM",
+      "description": "2 API integrations (ERP-Sync, Legacy-Reports) use the deprecated shared secret authentication. This method does not support token expiration or scoping.",
+      "recommendation": "Migrate all API integrations to OAuth 2.0 client credentials flow. Decommission shared secret authentication method."
+    },
+    {
+      "rule_id": "ARIBA-PROC-001",
+      "name": "Purchase order approval thresholds not tiered",
+      "category": "Procurement Workflow",
+      "severity": "HIGH",
+      "description": "A single approval level is configured for all purchase orders regardless of amount. POs up to $500,000 require only one manager approval.",
+      "recommendation": "Implement tiered approval workflows: <$10K single approval, $10K-$100K two-level, >$100K three-level with VP sign-off."
+    },
+    {
+      "rule_id": "ARIBA-PROC-002",
+      "name": "Emergency purchase order bypass used excessively",
+      "category": "Procurement Workflow",
+      "severity": "HIGH",
+      "description": "Emergency PO bypass was used 47 times in the last 30 days, representing 12% of all purchase orders. Emergency bypass skips standard approval workflows.",
+      "recommendation": "Review and restrict emergency PO bypass authorization. Implement post-facto review process. Set monthly threshold alerts for bypass usage."
+    },
+    {
+      "rule_id": "ARIBA-PROC-003",
+      "name": "Contract expiration notifications not configured",
+      "category": "Procurement Workflow",
+      "severity": "MEDIUM",
+      "description": "Automatic notifications for expiring contracts are not enabled. 15 contracts with a combined value of $2.3M expired without renewal or renegotiation.",
+      "recommendation": "Enable contract expiration notifications at 90, 60, and 30 days before expiry. Assign contract owners responsible for renewal workflows."
+    },
+    {
+      "rule_id": "ARIBA-PROC-004",
+      "name": "Maverick spending detection not enabled",
+      "category": "Procurement Workflow",
+      "severity": "MEDIUM",
+      "description": "No rules are configured to detect and flag off-contract or maverick spending. Purchases outside contracted suppliers are not identified for review.",
+      "recommendation": "Configure guided buying rules to flag off-contract purchases. Implement preferred supplier enforcement and compliance reporting."
+    },
+    {
+      "rule_id": "ARIBA-DATA-001",
+      "name": "Sensitive supplier data accessible without field-level security",
+      "category": "Data Protection",
+      "severity": "HIGH",
+      "description": "Supplier bank account details, tax IDs, and contact information are visible to all users with Supplier Manager role (42 users) without field-level restrictions.",
+      "recommendation": "Implement field-level security for sensitive supplier data. Restrict bank account and tax ID visibility to Finance and Supplier Master Data roles only."
+    },
+    {
+      "rule_id": "ARIBA-DATA-002",
+      "name": "Data export controls not restricted",
+      "category": "Data Protection",
+      "severity": "MEDIUM",
+      "description": "Bulk data export functionality is available to 67 users. Large exports of procurement data, pricing, and supplier information are not logged or restricted.",
+      "recommendation": "Restrict bulk export to authorized roles. Implement export logging and alerting. Set maximum record limits for data exports."
+    },
+    {
+      "rule_id": "ARIBA-DATA-003",
+      "name": "Document attachments not scanned for malware",
+      "category": "Data Protection",
+      "severity": "MEDIUM",
+      "description": "Supplier-uploaded documents (invoices, proposals, certificates) are not scanned for malware before being stored or accessed by internal users.",
+      "recommendation": "Enable document scanning integration for all uploaded attachments. Quarantine suspicious files and notify the security team."
+    },
+    {
+      "rule_id": "ARIBA-INT-001",
+      "name": "ERP integration credentials stored in plaintext",
+      "category": "Integration Security",
+      "severity": "CRITICAL",
+      "description": "SAP ERP integration connection uses plaintext credentials in the integration configuration. These credentials grant write access to the ERP procurement module.",
+      "recommendation": "Migrate to certificate-based authentication for ERP integration. Store any required credentials in a secrets management vault."
+    },
+    {
+      "rule_id": "ARIBA-INT-002",
+      "name": "Integration middleware using unencrypted channel",
+      "category": "Integration Security",
+      "severity": "HIGH",
+      "description": "The Dell Boomi integration middleware communicates with Ariba over HTTP (not HTTPS) on 2 of 5 integration flows, exposing procurement data in transit.",
+      "recommendation": "Enforce TLS 1.2+ for all integration channels. Update middleware configuration to use HTTPS endpoints exclusively."
+    },
+    {
+      "rule_id": "ARIBA-INT-003",
+      "name": "Third-party integration with excessive data access",
+      "category": "Integration Security",
+      "severity": "MEDIUM",
+      "description": "Analytics integration (PowerBI-Connector) has read access to all procurement data including supplier financials. Scope exceeds reporting requirements.",
+      "recommendation": "Scope integration data access to specific data views needed for reporting. Remove access to sensitive supplier financial data."
+    },
+    {
+      "rule_id": "ARIBA-SUP-001",
+      "name": "Supplier self-registration without verification workflow",
+      "category": "Supplier Management",
+      "severity": "CRITICAL",
+      "description": "Supplier self-registration portal does not require identity verification or compliance checks before granting access to the sourcing network.",
+      "recommendation": "Implement a supplier verification workflow including business registration validation, compliance checks, and manual approval before activation."
+    },
+    {
+      "rule_id": "ARIBA-SUP-002",
+      "name": "Supplier bank account changes not requiring dual approval",
+      "category": "Supplier Management",
+      "severity": "HIGH",
+      "description": "Changes to supplier bank account details require only single approval. This is a primary vector for Business Email Compromise (BEC) payment fraud.",
+      "recommendation": "Implement dual approval for all supplier bank account changes. Require out-of-band verification with a known supplier contact before processing."
+    },
+    {
+      "rule_id": "ARIBA-SUP-003",
+      "name": "Duplicate supplier records detected",
+      "category": "Supplier Management",
+      "severity": "MEDIUM",
+      "description": "23 potential duplicate supplier records detected based on matching tax IDs and similar company names. Duplicates can be used to circumvent spend controls.",
+      "recommendation": "Run supplier deduplication. Enable automatic duplicate detection rules for new supplier registrations. Merge confirmed duplicate records."
+    },
+    {
+      "rule_id": "ARIBA-AUD-001",
+      "name": "Audit logging not covering all security events",
+      "category": "Audit & Compliance",
+      "severity": "MEDIUM",
+      "description": "Audit logging is enabled but does not capture: role assignment changes, approval delegation modifications, or API key generation events.",
+      "recommendation": "Enable comprehensive audit logging for all security-relevant events. Configure log export to SIEM for correlation and alerting."
+    },
+    {
+      "rule_id": "ARIBA-AUD-002",
+      "name": "No periodic access certification process",
+      "category": "Audit & Compliance",
+      "severity": "LOW",
+      "description": "No formal access certification or recertification process is in place. User roles and permissions are not reviewed on a scheduled basis.",
+      "recommendation": "Implement quarterly access certification campaigns. Require managers to review and attest to their reports' access levels."
+    },
+    {
+      "rule_id": "ARIBA-AUD-003",
+      "name": "Compliance reports not generated automatically",
+      "category": "Audit & Compliance",
+      "severity": "LOW",
+      "description": "Compliance and spend reports are generated manually on an ad-hoc basis. There is no automated compliance reporting schedule.",
+      "recommendation": "Configure automated weekly compliance reports covering: off-contract spend, approval bypasses, and SoD violations. Distribute to compliance team."
+    },
+    {
+      "rule_id": "ARIBA-CFG-001",
+      "name": "Test realm configuration replicated to production",
+      "category": "Configuration Management",
+      "severity": "LOW",
+      "description": "3 configuration settings replicated from the test realm to production appear to be test configurations including relaxed validation rules.",
+      "recommendation": "Review all configurations migrated from test to production. Remove test-specific settings and enforce production-grade validation rules."
+    },
+    {
+      "rule_id": "ARIBA-CFG-002",
+      "name": "Unused integration endpoints still active",
+      "category": "Configuration Management",
+      "severity": "LOW",
+      "description": "5 integration endpoints are configured but have had zero traffic for over 180 days. Unused endpoints expand the attack surface.",
+      "recommendation": "Decommission unused integration endpoints. Implement periodic review of active integrations. Disable endpoints with no traffic for 90+ days."
+    }
+  ]
+}

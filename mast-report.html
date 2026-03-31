@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Application Security Testing &mdash; Sample Report | Phalanx Cyber</title>
+<meta name="description" content="Static analysis scanner for Android APK and iOS IPA files with 130+ SAST rules across 24 check modules, MASVS v2 mapping, and 39 dependency CVEs.">
+<style>
+/* ---- RESET ---- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0A0E1A;--bg-surface:#111827;--bg-card:rgba(17,24,39,0.6);
+  --bg-glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --text:#F9FAFB;--text-secondary:#9CA3AF;--text-muted:#6B7280;
+  --accent-1:#00D4FF;--accent-2:#7B61FF;
+  --gradient:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+  --radius:12px;--radius-sm:8px;
+  --sev-critical:#EF4444;--sev-high:#F59E0B;--sev-medium:#3B82F6;
+  --sev-low:#22C55E;--sev-info:#6B7280;
+}
+
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:var(--accent-1);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---- LAYOUT ---- */
+.container{max-width:1280px;margin:0 auto;padding:0 24px}
+
+/* ---- BACK NAV ---- */
+.back-nav{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 0}
+.back-nav .container{display:flex;align-items:center;justify-content:space-between}
+.back-nav a{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:0.9rem;color:var(--text-secondary);transition:color 0.2s}
+.back-nav a:hover{color:var(--accent-1);text-decoration:none}
+.back-nav__brand{font-weight:800;font-size:1.1rem;color:var(--text)}
+.back-nav__brand span{color:var(--accent-1)}
+
+/* ---- HERO HEADER ---- */
+.report-hero{position:relative;padding:80px 0 60px;overflow:hidden}
+.report-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,212,255,0.08),transparent 70%)}
+.report-hero__badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);font-size:0.8rem;font-weight:600;color:var(--accent-1);margin-bottom:20px}
+.report-hero__badge::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent-1);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.report-hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.2;margin-bottom:12px}
+.report-hero h1 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.report-hero__sub{color:var(--text-secondary);font-size:1.05rem;max-width:680px;margin-bottom:32px}
+
+/* ---- META GRID ---- */
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:0}
+.meta-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;backdrop-filter:blur(8px)}
+.meta-card__label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:4px}
+.meta-card__value{font-size:0.95rem;font-weight:600;color:var(--text);word-break:break-all}
+
+/* ---- SEVERITY DASHBOARD ---- */
+.dashboard{padding:48px 0}
+.section-title{font-size:1.4rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.section-title svg{color:var(--accent-1)}
+
+.sev-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:40px}
+@media(max-width:768px){.sev-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.sev-grid{grid-template-columns:repeat(2,1fr)}}
+.sev-card{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;text-align:center;overflow:hidden;cursor:pointer;transition:all 0.25s}
+.sev-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.15)}
+.sev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sev-card[data-sev="CRITICAL"]::before{background:var(--sev-critical)}
+.sev-card[data-sev="HIGH"]::before{background:var(--sev-high)}
+.sev-card[data-sev="MEDIUM"]::before{background:var(--sev-medium)}
+.sev-card[data-sev="LOW"]::before{background:var(--sev-low)}
+.sev-card[data-sev="INFO"]::before{background:var(--sev-info)}
+.sev-card__count{font-size:2.2rem;font-weight:800;line-height:1}
+.sev-card[data-sev="CRITICAL"] .sev-card__count{color:var(--sev-critical)}
+.sev-card[data-sev="HIGH"] .sev-card__count{color:var(--sev-high)}
+.sev-card[data-sev="MEDIUM"] .sev-card__count{color:var(--sev-medium)}
+.sev-card[data-sev="LOW"] .sev-card__count{color:var(--sev-low)}
+.sev-card[data-sev="INFO"] .sev-card__count{color:var(--sev-info)}
+.sev-card__label{font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-top:6px}
+.sev-card.active{border-color:rgba(0,212,255,0.4);background:rgba(0,212,255,0.06)}
+
+/* ---- POSTURE SCORE ---- */
+.posture{display:flex;align-items:center;gap:40px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:32px;margin-bottom:40px}
+@media(max-width:640px){.posture{flex-direction:column;text-align:center}}
+.posture__ring{position:relative;width:120px;height:120px;flex-shrink:0}
+.posture__ring svg{transform:rotate(-90deg)}
+.posture__ring circle{fill:none;stroke-width:8}
+.posture__ring .bg{stroke:rgba(255,255,255,0.06)}
+.posture__ring .fg{stroke:var(--sev-critical);stroke-linecap:round;stroke-dasharray:339.292;stroke-dashoffset:339.29;transition:stroke-dashoffset 1.5s ease}
+.posture__score{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.posture__score-num{font-size:2rem;font-weight:800;color:var(--sev-critical)}
+.posture__score-max{font-size:0.75rem;color:var(--text-muted)}
+.posture__text h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
+.posture__text .grade{display:inline-block;padding:2px 10px;border-radius:4px;font-weight:700;font-size:0.85rem;background:rgba(239,68,68,0.15);color:var(--sev-critical);margin-left:8px}
+.posture__text p{color:var(--text-secondary);font-size:0.9rem;line-height:1.6;margin-top:8px}
+
+/* ---- CATEGORY BAR CHART ---- */
+.cat-chart{margin-bottom:40px}
+.cat-bar{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.cat-bar__label{width:180px;text-align:right;font-size:0.82rem;color:var(--text-secondary);flex-shrink:0}
+@media(max-width:640px){.cat-bar__label{width:120px;font-size:0.75rem}}
+.cat-bar__track{flex:1;height:28px;background:rgba(255,255,255,0.04);border-radius:4px;overflow:hidden;position:relative}
+.cat-bar__fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;font-size:0.75rem;font-weight:700;color:#fff;transition:width 0.8s ease}
+.cat-bar__count{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--text-muted)}
+
+/* ---- FILTERS ---- */
+.filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px;align-items:center}
+.filter-select,.filter-search{background:var(--bg-surface);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:var(--radius-sm);font-size:0.85rem;font-family:inherit;transition:border-color 0.2s}
+.filter-select:focus,.filter-search:focus{outline:none;border-color:var(--accent-1)}
+.filter-search{flex:1;min-width:200px}
+.filter-count{margin-left:auto;font-size:0.85rem;color:var(--text-muted)}
+
+/* ---- FINDINGS ---- */
+.findings-section{padding-bottom:60px}
+.finding{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;transition:border-color 0.2s}
+.finding:hover{border-color:rgba(255,255,255,0.12)}
+.finding__header{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;user-select:none}
+.finding__sev{display:inline-flex;align-items:center;justify-content:center;padding:4px 10px;border-radius:4px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;flex-shrink:0;min-width:72px}
+.finding__sev--CRITICAL{background:rgba(239,68,68,0.15);color:var(--sev-critical)}
+.finding__sev--HIGH{background:rgba(245,158,11,0.15);color:var(--sev-high)}
+.finding__sev--MEDIUM{background:rgba(59,130,246,0.15);color:var(--sev-medium)}
+.finding__sev--LOW{background:rgba(34,197,94,0.15);color:var(--sev-low)}
+.finding__sev--INFO{background:rgba(107,114,128,0.15);color:var(--sev-info)}
+.finding__id{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.8rem;color:var(--accent-1);font-weight:600;flex-shrink:0;min-width:120px}
+.finding__name{font-size:0.9rem;font-weight:600;flex:1}
+.finding__chevron{color:var(--text-muted);transition:transform 0.2s;flex-shrink:0}
+.finding.open .finding__chevron{transform:rotate(180deg)}
+.finding__body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
+.finding.open .finding__body{display:block}
+.finding__grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:640px){.finding__grid{grid-template-columns:1fr}}
+.finding__field{padding:14px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.04)}
+.finding__field-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px}
+.finding__field-value{font-size:0.85rem;color:var(--text-secondary);line-height:1.5}
+.finding__field-value code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.82rem;background:rgba(0,212,255,0.08);color:var(--accent-1);padding:2px 6px;border-radius:3px}
+.finding__field--full{grid-column:1/-1}
+.finding__field--rec{border-left:3px solid var(--accent-1)}
+.finding__field--issue{border-left:3px solid var(--sev-high)}
+.finding__cwe{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:4px;background:rgba(123,97,255,0.12);color:var(--accent-2);font-size:0.78rem;font-weight:600;font-family:'JetBrains Mono','Fira Code',monospace}
+
+/* ---- COMPLIANCE ---- */
+.compliance{padding:40px 0 60px}
+.compliance-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.compliance-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center}
+.compliance-card__name{font-weight:700;font-size:0.9rem;margin-bottom:4px}
+.compliance-card__desc{font-size:0.75rem;color:var(--text-muted);line-height:1.4}
+
+/* ---- FOOTER ---- */
+.report-footer{border-top:1px solid var(--border);padding:32px 0;text-align:center;color:var(--text-muted);font-size:0.82rem}
+.report-footer a{color:var(--accent-1)}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeIn 0.4s ease both}
+
+/* ---- PRINT ---- */
+@media print{
+  body{background:#fff;color:#111}
+  .back-nav,.filters{display:none}
+  .finding__body{display:block!important}
+  .finding{break-inside:avoid}
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ======== BACK NAV ======== -->
+<nav class="back-nav">
+  <div class="container">
+    <a href="index.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Portal
+    </a>
+    <div class="back-nav__brand">Phalanx<span>Cyber</span></div>
+  </div>
+</nav>
+
+<!-- ======== HERO ======== -->
+<header class="report-hero">
+  <div class="container">
+    <div class="report-hero__badge">Sample Security Audit Report</div>
+    <h1>Mobile Application Security <span>Testing</span></h1>
+    <p class="report-hero__sub">
+      Static analysis scanner for Android APK and iOS IPA files with 130+ SAST rules across 24 check modules, MASVS v2 mapping, and 39 dependency CVEs.
+      44 findings generated by the open-source scanner.
+    </p>
+    <div class="meta-grid">
+      <div class="meta-card">
+        <div class="meta-card__label">Platform</div>
+        <div class="meta-card__value">Android APK</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-card__label">Scanner</div>
+        <div class="meta-card__value">mast_scanner.py v1.0.0</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-card__label">Scan Date</div>
+        <div class="meta-card__value">2026-03-31</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ======== SEVERITY DASHBOARD ======== -->
+<section class="dashboard">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Finding Summary
+    </h2>
+
+    <div class="sev-grid">
+      <div class="sev-card" data-sev="CRITICAL" onclick="filterBySev('CRITICAL')">
+        <div class="sev-card__count">6</div>
+        <div class="sev-card__label">Critical</div>
+      </div>
+      <div class="sev-card" data-sev="HIGH" onclick="filterBySev('HIGH')">
+        <div class="sev-card__count">13</div>
+        <div class="sev-card__label">High</div>
+      </div>
+      <div class="sev-card" data-sev="MEDIUM" onclick="filterBySev('MEDIUM')">
+        <div class="sev-card__count">21</div>
+        <div class="sev-card__label">Medium</div>
+      </div>
+      <div class="sev-card" data-sev="LOW" onclick="filterBySev('LOW')">
+        <div class="sev-card__count">4</div>
+        <div class="sev-card__label">Low</div>
+      </div>
+      <div class="sev-card" data-sev="INFO" onclick="filterBySev('INFO')">
+        <div class="sev-card__count">0</div>
+        <div class="sev-card__label">Info</div>
+      </div>
+    </div>
+
+    <!-- Posture Score -->
+    <div class="posture">
+      <div class="posture__ring">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle class="bg" cx="60" cy="60" r="54"/>
+          <circle class="fg" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="posture__score">
+          <div class="posture__score-num">0</div>
+          <div class="posture__score-max">/ 100</div>
+        </div>
+      </div>
+      <div class="posture__text">
+        <h3>Security Posture <span class="grade">F &mdash; Critical</span></h3>
+        <p>6 critical findings require immediate attention. 13 high-severity issues compound the risk. 21 medium-severity findings should be addressed in the next sprint. 4 low-severity items are informational or best-practice recommendations.</p>
+      </div>
+    </div>
+
+    <!-- Category Breakdown Chart -->
+    <h2 class="section-title" style="margin-top:16px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+      Findings by Category
+    </h2>
+    <div class="cat-chart" id="catChart"></div>
+  </div>
+</section>
+
+<!-- ======== FINDINGS ======== -->
+<section class="findings-section">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Detailed Findings
+    </h2>
+
+    <div class="filters">
+      <select class="filter-select" id="sevFilter" onchange="applyFilters()">
+        <option value="">All Severities</option>
+        <option value="CRITICAL">Critical</option>
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+        <option value="INFO">Info</option>
+      </select>
+      <select class="filter-select" id="catFilter" onchange="applyFilters()">
+        <option value="">All Categories</option>
+      </select>
+      <input type="text" class="filter-search" id="searchFilter" placeholder="Search findings..." oninput="applyFilters()">
+      <span class="filter-count" id="filterCount">Showing 44 of 44</span>
+    </div>
+
+    <div id="findingsContainer"></div>
+  </div>
+</section>
+
+
+<!-- ======== COMPLIANCE ======== -->
+<section class="compliance">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Compliance Mapping
+    </h2>
+    <div class="compliance-grid">
+      <div class="compliance-card">
+        <div class="compliance-card__name">OWASP Mobile Top 10 2024</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-card__name">MASVS v2</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-card__name">CWE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======== FOOTER ======== -->
+<footer class="report-footer">
+  <div class="container">
+    Generated by <a href="https://github.com/Krishcalin/Mobile-Application-Security-Testing" target="_blank" rel="noopener">Mobile Application Security Testing</a> &mdash;
+    part of the <a href="index.html">Phalanx Cyber</a> open-source security toolkit.
+    This is a sample report using synthetic test data.
+  </div>
+</footer>
+
+<script>
+/* ================================================================
+   FINDINGS DATA
+   ================================================================ */
+const FINDINGS = [{"rule_id": "MAST-MANIFEST-001", "name": "Application is debuggable", "category": "Manifest", "severity": "CRITICAL", "description": "Application has debugging enabled, allowing attackers to attach debuggers and inspect runtime data.", "recommendation": "Set android:debuggable=\"false\" in release builds.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-215"}, {"rule_id": "MAST-SECRET-001", "name": "AWS Access Key ID", "category": "Secrets", "severity": "CRITICAL", "description": "Hardcoded aws access key id found in application strings.", "recommendation": "Remove hardcoded secrets. Use Android Keystore or environment-based configuration.", "source": "classes.dex / resources", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-SECRET-002", "name": "AWS Secret Key", "category": "Secrets", "severity": "CRITICAL", "description": "Hardcoded aws secret key found in application strings.", "recommendation": "Remove hardcoded secrets. Use Android Keystore or environment-based configuration.", "source": "classes.dex / resources", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-SECRET-007", "name": "Private Key", "category": "Secrets", "severity": "CRITICAL", "description": "Hardcoded private key found in application strings.", "recommendation": "Remove hardcoded secrets. Use Android Keystore or environment-based configuration.", "source": "classes.dex / resources", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-COMMON-SEC-001", "name": "AWS Access Key ID", "category": "Secrets", "severity": "CRITICAL", "description": "Hardcoded aws access key id found in application.", "recommendation": "Remove secrets from code. Use platform-specific secure storage.", "source": "strings", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-COMMON-SEC-003", "name": "Stripe Secret Key", "category": "Secrets", "severity": "CRITICAL", "description": "Hardcoded stripe secret key found in application.", "recommendation": "Remove secrets from code. Use platform-specific secure storage.", "source": "strings", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-MANIFEST-002", "name": "Application allows backup", "category": "Manifest", "severity": "HIGH", "description": "Application data can be backed up via ADB, potentially exposing sensitive data.", "recommendation": "Set android:allowBackup=\"false\" or use android:fullBackupContent with encryption.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-530"}, {"rule_id": "MAST-MANIFEST-003", "name": "Exported Activity without permission", "category": "Manifest", "severity": "HIGH", "description": "Activity '.ExportedActivity' is exported without permission protection, accessible by other apps.", "recommendation": "Add android:permission to restrict access or set exported=\"false\".", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-926"}, {"rule_id": "MAST-MANIFEST-003", "name": "Exported Activity without permission", "category": "Manifest", "severity": "HIGH", "description": "Activity '.MainActivity' is exported without permission protection, accessible by other apps.", "recommendation": "Add android:permission to restrict access or set exported=\"false\".", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-926"}, {"rule_id": "MAST-MANIFEST-004", "name": "Exported Service without permission", "category": "Manifest", "severity": "HIGH", "description": "Service '.ExportedService' is exported without permission protection, accessible by other apps.", "recommendation": "Add android:permission to restrict access or set exported=\"false\".", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-926"}, {"rule_id": "MAST-MANIFEST-006", "name": "Exported Content Provider without permission", "category": "Manifest", "severity": "HIGH", "description": "Content Provider '.ExportedProvider' is exported without permission protection, accessible by other apps.", "recommendation": "Add android:permission to restrict access or set exported=\"false\".", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-926"}, {"rule_id": "MAST-MANIFEST-007", "name": "Cleartext traffic allowed", "category": "Manifest", "severity": "HIGH", "description": "Application allows cleartext HTTP traffic, exposing data to network interception.", "recommendation": "Set usesCleartextTraffic=\"false\" and use HTTPS exclusively.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-319"}, {"rule_id": "MAST-SECRET-003", "name": "Google API Key", "category": "Secrets", "severity": "HIGH", "description": "Hardcoded google api key found in application strings.", "recommendation": "Remove hardcoded secrets. Use Android Keystore or environment-based configuration.", "source": "classes.dex / resources", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-SECRET-006", "name": "Hardcoded Password", "category": "Secrets", "severity": "HIGH", "description": "Hardcoded hardcoded password found in application strings.", "recommendation": "Remove hardcoded secrets. Use Android Keystore or environment-based configuration.", "source": "classes.dex / resources", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-SECRET-008", "name": "OAuth Client Secret", "category": "Secrets", "severity": "HIGH", "description": "Hardcoded oauth client secret found in application strings.", "recommendation": "Remove hardcoded secrets. Use Android Keystore or environment-based configuration.", "source": "classes.dex / resources", "context": "", "cwe": "CWE-798"}, {"rule_id": "DEP-ANDROID-CVE20210341", "name": "Vulnerable library: okhttp 3 (CVE-2021-0341)", "category": "Vulnerable Dependency", "severity": "HIGH", "description": "OkHttp: Certificate pinning bypass due to hostname verification flaw in OkHostnameVerifier.", "recommendation": "Upgrade okhttp to 4.9.1 or later.", "source": "classes.dex", "context": "", "cwe": "CWE-1395"}, {"rule_id": "MAST-COMMON-SEC-002", "name": "Google Cloud API Key", "category": "Secrets", "severity": "HIGH", "description": "Hardcoded google cloud api key found in application.", "recommendation": "Remove secrets from code. Use platform-specific secure storage.", "source": "strings", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-COMMON-SEC-005", "name": "SendGrid API Key", "category": "Secrets", "severity": "HIGH", "description": "Hardcoded sendgrid api key found in application.", "recommendation": "Remove secrets from code. Use platform-specific secure storage.", "source": "strings", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-COMMON-CRYPTO-001", "name": "Hardcoded encryption key", "category": "Cryptography", "severity": "HIGH", "description": "Cryptographic issue: Hardcoded encryption key.", "recommendation": "Use platform-provided secure cryptographic APIs.", "source": "strings", "context": "", "cwe": "CWE-321"}, {"rule_id": "MAST-MANIFEST-005", "name": "Exported Broadcast Receiver without permission", "category": "Manifest", "severity": "MEDIUM", "description": "Broadcast Receiver '.ExportedReceiver' is exported without permission protection, accessible by other apps.", "recommendation": "Add android:permission to restrict access or set exported=\"false\".", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-926"}, {"rule_id": "MAST-MANIFEST-008", "name": "Low minimum SDK version (19)", "category": "Manifest", "severity": "MEDIUM", "description": "App supports Android SDK 19 (< 23/Android 6.0), missing runtime permission model.", "recommendation": "Increase minSdkVersion to 23+ for runtime permissions and modern security features.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-693"}, {"rule_id": "MAST-MANIFEST-009", "name": "Dangerous permission: Camera access", "category": "Manifest", "severity": "MEDIUM", "description": "App requests dangerous permission 'android.permission.CAMERA' (Camera access).", "recommendation": "Verify this permission is necessary. Request at runtime with clear user justification.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-250"}, {"rule_id": "MAST-MANIFEST-009", "name": "Dangerous permission: SMS read access", "category": "Manifest", "severity": "MEDIUM", "description": "App requests dangerous permission 'android.permission.READ_SMS' (SMS read access).", "recommendation": "Verify this permission is necessary. Request at runtime with clear user justification.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-250"}, {"rule_id": "MAST-MANIFEST-009", "name": "Dangerous permission: SMS send access", "category": "Manifest", "severity": "MEDIUM", "description": "App requests dangerous permission 'android.permission.SEND_SMS' (SMS send access).", "recommendation": "Verify this permission is necessary. Request at runtime with clear user justification.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-250"}, {"rule_id": "MAST-MANIFEST-009", "name": "Dangerous permission: Contacts access", "category": "Manifest", "severity": "MEDIUM", "description": "App requests dangerous permission 'android.permission.READ_CONTACTS' (Contacts access).", "recommendation": "Verify this permission is necessary. Request at runtime with clear user justification.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-250"}, {"rule_id": "MAST-MANIFEST-009", "name": "Dangerous permission: Fine location access", "category": "Manifest", "severity": "MEDIUM", "description": "App requests dangerous permission 'android.permission.ACCESS_FINE_LOCATION' (Fine location access).", "recommendation": "Verify this permission is necessary. Request at runtime with clear user justification.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-250"}, {"rule_id": "MAST-MANIFEST-009", "name": "Dangerous permission: Microphone access", "category": "Manifest", "severity": "MEDIUM", "description": "App requests dangerous permission 'android.permission.RECORD_AUDIO' (Microphone access).", "recommendation": "Verify this permission is necessary. Request at runtime with clear user justification.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-250"}, {"rule_id": "MAST-MANIFEST-009", "name": "Dangerous permission: Phone state access", "category": "Manifest", "severity": "MEDIUM", "description": "App requests dangerous permission 'android.permission.READ_PHONE_STATE' (Phone state access).", "recommendation": "Verify this permission is necessary. Request at runtime with clear user justification.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-250"}, {"rule_id": "MAST-MANIFEST-009", "name": "Dangerous permission: Call log access", "category": "Manifest", "severity": "MEDIUM", "description": "App requests dangerous permission 'android.permission.READ_CALL_LOG' (Call log access).", "recommendation": "Verify this permission is necessary. Request at runtime with clear user justification.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-250"}, {"rule_id": "MAST-MANIFEST-009", "name": "Dangerous permission: External storage write", "category": "Manifest", "severity": "MEDIUM", "description": "App requests dangerous permission 'android.permission.WRITE_EXTERNAL_STORAGE' (External storage write).", "recommendation": "Verify this permission is necessary. Request at runtime with clear user justification.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-250"}, {"rule_id": "MAST-MANIFEST-010", "name": "SYSTEM_ALERT_WINDOW permission", "category": "Manifest", "severity": "MEDIUM", "description": "App can draw over other apps, potentially used for tapjacking/overlay attacks.", "recommendation": "Remove unless essential. Google Play restricts this permission.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-1021"}, {"rule_id": "MAST-MANIFEST-011", "name": "Missing network security config", "category": "Manifest", "severity": "MEDIUM", "description": "No custom network security configuration. Relying on platform defaults.", "recommendation": "Add a network_security_config.xml to enforce certificate pinning and cleartext restrictions.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-295"}, {"rule_id": "MAST-SECRET-005", "name": "Generic API Key/Token", "category": "Secrets", "severity": "MEDIUM", "description": "Hardcoded generic api key/token found in application strings.", "recommendation": "Remove hardcoded secrets. Use Android Keystore or environment-based configuration.", "source": "classes.dex / resources", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-SECRET-004", "name": "Firebase Database URL", "category": "Secrets", "severity": "MEDIUM", "description": "Hardcoded firebase database url found in application strings.", "recommendation": "Remove hardcoded secrets. Use Android Keystore or environment-based configuration.", "source": "classes.dex / resources", "context": "", "cwe": "CWE-798"}, {"rule_id": "DEP-ANDROID-CVE20230833", "name": "Vulnerable library: okhttp 3 (CVE-2023-0833)", "category": "Vulnerable Dependency", "severity": "MEDIUM", "description": "OkHttp: Information disclosure via HTTP/2 connection coalescing allows requests to wrong host.", "recommendation": "Upgrade okhttp to 4.9.3 or later.", "source": "classes.dex", "context": "", "cwe": "CWE-1395"}, {"rule_id": "MAST-COMMON-SEC-006", "name": "Generic Bearer Token", "category": "Secrets", "severity": "MEDIUM", "description": "Hardcoded generic bearer token found in application.", "recommendation": "Remove secrets from code. Use platform-specific secure storage.", "source": "strings", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-COMMON-URL-002", "name": "Staging/internal URL found", "category": "URLs", "severity": "MEDIUM", "description": "Application contains staging or internal URLs that should not be in production.", "recommendation": "Remove all staging/dev/test URLs from production builds.", "source": "strings", "context": "", "cwe": "CWE-200"}, {"rule_id": "MAST-COMMON-URL-001", "name": "Cleartext HTTP endpoint", "category": "URLs", "severity": "MEDIUM", "description": "Application contains cleartext HTTP URLs.", "recommendation": "Use HTTPS for all network endpoints.", "source": "strings", "context": "", "cwe": "CWE-319"}, {"rule_id": "MAST-COMMON-CRYPTO-003", "name": "Insecure random", "category": "Cryptography", "severity": "MEDIUM", "description": "Cryptographic issue: Insecure random.", "recommendation": "Use platform-provided secure cryptographic APIs.", "source": "strings", "context": "", "cwe": "CWE-330"}, {"rule_id": "MAST-COMMON-CRYPTO-005", "name": "Base64 encoding as pseudo-encryption", "category": "Cryptography", "severity": "MEDIUM", "description": "Cryptographic issue: Base64 encoding as pseudo-encryption.", "recommendation": "Use platform-provided secure cryptographic APIs.", "source": "strings", "context": "", "cwe": "CWE-261"}, {"rule_id": "MAST-MANIFEST-012", "name": "Custom task affinity set", "category": "Manifest", "severity": "LOW", "description": "Custom task affinity may enable task hijacking attacks (StrandHogg).", "recommendation": "Remove taskAffinity or set to empty string to use default.", "source": "AndroidManifest.xml", "context": "", "cwe": "CWE-269"}, {"rule_id": "MAST-COMMON-URL-004", "name": "Hardcoded IP address", "category": "URLs", "severity": "LOW", "description": "Hardcoded IP address found — makes infrastructure changes difficult.", "recommendation": "Use domain names instead of hardcoded IP addresses.", "source": "strings", "context": "", "cwe": "CWE-798"}, {"rule_id": "MAST-COMMON-URL-003", "name": "Localhost reference", "category": "URLs", "severity": "LOW", "description": "Localhost/127.0.0.1 reference found — likely debug leftover.", "recommendation": "Remove localhost references from production builds.", "source": "strings", "context": "", "cwe": "CWE-200"}, {"rule_id": "MAST-COMMON-CRYPTO-002", "name": "MD5 hash usage", "category": "Cryptography", "severity": "LOW", "description": "Cryptographic issue: MD5 hash usage.", "recommendation": "Use platform-provided secure cryptographic APIs.", "source": "strings", "context": "", "cwe": "CWE-328"}];
+
+/* ================================================================
+   RENDER
+   ================================================================ */
+const SEV_ORDER = {CRITICAL:0,HIGH:1,MEDIUM:2,LOW:3,INFO:4};
+const SEV_COLORS = {CRITICAL:'var(--sev-critical)',HIGH:'var(--sev-high)',MEDIUM:'var(--sev-medium)',LOW:'var(--sev-low)',INFO:'var(--sev-info)'};
+
+// Category chart
+(function renderCatChart(){
+  const cats = {};
+  FINDINGS.forEach(f => { cats[f.category] = (cats[f.category]||0) + 1 });
+  const sorted = Object.entries(cats).sort((a,b) => b[1]-a[1]);
+  if(!sorted.length) return;
+  const max = sorted[0][1];
+  const barColors = ['#EF4444','#F59E0B','#3B82F6','#8B5CF6','#22C55E','#EC4899','#06B6D4','#F97316','#14B8A6','#A855F7'];
+  const container = document.getElementById('catChart');
+  container.innerHTML = sorted.map(([cat, count], i) => {
+    const pct = Math.round((count / max) * 100);
+    return `<div class="cat-bar animate-in" style="animation-delay:${i*60}ms">
+      <div class="cat-bar__label">${cat}</div>
+      <div class="cat-bar__track">
+        <div class="cat-bar__fill" style="width:${pct}%;background:${barColors[i%barColors.length]}">${count}</div>
+      </div>
+    </div>`;
+  }).join('');
+})();
+
+// Populate category filter
+(function populateCatFilter(){
+  const cats = [...new Set(FINDINGS.map(f=>f.category))].sort();
+  const sel = document.getElementById('catFilter');
+  cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o) });
+})();
+
+// Render findings
+function renderFindings(list){
+  const container = document.getElementById('findingsContainer');
+  if(!list.length){
+    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:40px 0">No findings match the current filters.</p>';
+    return;
+  }
+  container.innerHTML = list.map((f, i) => `
+    <div class="finding animate-in" data-sev="${f.severity}" data-cat="${f.category}" style="animation-delay:${Math.min(i*20,400)}ms">
+      <div class="finding__header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="finding__sev finding__sev--${f.severity}">${f.severity}</span>
+        <span class="finding__id">${f.rule_id}</span>
+        <span class="finding__name">${escHtml(f.name)}</span>
+        <svg class="finding__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="finding__body">
+        <div class="finding__grid">
+          <div class="finding__field finding__field--full finding__field--issue">
+            <div class="finding__field-label">Issue</div>
+            <div class="finding__field-value">${escHtml(f.description)}</div>
+          </div>
+          <div class="finding__field finding__field--full finding__field--rec">
+            <div class="finding__field-label">Recommendation</div>
+            <div class="finding__field-value">${escHtml(f.recommendation)}</div>
+          </div>
+          ${f.context ? `<div class="finding__field">
+            <div class="finding__field-label">Context</div>
+            <div class="finding__field-value"><code>${escHtml(f.context)}</code></div>
+          </div>` : ''}
+          ${f.source ? `<div class="finding__field">
+            <div class="finding__field-label">Source</div>
+            <div class="finding__field-value"><code>${escHtml(f.source)}</code></div>
+          </div>` : ''}
+          ${f.cwe ? `<div class="finding__field">
+            <div class="finding__field-label">Weakness</div>
+            <div class="finding__field-value"><span class="finding__cwe">${f.cwe}</span></div>
+          </div>` : ''}
+          <div class="finding__field">
+            <div class="finding__field-label">Category</div>
+            <div class="finding__field-value">${escHtml(f.category)}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+
+// Initial render
+renderFindings(FINDINGS);
+
+// Filters
+function applyFilters(){
+  const sev = document.getElementById('sevFilter').value;
+  const cat = document.getElementById('catFilter').value;
+  const q = document.getElementById('searchFilter').value.toLowerCase();
+
+  // Reset sev card highlights
+  document.querySelectorAll('.sev-card').forEach(c => c.classList.remove('active'));
+  if(sev) document.querySelector(`.sev-card[data-sev="${sev}"]`)?.classList.add('active');
+
+  const filtered = FINDINGS.filter(f => {
+    if(sev && f.severity !== sev) return false;
+    if(cat && f.category !== cat) return false;
+    if(q && !((f.rule_id||'')+' '+(f.name||'')+' '+(f.description||'')+' '+(f.context||'')+' '+(f.cwe||'')+' '+(f.category||'')).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  renderFindings(filtered);
+  document.getElementById('filterCount').textContent = `Showing ${filtered.length} of ${FINDINGS.length}`;
+}
+
+function filterBySev(sev){
+  const sel = document.getElementById('sevFilter');
+  sel.value = sel.value === sev ? '' : sev;
+  applyFilters();
+  document.querySelector('.findings-section').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>

@@ -8,9 +8,9 @@
   var translations = {
     /* ---- HERO ---- */
     'hero.badge': {
-      nl: '<span class="hero__badge-dot"></span>39 Open-Source Beveiligingstools',
-      de: '<span class="hero__badge-dot"></span>39 Open-Source Sicherheitstools',
-      en: '<span class="hero__badge-dot"></span>39 Open-Source Security Tools'
+      nl: '<span class="hero__badge-dot"></span>44 Open-Source Beveiligingstools',
+      de: '<span class="hero__badge-dot"></span>44 Open-Source Sicherheitstools',
+      en: '<span class="hero__badge-dot"></span>44 Open-Source Security Tools'
     },
     'hero.title': {
       nl: 'Open-Source<br><span class="gradient-text">Beveiligingstools</span>',
@@ -18,9 +18,9 @@
       en: 'Open-Source<br><span class="gradient-text">Security Tools</span>'
     },
     'hero.subtitle': {
-      nl: '39 tools voor applicatiecode, cloudinfrastructuur, SaaS-platforms, netwerkapparaten, dreigingsdetectie, red teaming en risicokwantificering. 5.500+ beveiligingsregels over 20+ compliance-frameworks. Gebouwd door een practitioner. Gratis voor altijd.',
-      de: '39 Tools für Anwendungscode, Cloud-Infrastruktur, SaaS-Plattformen, Netzwerkgeräte, Bedrohungserkennung, Red Teaming und Risikoquantifizierung. 5.500+ Sicherheitsregeln über 20+ Compliance-Frameworks. Von einem Praktiker entwickelt. Für immer kostenlos.',
-      en: '39 tools covering application code, cloud infrastructure, SaaS platforms, network devices, threat detection, red teaming, and risk quantification. 5,500+ security rules across 20+ compliance frameworks. Built by a practitioner. Free forever.'
+      nl: '44 tools voor applicatiecode, cloudinfrastructuur, SaaS-platforms, netwerkapparaten, dreigingsdetectie, red teaming en risicokwantificering. 5.800+ beveiligingsregels over 20+ compliance-frameworks. Gebouwd door een practitioner. Gratis voor altijd.',
+      de: '44 Tools für Anwendungscode, Cloud-Infrastruktur, SaaS-Plattformen, Netzwerkgeräte, Bedrohungserkennung, Red Teaming und Risikoquantifizierung. 5.800+ Sicherheitsregeln über 20+ Compliance-Frameworks. Von einem Praktiker entwickelt. Für immer kostenlos.',
+      en: '44 tools covering application code, cloud infrastructure, SaaS platforms, network devices, threat detection, red teaming, and risk quantification. 5,800+ security rules across 20+ compliance frameworks. Built by a practitioner. Free forever.'
     },
     'hero.cta1': {
       nl: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> Bekijk tools',

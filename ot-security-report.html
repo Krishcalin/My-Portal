@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OT/ICS Security Scanner &mdash; Sample Report | Phalanx Cyber</title>
+<meta name="description" content="Unified passive network scanner for OT/ICS environments detecting 15 industrial protocols, asset discovery, and vulnerability identification.">
+<style>
+/* ---- RESET ---- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0A0E1A;--bg-surface:#111827;--bg-card:rgba(17,24,39,0.6);
+  --bg-glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --text:#F9FAFB;--text-secondary:#9CA3AF;--text-muted:#6B7280;
+  --accent-1:#00D4FF;--accent-2:#7B61FF;
+  --gradient:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+  --radius:12px;--radius-sm:8px;
+  --sev-critical:#EF4444;--sev-high:#F59E0B;--sev-medium:#3B82F6;
+  --sev-low:#22C55E;--sev-info:#6B7280;
+}
+
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:var(--accent-1);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---- LAYOUT ---- */
+.container{max-width:1280px;margin:0 auto;padding:0 24px}
+
+/* ---- BACK NAV ---- */
+.back-nav{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:16px 0}
+.back-nav .container{display:flex;align-items:center;justify-content:space-between}
+.back-nav a{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:0.9rem;color:var(--text-secondary);transition:color 0.2s}
+.back-nav a:hover{color:var(--accent-1);text-decoration:none}
+.back-nav__brand{font-weight:800;font-size:1.1rem;color:var(--text)}
+.back-nav__brand span{color:var(--accent-1)}
+
+/* ---- HERO HEADER ---- */
+.report-hero{position:relative;padding:80px 0 60px;overflow:hidden}
+.report-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,212,255,0.08),transparent 70%)}
+.report-hero__badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);font-size:0.8rem;font-weight:600;color:var(--accent-1);margin-bottom:20px}
+.report-hero__badge::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent-1);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.report-hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.2;margin-bottom:12px}
+.report-hero h1 span{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.report-hero__sub{color:var(--text-secondary);font-size:1.05rem;max-width:680px;margin-bottom:32px}
+
+/* ---- META GRID ---- */
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:0}
+.meta-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;backdrop-filter:blur(8px)}
+.meta-card__label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:4px}
+.meta-card__value{font-size:0.95rem;font-weight:600;color:var(--text);word-break:break-all}
+
+/* ---- SEVERITY DASHBOARD ---- */
+.dashboard{padding:48px 0}
+.section-title{font-size:1.4rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.section-title svg{color:var(--accent-1)}
+
+.sev-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:40px}
+@media(max-width:768px){.sev-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.sev-grid{grid-template-columns:repeat(2,1fr)}}
+.sev-card{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;text-align:center;overflow:hidden;cursor:pointer;transition:all 0.25s}
+.sev-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.15)}
+.sev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sev-card[data-sev="CRITICAL"]::before{background:var(--sev-critical)}
+.sev-card[data-sev="HIGH"]::before{background:var(--sev-high)}
+.sev-card[data-sev="MEDIUM"]::before{background:var(--sev-medium)}
+.sev-card[data-sev="LOW"]::before{background:var(--sev-low)}
+.sev-card[data-sev="INFO"]::before{background:var(--sev-info)}
+.sev-card__count{font-size:2.2rem;font-weight:800;line-height:1}
+.sev-card[data-sev="CRITICAL"] .sev-card__count{color:var(--sev-critical)}
+.sev-card[data-sev="HIGH"] .sev-card__count{color:var(--sev-high)}
+.sev-card[data-sev="MEDIUM"] .sev-card__count{color:var(--sev-medium)}
+.sev-card[data-sev="LOW"] .sev-card__count{color:var(--sev-low)}
+.sev-card[data-sev="INFO"] .sev-card__count{color:var(--sev-info)}
+.sev-card__label{font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-top:6px}
+.sev-card.active{border-color:rgba(0,212,255,0.4);background:rgba(0,212,255,0.06)}
+
+/* ---- POSTURE SCORE ---- */
+.posture{display:flex;align-items:center;gap:40px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:32px;margin-bottom:40px}
+@media(max-width:640px){.posture{flex-direction:column;text-align:center}}
+.posture__ring{position:relative;width:120px;height:120px;flex-shrink:0}
+.posture__ring svg{transform:rotate(-90deg)}
+.posture__ring circle{fill:none;stroke-width:8}
+.posture__ring .bg{stroke:rgba(255,255,255,0.06)}
+.posture__ring .fg{stroke:var(--sev-medium);stroke-linecap:round;stroke-dasharray:339.292;stroke-dashoffset:103.48;transition:stroke-dashoffset 1.5s ease}
+.posture__score{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.posture__score-num{font-size:2rem;font-weight:800;color:var(--sev-medium)}
+.posture__score-max{font-size:0.75rem;color:var(--text-muted)}
+.posture__text h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
+.posture__text .grade{display:inline-block;padding:2px 10px;border-radius:4px;font-weight:700;font-size:0.85rem;background:rgba(59,130,246,0.15);color:var(--sev-medium);margin-left:8px}
+.posture__text p{color:var(--text-secondary);font-size:0.9rem;line-height:1.6;margin-top:8px}
+
+/* ---- CATEGORY BAR CHART ---- */
+.cat-chart{margin-bottom:40px}
+.cat-bar{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.cat-bar__label{width:180px;text-align:right;font-size:0.82rem;color:var(--text-secondary);flex-shrink:0}
+@media(max-width:640px){.cat-bar__label{width:120px;font-size:0.75rem}}
+.cat-bar__track{flex:1;height:28px;background:rgba(255,255,255,0.04);border-radius:4px;overflow:hidden;position:relative}
+.cat-bar__fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;font-size:0.75rem;font-weight:700;color:#fff;transition:width 0.8s ease}
+.cat-bar__count{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--text-muted)}
+
+/* ---- FILTERS ---- */
+.filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px;align-items:center}
+.filter-select,.filter-search{background:var(--bg-surface);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:var(--radius-sm);font-size:0.85rem;font-family:inherit;transition:border-color 0.2s}
+.filter-select:focus,.filter-search:focus{outline:none;border-color:var(--accent-1)}
+.filter-search{flex:1;min-width:200px}
+.filter-count{margin-left:auto;font-size:0.85rem;color:var(--text-muted)}
+
+/* ---- FINDINGS ---- */
+.findings-section{padding-bottom:60px}
+.finding{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;transition:border-color 0.2s}
+.finding:hover{border-color:rgba(255,255,255,0.12)}
+.finding__header{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;user-select:none}
+.finding__sev{display:inline-flex;align-items:center;justify-content:center;padding:4px 10px;border-radius:4px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;flex-shrink:0;min-width:72px}
+.finding__sev--CRITICAL{background:rgba(239,68,68,0.15);color:var(--sev-critical)}
+.finding__sev--HIGH{background:rgba(245,158,11,0.15);color:var(--sev-high)}
+.finding__sev--MEDIUM{background:rgba(59,130,246,0.15);color:var(--sev-medium)}
+.finding__sev--LOW{background:rgba(34,197,94,0.15);color:var(--sev-low)}
+.finding__sev--INFO{background:rgba(107,114,128,0.15);color:var(--sev-info)}
+.finding__id{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.8rem;color:var(--accent-1);font-weight:600;flex-shrink:0;min-width:120px}
+.finding__name{font-size:0.9rem;font-weight:600;flex:1}
+.finding__chevron{color:var(--text-muted);transition:transform 0.2s;flex-shrink:0}
+.finding.open .finding__chevron{transform:rotate(180deg)}
+.finding__body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
+.finding.open .finding__body{display:block}
+.finding__grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:640px){.finding__grid{grid-template-columns:1fr}}
+.finding__field{padding:14px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.04)}
+.finding__field-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px}
+.finding__field-value{font-size:0.85rem;color:var(--text-secondary);line-height:1.5}
+.finding__field-value code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.82rem;background:rgba(0,212,255,0.08);color:var(--accent-1);padding:2px 6px;border-radius:3px}
+.finding__field--full{grid-column:1/-1}
+.finding__field--rec{border-left:3px solid var(--accent-1)}
+.finding__field--issue{border-left:3px solid var(--sev-high)}
+.finding__cwe{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:4px;background:rgba(123,97,255,0.12);color:var(--accent-2);font-size:0.78rem;font-weight:600;font-family:'JetBrains Mono','Fira Code',monospace}
+
+/* ---- COMPLIANCE ---- */
+.compliance{padding:40px 0 60px}
+.compliance-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.compliance-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center}
+.compliance-card__name{font-weight:700;font-size:0.9rem;margin-bottom:4px}
+.compliance-card__desc{font-size:0.75rem;color:var(--text-muted);line-height:1.4}
+
+/* ---- FOOTER ---- */
+.report-footer{border-top:1px solid var(--border);padding:32px 0;text-align:center;color:var(--text-muted);font-size:0.82rem}
+.report-footer a{color:var(--accent-1)}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeIn 0.4s ease both}
+
+/* ---- PRINT ---- */
+@media print{
+  body{background:#fff;color:#111}
+  .back-nav,.filters{display:none}
+  .finding__body{display:block!important}
+  .finding{break-inside:avoid}
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ======== BACK NAV ======== -->
+<nav class="back-nav">
+  <div class="container">
+    <a href="index.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Portal
+    </a>
+    <div class="back-nav__brand">Phalanx<span>Cyber</span></div>
+  </div>
+</nav>
+
+<!-- ======== HERO ======== -->
+<header class="report-hero">
+  <div class="container">
+    <div class="report-hero__badge">Sample Security Audit Report</div>
+    <h1>OT/ICS Security <span>Scanner</span></h1>
+    <p class="report-hero__sub">
+      Unified passive network scanner for OT/ICS environments detecting 15 industrial protocols, asset discovery, and vulnerability identification.
+      5 findings generated by the open-source scanner.
+    </p>
+    <div class="meta-grid">
+      <div class="meta-card">
+        <div class="meta-card__label">Mode</div>
+        <div class="meta-card__value">Passive PCAP Analysis</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-card__label">Scanner</div>
+        <div class="meta-card__value">ot_scanner.py v2.0.0</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-card__label">Protocols</div>
+        <div class="meta-card__value">15 OT/ICS protocols</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-card__label">Scan Date</div>
+        <div class="meta-card__value">2026-03-31</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ======== SEVERITY DASHBOARD ======== -->
+<section class="dashboard">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Finding Summary
+    </h2>
+
+    <div class="sev-grid">
+      <div class="sev-card" data-sev="CRITICAL" onclick="filterBySev('CRITICAL')">
+        <div class="sev-card__count">1</div>
+        <div class="sev-card__label">Critical</div>
+      </div>
+      <div class="sev-card" data-sev="HIGH" onclick="filterBySev('HIGH')">
+        <div class="sev-card__count">3</div>
+        <div class="sev-card__label">High</div>
+      </div>
+      <div class="sev-card" data-sev="MEDIUM" onclick="filterBySev('MEDIUM')">
+        <div class="sev-card__count">0</div>
+        <div class="sev-card__label">Medium</div>
+      </div>
+      <div class="sev-card" data-sev="LOW" onclick="filterBySev('LOW')">
+        <div class="sev-card__count">1</div>
+        <div class="sev-card__label">Low</div>
+      </div>
+      <div class="sev-card" data-sev="INFO" onclick="filterBySev('INFO')">
+        <div class="sev-card__count">0</div>
+        <div class="sev-card__label">Info</div>
+      </div>
+    </div>
+
+    <!-- Posture Score -->
+    <div class="posture">
+      <div class="posture__ring">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle class="bg" cx="60" cy="60" r="54"/>
+          <circle class="fg" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="posture__score">
+          <div class="posture__score-num">69.5</div>
+          <div class="posture__score-max">/ 100</div>
+        </div>
+      </div>
+      <div class="posture__text">
+        <h3>Security Posture <span class="grade">C &mdash; Fair</span></h3>
+        <p>1 critical finding require immediate attention. 3 high-severity issues compound the risk. 1 low-severity item are informational or best-practice recommendations.</p>
+      </div>
+    </div>
+
+    <!-- Category Breakdown Chart -->
+    <h2 class="section-title" style="margin-top:16px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+      Findings by Category
+    </h2>
+    <div class="cat-chart" id="catChart"></div>
+  </div>
+</section>
+
+<!-- ======== FINDINGS ======== -->
+<section class="findings-section">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Detailed Findings
+    </h2>
+
+    <div class="filters">
+      <select class="filter-select" id="sevFilter" onchange="applyFilters()">
+        <option value="">All Severities</option>
+        <option value="CRITICAL">Critical</option>
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+        <option value="INFO">Info</option>
+      </select>
+      <select class="filter-select" id="catFilter" onchange="applyFilters()">
+        <option value="">All Categories</option>
+      </select>
+      <input type="text" class="filter-search" id="searchFilter" placeholder="Search findings..." oninput="applyFilters()">
+      <span class="filter-count" id="filterCount">Showing 5 of 5</span>
+    </div>
+
+    <div id="findingsContainer"></div>
+  </div>
+</section>
+
+
+<!-- ======== COMPLIANCE ======== -->
+<section class="compliance">
+  <div class="container">
+    <h2 class="section-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Compliance Mapping
+    </h2>
+    <div class="compliance-grid">
+      <div class="compliance-card">
+        <div class="compliance-card__name">IEC 62443</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-card__name">NERC CIP</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-card__name">NIST SP 800-82</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-card__name">ISA/IEC 62351</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======== FOOTER ======== -->
+<footer class="report-footer">
+  <div class="container">
+    Generated by <a href="https://github.com/Krishcalin/OT-Security" target="_blank" rel="noopener">OT/ICS Security Scanner</a> &mdash;
+    part of the <a href="index.html">Phalanx Cyber</a> open-source security toolkit.
+    This is a sample report using synthetic test data.
+  </div>
+</footer>
+
+<script>
+/* ================================================================
+   FINDINGS DATA
+   ================================================================ */
+const FINDINGS = [{"rule_id": "OT-10.10.1.10", "name": "Device 10.10.1.10 is communicating using 1 unencrypted industrial protocol(s): B", "category": "encryption", "severity": "HIGH", "description": "Device 10.10.1.10 is communicating using 1 unencrypted industrial protocol(s): BACnet/IP. All operational data (measurements, alarms, events) and control commands are transmitted in plaintext, exposing them to eavesdropping, replay, and man-in-the-middle attacks by any host on the same network segment.", "recommendation": "Apply encryption at the session layer: IEC 62351-3 TLS for IEC 104, IEC 62351-5 SA for DNP3, IEC 62351-4 TLS for MMS, OPC-UA Security Policy for OPC-UA, MQTT over TLS (port 8883) for MQTT, BACnet/SC (Secure Connect) for BACnet. Where encryption is not natively supported, use an encrypted tunnel (IPsec, TLS proxy) between master and device. Enforce network segmentation -- OT device traffic must remain on dedicated OT VLANs, isolated from IT networks.", "source": "10.10.1.10", "context": "", "cwe": ""}, {"rule_id": "OT-10.10.1.100", "name": "Device 10.10.1.100 has Telnet (TCP/23) traffic. Telnet transmits all data includ", "category": "convergence", "severity": "CRITICAL", "description": "Device 10.10.1.100 has Telnet (TCP/23) traffic. Telnet transmits all data including credentials in cleartext. An attacker on the network can capture login credentials via passive sniffing.", "recommendation": "Replace Telnet with SSH. If the device does not support SSH, use a serial console server or encrypted tunnel. Disable Telnet service on all OT devices.", "source": "10.10.1.100", "context": "", "cwe": ""}, {"rule_id": "OT-10.10.1.100", "name": "Device 10.10.1.100 is communicating using 1 unencrypted industrial protocol(s): ", "category": "encryption", "severity": "HIGH", "description": "Device 10.10.1.100 is communicating using 1 unencrypted industrial protocol(s): Modbus/TCP. All operational data (measurements, alarms, events) and control commands are transmitted in plaintext, exposing them to eavesdropping, replay, and man-in-the-middle attacks by any host on the same network segment.", "recommendation": "Apply encryption at the session layer: IEC 62351-3 TLS for IEC 104, IEC 62351-5 SA for DNP3, IEC 62351-4 TLS for MMS, OPC-UA Security Policy for OPC-UA, MQTT over TLS (port 8883) for MQTT, BACnet/SC (Secure Connect) for BACnet. Where encryption is not natively supported, use an encrypted tunnel (IPsec, TLS proxy) between master and device. Enforce network segmentation -- OT device traffic must remain on dedicated OT VLANs, isolated from IT networks.", "source": "10.10.1.100", "context": "", "cwe": ""}, {"rule_id": "OT-10.10.1.100", "name": "Device 10.10.1.100 has remote access traffic: Telnet. Remote desktop protocols p", "category": "convergence", "severity": "HIGH", "description": "Device 10.10.1.100 has remote access traffic: Telnet. Remote desktop protocols provide a direct path for attackers to reach OT devices. If an RDP/VNC session is compromised, the attacker gains full control of the connected HMI or engineering workstation. Peers: 10.10.1.20", "recommendation": "Remove direct RDP/VNC access to OT devices. Use a hardened jump server in the DMZ (Purdue Level 3.5) with MFA. Deploy an OT-approved remote access gateway with session recording. See IEC 62443-3-3 SR 1.13, NERC CIP-005-6 R2.", "source": "10.10.1.100", "context": "", "cwe": ""}, {"rule_id": "OT-10.10.2.50", "name": "Device 10.10.2.50 is listening on known OT port(s) [20000] but no industrial pro", "category": "misconfiguration", "severity": "LOW", "description": "Device 10.10.2.50 is listening on known OT port(s) [20000] but no industrial protocol was successfully parsed. This may indicate a non-standard firmware version, a custom protocol variant, or a misconfigured device. Manual inspection of the PCAP is recommended.", "recommendation": "Perform a manual protocol analysis of the captured traffic. Verify the device's role and authorised protocol configuration. If the protocol cannot be identified, treat the device as untrusted and isolate pending investigation.", "source": "10.10.2.50", "context": "", "cwe": ""}];
+
+/* ================================================================
+   RENDER
+   ================================================================ */
+const SEV_ORDER = {CRITICAL:0,HIGH:1,MEDIUM:2,LOW:3,INFO:4};
+const SEV_COLORS = {CRITICAL:'var(--sev-critical)',HIGH:'var(--sev-high)',MEDIUM:'var(--sev-medium)',LOW:'var(--sev-low)',INFO:'var(--sev-info)'};
+
+// Category chart
+(function renderCatChart(){
+  const cats = {};
+  FINDINGS.forEach(f => { cats[f.category] = (cats[f.category]||0) + 1 });
+  const sorted = Object.entries(cats).sort((a,b) => b[1]-a[1]);
+  if(!sorted.length) return;
+  const max = sorted[0][1];
+  const barColors = ['#EF4444','#F59E0B','#3B82F6','#8B5CF6','#22C55E','#EC4899','#06B6D4','#F97316','#14B8A6','#A855F7'];
+  const container = document.getElementById('catChart');
+  container.innerHTML = sorted.map(([cat, count], i) => {
+    const pct = Math.round((count / max) * 100);
+    return `<div class="cat-bar animate-in" style="animation-delay:${i*60}ms">
+      <div class="cat-bar__label">${cat}</div>
+      <div class="cat-bar__track">
+        <div class="cat-bar__fill" style="width:${pct}%;background:${barColors[i%barColors.length]}">${count}</div>
+      </div>
+    </div>`;
+  }).join('');
+})();
+
+// Populate category filter
+(function populateCatFilter(){
+  const cats = [...new Set(FINDINGS.map(f=>f.category))].sort();
+  const sel = document.getElementById('catFilter');
+  cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o) });
+})();
+
+// Render findings
+function renderFindings(list){
+  const container = document.getElementById('findingsContainer');
+  if(!list.length){
+    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:40px 0">No findings match the current filters.</p>';
+    return;
+  }
+  container.innerHTML = list.map((f, i) => `
+    <div class="finding animate-in" data-sev="${f.severity}" data-cat="${f.category}" style="animation-delay:${Math.min(i*20,400)}ms">
+      <div class="finding__header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="finding__sev finding__sev--${f.severity}">${f.severity}</span>
+        <span class="finding__id">${f.rule_id}</span>
+        <span class="finding__name">${escHtml(f.name)}</span>
+        <svg class="finding__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="finding__body">
+        <div class="finding__grid">
+          <div class="finding__field finding__field--full finding__field--issue">
+            <div class="finding__field-label">Issue</div>
+            <div class="finding__field-value">${escHtml(f.description)}</div>
+          </div>
+          <div class="finding__field finding__field--full finding__field--rec">
+            <div class="finding__field-label">Recommendation</div>
+            <div class="finding__field-value">${escHtml(f.recommendation)}</div>
+          </div>
+          ${f.context ? `<div class="finding__field">
+            <div class="finding__field-label">Context</div>
+            <div class="finding__field-value"><code>${escHtml(f.context)}</code></div>
+          </div>` : ''}
+          ${f.source ? `<div class="finding__field">
+            <div class="finding__field-label">Source</div>
+            <div class="finding__field-value"><code>${escHtml(f.source)}</code></div>
+          </div>` : ''}
+          ${f.cwe ? `<div class="finding__field">
+            <div class="finding__field-label">Weakness</div>
+            <div class="finding__field-value"><span class="finding__cwe">${f.cwe}</span></div>
+          </div>` : ''}
+          <div class="finding__field">
+            <div class="finding__field-label">Category</div>
+            <div class="finding__field-value">${escHtml(f.category)}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+
+// Initial render
+renderFindings(FINDINGS);
+
+// Filters
+function applyFilters(){
+  const sev = document.getElementById('sevFilter').value;
+  const cat = document.getElementById('catFilter').value;
+  const q = document.getElementById('searchFilter').value.toLowerCase();
+
+  // Reset sev card highlights
+  document.querySelectorAll('.sev-card').forEach(c => c.classList.remove('active'));
+  if(sev) document.querySelector(`.sev-card[data-sev="${sev}"]`)?.classList.add('active');
+
+  const filtered = FINDINGS.filter(f => {
+    if(sev && f.severity !== sev) return false;
+    if(cat && f.category !== cat) return false;
+    if(q && !((f.rule_id||'')+' '+(f.name||'')+' '+(f.description||'')+' '+(f.context||'')+' '+(f.cwe||'')+' '+(f.category||'')).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  renderFindings(filtered);
+  document.getElementById('filterCount').textContent = `Showing ${filtered.length} of ${FINDINGS.length}`;
+}
+
+function filterBySev(sev){
+  const sel = document.getElementById('sevFilter');
+  sel.value = sel.value === sev ? '' : sev;
+  applyFilters();
+  document.querySelector('.findings-section').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
