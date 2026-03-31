@@ -16,7 +16,7 @@ A single-page web portal showcasing **44 open-source security tools** across 9 s
 | Security Rules (across all tools) | 5,800+ |
 | Sample Report Pages | 35 |
 | Tool Overview Pages | 9 |
-| Languages | EN, NL, DE |
+| Languages | EN, NL |
 
 ---
 
@@ -42,23 +42,38 @@ My-Portal/
 ├── index.html                    # Main portal page (tool catalogue)
 ├── about.html                    # About / founder page
 ├── strategy.html                 # Cybersecurity strategy page
+├── risk-quantification.html      # Risk quantification dashboard page
 ├── css/
 │   └── styles.css                # Portal styles (dark theme, glassmorphic cards)
 ├── js/
 │   ├── tools.js                  # Tool data array (44 entries) + categories + icons
 │   ├── main.js                   # Card rendering, search, filters, detail expansion
-│   └── translations.js           # i18n engine (EN, NL, DE)
+│   └── translations.js           # i18n engine (EN, NL)
 ├── assets/
 │   └── favicon.svg               # Site favicon
-├── generate_reports.py           # Batch generator for sample report HTML pages
-├── generate_overviews.py         # Batch generator for tool overview HTML pages
+├── reports/                      # Sample reports, overviews, and generators
+│   ├── generate_reports.py       # Batch generator for sample report HTML pages
+│   ├── generate_overviews.py     # Batch generator for tool overview HTML pages
+│   ├── *-report.html (35 files)  # Interactive sample report pages (scanner tools)
+│   └── *-overview.html (9 files) # Tool overview pages (non-scanner tools)
 ├── synthetic_data/               # Synthetic JSON data for tools without local repos
 │   ├── ariba_report.json
 │   └── zscaler_report.json
-├── *-report.html (35 files)      # Interactive sample report pages (scanner tools)
-├── *-overview.html (9 files)     # Tool overview pages (non-scanner tools)
 └── LICENSE                       # GPL-3.0
 ```
+
+---
+
+## Pages
+
+| Page | Description |
+|------|-------------|
+| `index.html` | Main portal — hero, tool catalogue with search/filters, category navigation |
+| `strategy.html` | Cybersecurity strategy — maturity model, governance, compliance |
+| `risk-quantification.html` | Risk dashboard — composite risk gauge, trend chart, CTEM phases, loss exceedance curve, compliance coverage |
+| `about.html` | Founder bio, career timeline, certifications |
+
+**Navigation order:** Strategy | Tools | Risk Quantification | Why Open Source | About | GitHub
 
 ---
 
@@ -84,14 +99,14 @@ Every tool card has three action buttons:
 ### Regenerating Report Pages
 
 ```bash
-# Regenerate all 35 sample report pages from scanner JSON/HTML data
-python generate_reports.py
+# Regenerate all 35 sample report pages
+python reports/generate_reports.py
 
 # Regenerate all 9 overview pages
-python generate_overviews.py
+python reports/generate_overviews.py
 ```
 
-Both scripts produce self-contained HTML files in the portal root directory.
+Both scripts produce self-contained HTML files in the `reports/` directory.
 
 ---
 
@@ -101,15 +116,15 @@ Both scripts produce self-contained HTML files in the portal root directory.
 - **Palette:** `#0A0E1A` background, `#00D4FF` cyan accent, `#7B61FF` purple accent
 - **Fonts:** Inter (UI), JetBrains Mono (code)
 - **Layout:** CSS Grid responsive catalogue, mega-menu navigation
-- **Features:** Animated hero with particle canvas, terminal demo, counter animations, category filters, full-text search
+- **Features:** Animated hero with particle canvas, counter animations, category filters, full-text search
 
 ---
 
 ## Adding a New Tool
 
 1. Add a tool entry to `js/tools.js` in the `TOOLS` array
-2. Add a `sampleReport` or `overview` field pointing to the HTML page
-3. Run `python generate_reports.py` (or create the page manually)
+2. Add a `sampleReport` or `overview` field pointing to `reports/<filename>.html`
+3. Run `python reports/generate_reports.py` (or create the page manually)
 4. Update tool counts in `index.html` and `js/translations.js`
 
 ---
