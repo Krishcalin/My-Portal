@@ -81,28 +81,32 @@ a:hover{text-decoration:underline}
 @media(max-width:900px){.dashboard-grid{grid-template-columns:1fr}}
 
 /* Gauge */
-.gauge-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 20px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;overflow:hidden}
-.gauge-wrap{position:relative;width:360px;height:200px;margin:0 auto 16px}
-.gauge-wrap svg{width:100%;height:100%;overflow:visible}
-.gauge-track{fill:none;stroke:rgba(255,255,255,0.06);stroke-width:28;stroke-linecap:butt}
-.gauge-needle-g{transition:transform 2s cubic-bezier(0.4,0,0.2,1);transform-origin:190px 190px}
-.gauge-score{position:absolute;inset:0;pointer-events:none}
-.gauge-score__num{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);font-size:4.5rem;font-weight:800;line-height:1;color:var(--text);background:none}
-.gauge-score__label{position:absolute;top:62%;left:50%;transform:translate(-50%,0);font-size:1.15rem;font-weight:700;color:#EF4444;text-transform:uppercase;letter-spacing:0.06em;background:none}
-.gauge-markers{display:flex;justify-content:space-between;width:360px;margin:-4px auto 0}
-.gauge-markers span{font-size:0.85rem;color:var(--text-muted);font-weight:700}
-.gauge-peer{width:100%;max-width:380px;margin:28px auto 0}
-.gauge-peer__header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:0.82rem}
-.gauge-peer__header span:first-child{color:var(--text-muted)}
-.gauge-peer__header span:last-child{color:var(--text);font-weight:700}
-.gauge-peer__bar{height:10px;border-radius:5px;background:rgba(255,255,255,0.08);position:relative;overflow:visible}
-.gauge-peer__fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#22C55E,#F59E0B 50%,#EF4444 80%,#991B1B)}
-.gauge-peer__marker{position:absolute;top:-4px;width:3px;height:18px;background:var(--text);border-radius:2px}
-.gauge-peer__labels{display:flex;justify-content:space-between;margin-top:4px;font-size:0.75rem;color:var(--text-muted)}
-.gauge-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:18px}
-.gauge-legend__item{display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--text-secondary)}
-.gauge-legend__dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.gauge-date{font-size:0.78rem;color:var(--text-muted);margin-top:14px}
+.gauge-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;max-width:420px}
+.gauge-svg-wrap{width:100%;max-width:380px}
+.gauge-svg-wrap svg{width:100%;display:block}
+.gauge-score-wrap{margin-top:-80px;text-align:center;opacity:0;transform:translateY(8px);transition:all 0.6s ease 0.4s}
+.gauge-score-wrap.visible{opacity:1;transform:translateY(0)}
+.gauge-score-num{font-size:3rem;font-weight:600;line-height:1;color:var(--text);letter-spacing:-1px}
+.gauge-score-badge{display:inline-block;margin-top:8px;padding:4px 16px;border-radius:6px;font-size:0.78rem;font-weight:600;letter-spacing:0.5px}
+.gauge-meta{display:flex;gap:12px;margin-top:24px;width:100%;opacity:0;transform:translateY(8px);transition:all 0.5s ease 0.55s}
+.gauge-meta.visible{opacity:1;transform:translateY(0)}
+.gauge-meta__card{flex:1;background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 14px;text-align:center}
+.gauge-meta__label{font-size:0.7rem;color:var(--text-muted);margin-bottom:2px}
+.gauge-meta__val{font-size:1rem;font-weight:600;color:var(--text)}
+.gauge-peer{width:100%;margin-top:20px;opacity:0;transform:translateY(8px);transition:all 0.5s ease 0.7s}
+.gauge-peer.visible{opacity:1;transform:translateY(0)}
+.gauge-peer__header{display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-muted);margin-bottom:8px}
+.gauge-peer__header span:last-child{font-weight:600;color:var(--text)}
+.gauge-peer__track{height:5px;border-radius:3px;background:rgba(255,255,255,0.06);position:relative}
+.gauge-peer__bar{height:100%;border-radius:3px;background:rgba(255,255,255,0.12);width:0%;transition:width 1s ease 0.9s}
+.gauge-peer__dot{position:absolute;top:-4px;width:12px;height:12px;border-radius:50%;border:2px solid var(--text);background:var(--bg);transform:translateX(-50%);left:0%;transition:left 1s ease 0.9s}
+.gauge-peer__labels{display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-muted);margin-top:6px}
+.gauge-legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:18px;opacity:0;transition:opacity 0.5s ease 0.85s}
+.gauge-legend.visible{opacity:1}
+.gauge-legend__item{display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--text-secondary)}
+.gauge-legend__dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.gauge-date{font-size:0.72rem;color:var(--text-muted);margin-top:14px;opacity:0;transition:opacity 0.5s ease 1s}
+.gauge-date.visible{opacity:1}
 
 /* Trend Chart */
 .trend-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px}
@@ -353,41 +357,40 @@ a:hover{text-decoration:underline}
     <!-- Gauge + Trend -->
     <div class="dashboard-grid">
       <!-- Risk Score Gauge -->
-      <div class="gauge-card reveal">
-        <!-- Gauge arc -->
-        <div class="gauge-wrap">
-          <svg viewBox="0 0 380 220" overflow="visible">
-            <defs>
-              <!-- Tick marks at intervals -->
-            </defs>
-            <!-- Background track -->
-            <path id="gaugeTrack" class="gauge-track" d=""/>
-            <!-- Colored arc (filled portion) drawn by JS -->
-            <path id="gaugeFill" fill="none" stroke-width="28" stroke-linecap="butt" d=""/>
-            <!-- Tick marks drawn by JS -->
-            <g id="gaugeTicks"></g>
-            <!-- Needle -->
-            <g class="gauge-needle-g" id="gaugeNeedle">
-              <line x1="190" y1="190" x2="190" y2="42" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"/>
-              <circle cx="190" cy="190" r="7" fill="var(--bg-surface)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
-              <circle cx="190" cy="190" r="3" fill="var(--text)"/>
-            </g>
-          </svg>
-          <div class="gauge-score">
-            <div class="gauge-score__num" id="gaugeNum">0</div>
-            <div class="gauge-score__label">HIGH RISK</div>
+      <div class="gauge-card reveal" id="gaugeCard">
+        <!-- SVG Gauge -->
+        <div class="gauge-svg-wrap">
+          <svg id="gaugeSvg" viewBox="0 0 340 190"></svg>
+        </div>
+        <!-- Score + Badge -->
+        <div class="gauge-score-wrap" id="gaugeScoreWrap">
+          <div class="gauge-score-num" id="gaugeNum">0</div>
+          <div class="gauge-score-badge" id="gaugeBadge">High</div>
+        </div>
+        <!-- Meta cards -->
+        <div class="gauge-meta" id="gaugeMeta">
+          <div class="gauge-meta__card">
+            <div class="gauge-meta__label">Score range</div>
+            <div class="gauge-meta__val" id="gaugeRange">700 &ndash; 849</div>
+          </div>
+          <div class="gauge-meta__card">
+            <div class="gauge-meta__label">Trend (30d)</div>
+            <div class="gauge-meta__val" id="gaugeTrend" style="color:#A32D2D">+12</div>
+          </div>
+          <div class="gauge-meta__card">
+            <div class="gauge-meta__label">Percentile</div>
+            <div class="gauge-meta__val">51.8th</div>
           </div>
         </div>
-        <div class="gauge-markers"><span>0</span><span>1000</span></div>
-        <!-- Peer benchmark bar -->
-        <div class="gauge-peer">
+        <!-- Peer benchmark -->
+        <div class="gauge-peer" id="gaugePeer">
           <div class="gauge-peer__header">
             <span>Peer benchmark</span>
             <span>51.8th percentile</span>
           </div>
-          <div class="gauge-peer__bar">
-            <div class="gauge-peer__fill" style="width:100%"></div>
-            <div class="gauge-peer__marker" style="left:51.8%"></div>
+          <div class="gauge-peer__track">
+            <div class="gauge-peer__bar" id="gaugePeerBar"></div>
+            <div class="gauge-peer__dot" id="gaugePeerDot"></div>
           </div>
           <div class="gauge-peer__labels">
             <span>Better than peers</span>
@@ -395,14 +398,14 @@ a:hover{text-decoration:underline}
           </div>
         </div>
         <!-- Legend -->
-        <div class="gauge-legend">
-          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#22C55E"></div>Low 0&ndash;499</div>
-          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#F59E0B"></div>Medium 500&ndash;699</div>
-          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#EF4444"></div>High 700&ndash;849</div>
-          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#991B1B"></div>Critical 850&ndash;1000</div>
+        <div class="gauge-legend" id="gaugeLegend">
+          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#1D9E75"></div>Low 0&ndash;499</div>
+          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#BA7517"></div>Medium 500&ndash;699</div>
+          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#D85A30"></div>High 700&ndash;849</div>
+          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#A32D2D"></div>Critical 850&ndash;1000</div>
         </div>
-        <!-- Date -->
-        <div class="gauge-date">Last calculated: 31 Mar 2026, 09:42 AM</div>
+        <!-- Timestamp -->
+        <div class="gauge-date" id="gaugeDate">Last calculated 31 Mar 2026, 09:42 AM</div>
       </div>
 
       <!-- Risk Trend Chart -->
@@ -912,89 +915,148 @@ document.querySelectorAll('.metrics-bar').forEach(el => counterObserver.observe(
 /* ============================
    GAUGE ANIMATION
    ============================ */
-/* Draw gauge */
-(function drawGauge() {
-  const cx = 190, cy = 190, r = 150;
-  const SA = 135, TS = 270;
+/* ============================
+   COMPOSITE RISK GAUGE (from JSX)
+   ============================ */
+(function buildGauge() {
+  const SCORE = 785, MAX = 1000, PEER = 51.8;
+  const SEGS = [
+    {label:'Low',from:0,to:499,color:'#1D9E75',bg:'rgba(29,158,117,0.15)',textCol:'#1D9E75'},
+    {label:'Medium',from:500,to:699,color:'#BA7517',bg:'rgba(186,117,23,0.15)',textCol:'#BA7517'},
+    {label:'High',from:700,to:849,color:'#D85A30',bg:'rgba(216,90,48,0.15)',textCol:'#D85A30'},
+    {label:'Critical',from:850,to:1000,color:'#A32D2D',bg:'rgba(163,45,45,0.15)',textCol:'#A32D2D'},
+  ];
+  const SWEEP = 270, START = -135, GAP = 3;
+  const CX = 170, CY = 170, R = 140, THICK = 18;
+  const TICKS = [0, 500, 700, 850, 1000];
 
-  function arcPath(sDeg, eDeg, radius) {
-    const s = sDeg * Math.PI / 180, e = eDeg * Math.PI / 180;
-    const x1 = cx + radius * Math.cos(s), y1 = cy + radius * Math.sin(s);
-    const x2 = cx + radius * Math.cos(e), y2 = cy + radius * Math.sin(e);
-    const large = (eDeg - sDeg > 180) ? 1 : 0;
-    return `M${x1},${y1} A${radius},${radius} 0 ${large} 1 ${x2},${y2}`;
+  function degToRad(d) { return d * Math.PI / 180; }
+  function pt(cx, cy, r, angle) {
+    const rad = degToRad(angle - 90);
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
   }
+  function arc(cx, cy, r, a1, a2) {
+    const s = pt(cx, cy, r, a1), e = pt(cx, cy, r, a2);
+    const large = (a2 - a1) > 180 ? 1 : 0;
+    return 'M' + s.x.toFixed(2) + ' ' + s.y.toFixed(2) + ' A' + r + ' ' + r + ' 0 ' + large + ' 1 ' + e.x.toFixed(2) + ' ' + e.y.toFixed(2);
+  }
+
+  const active = SEGS.find(s => SCORE >= s.from && SCORE <= s.to) || SEGS[0];
+  const svg = document.getElementById('gaugeSvg');
+  const ns = 'http://www.w3.org/2000/svg';
 
   // Background track
-  document.getElementById('gaugeTrack').setAttribute('d', arcPath(SA, SA + TS, r));
+  const trackPath = document.createElementNS(ns, 'path');
+  trackPath.setAttribute('d', arc(CX, CY, R, START, START + SWEEP));
+  trackPath.setAttribute('fill', 'none');
+  trackPath.setAttribute('stroke', 'rgba(255,255,255,0.06)');
+  trackPath.setAttribute('stroke-width', THICK);
+  trackPath.setAttribute('stroke-linecap', 'round');
+  svg.appendChild(trackPath);
 
-  // Colored fill up to score 785/1000
-  const fillSweep = TS * (785 / 1000);
-  const fill = document.getElementById('gaugeFill');
-  fill.setAttribute('d', arcPath(SA, SA + fillSweep, r));
-  // Gradient
-  const svg = fill.closest('svg');
-  const defs = svg.querySelector('defs');
-  const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-  grad.id = 'gaugeGrad';
-  grad.setAttribute('x1', '0%'); grad.setAttribute('y1', '50%');
-  grad.setAttribute('x2', '100%'); grad.setAttribute('y2', '50%');
-  [[0,'#22C55E'],[0.35,'#22C55E'],[0.50,'#F59E0B'],[0.70,'#EF4444'],[0.85,'#EF4444'],[1.0,'#991B1B']].forEach(([off,col]) => {
-    const s = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-    s.setAttribute('offset', off); s.setAttribute('stop-color', col);
-    grad.appendChild(s);
+  // Colored segments
+  SEGS.forEach(function(seg) {
+    var a1 = START + (seg.from / MAX) * SWEEP + GAP / 2;
+    var a2 = START + ((seg.to + 1) / MAX) * SWEEP - GAP / 2;
+    if (a2 <= a1) return;
+    var isActive = SCORE >= seg.from && SCORE <= seg.to;
+    var p = document.createElementNS(ns, 'path');
+    p.setAttribute('d', arc(CX, CY, R, a1, a2));
+    p.setAttribute('fill', 'none');
+    p.setAttribute('stroke', seg.color);
+    p.setAttribute('stroke-width', isActive ? THICK + 4 : THICK);
+    p.setAttribute('stroke-linecap', 'round');
+    p.setAttribute('opacity', isActive ? '1' : '0.4');
+    svg.appendChild(p);
   });
-  defs.appendChild(grad);
-  fill.setAttribute('stroke', 'url(#gaugeGrad)');
 
-  // Tick marks
-  const ticksG = document.getElementById('gaugeTicks');
-  for (let i = 0; i <= 20; i++) {
-    const pct = i / 20;
-    const angle = (SA + TS * pct) * Math.PI / 180;
-    const isMajor = i % 5 === 0;
-    const innerR = r - 14 - (isMajor ? 8 : 4);
-    const outerR = r - 14;
-    const x1 = cx + innerR * Math.cos(angle), y1 = cy + innerR * Math.sin(angle);
-    const x2 = cx + outerR * Math.cos(angle), y2 = cy + outerR * Math.sin(angle);
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
-    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
-    line.setAttribute('stroke', isMajor ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.12)');
-    line.setAttribute('stroke-width', isMajor ? '2' : '1');
-    line.setAttribute('stroke-linecap', 'round');
-    ticksG.appendChild(line);
-  }
+  // Tick marks and labels
+  TICKS.forEach(function(v) {
+    var angle = START + (v / MAX) * SWEEP;
+    var inner = pt(CX, CY, R + 2, angle);
+    var outer = pt(CX, CY, R + 8, angle);
+    var labelPt = pt(CX, CY, R + 20, angle);
+    var line = document.createElementNS(ns, 'line');
+    line.setAttribute('x1', inner.x); line.setAttribute('y1', inner.y);
+    line.setAttribute('x2', outer.x); line.setAttribute('y2', outer.y);
+    line.setAttribute('stroke', 'var(--text-muted)');
+    line.setAttribute('stroke-width', '1');
+    line.setAttribute('opacity', '0.5');
+    svg.appendChild(line);
+    var text = document.createElementNS(ns, 'text');
+    text.setAttribute('x', labelPt.x);
+    text.setAttribute('y', labelPt.y + 4);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('font-size', '11');
+    text.setAttribute('fill', 'var(--text-muted)');
+    text.setAttribute('font-family', 'Inter,sans-serif');
+    text.textContent = v;
+    svg.appendChild(text);
+  });
+
+  // Needle group
+  var needleG = document.createElementNS(ns, 'g');
+  needleG.id = 'gaugeNeedleG';
+  needleG.style.transformOrigin = CX + 'px ' + CY + 'px';
+  needleG.style.transform = 'rotate(-135deg)';
+  needleG.style.transition = 'transform 1.2s cubic-bezier(0.25,1,0.5,1)';
+  var needleLine = document.createElementNS(ns, 'line');
+  needleLine.setAttribute('x1', CX); needleLine.setAttribute('y1', CY);
+  needleLine.setAttribute('x2', CX); needleLine.setAttribute('y2', CY - (R - 10));
+  needleLine.setAttribute('stroke', 'var(--text)');
+  needleLine.setAttribute('stroke-width', '2');
+  needleLine.setAttribute('stroke-linecap', 'round');
+  needleG.appendChild(needleLine);
+  var c1 = document.createElementNS(ns, 'circle');
+  c1.setAttribute('cx', CX); c1.setAttribute('cy', CY); c1.setAttribute('r', '7');
+  c1.setAttribute('fill', 'var(--text)');
+  needleG.appendChild(c1);
+  var c2 = document.createElementNS(ns, 'circle');
+  c2.setAttribute('cx', CX); c2.setAttribute('cy', CY); c2.setAttribute('r', '3');
+  c2.setAttribute('fill', 'var(--bg)');
+  needleG.appendChild(c2);
+  svg.appendChild(needleG);
+
+  // Set badge style
+  var badge = document.getElementById('gaugeBadge');
+  badge.style.background = active.bg;
+  badge.style.color = active.textCol;
+  badge.textContent = active.label;
 })();
 
 let gaugeAnimated = false;
 function animateGauge() {
   if (gaugeAnimated) return;
   gaugeAnimated = true;
-  const score = 785;
-  const SA = 135, TS = 270;
-  const targetAngle = SA + (score / 1000) * TS;
+  var SCORE = 785, MAX = 1000, SWEEP = 270, START = -135, PEER = 51.8;
+  var needleAngle = START + (SCORE / MAX) * SWEEP;
 
-  const needle = document.getElementById('gaugeNeedle');
-  const numEl = document.getElementById('gaugeNum');
+  // Animate needle
+  var needleG = document.getElementById('gaugeNeedleG');
+  setTimeout(function(){ needleG.style.transform = 'rotate(' + needleAngle + 'deg)'; }, 200);
 
-  // Needle rotation: line points UP (-90 screen), rotate by angle+90
-  const startRotate = SA + 90;
-  const endRotate = targetAngle + 90;
-  needle.style.transition = 'none';
-  needle.style.transform = "rotate(" + startRotate + "deg)";
-  needle.offsetHeight;
-  needle.style.transition = 'transform 2s cubic-bezier(0.4,0,0.2,1)';
-  setTimeout(function(){ needle.style.transform = "rotate(" + endRotate + "deg)"; }, 300);
+  // Show elements with delays
+  setTimeout(function(){ document.getElementById('gaugeScoreWrap').classList.add('visible'); }, 100);
+  setTimeout(function(){ document.getElementById('gaugeMeta').classList.add('visible'); }, 300);
+  setTimeout(function(){ document.getElementById('gaugePeer').classList.add('visible'); }, 500);
+  setTimeout(function(){
+    document.getElementById('gaugePeerBar').style.width = PEER + '%';
+    document.getElementById('gaugePeerDot').style.left = PEER + '%';
+  }, 600);
+  setTimeout(function(){ document.getElementById('gaugeLegend').classList.add('visible'); }, 700);
+  setTimeout(function(){ document.getElementById('gaugeDate').classList.add('visible'); }, 800);
 
   // Animate number
-  const duration = 2000;
-  const start = performance.now();
+  var numEl = document.getElementById('gaugeNum');
+  var duration = 1200;
+  var start = performance.now();
   function step(now) {
-    const progress = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    numEl.textContent = Math.round(eased * score);
+    var progress = Math.min((now - start) / duration, 1);
+    var eased = 1 - Math.pow(1 - progress, 3);
+    numEl.textContent = Math.round(eased * SCORE);
     if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 
