@@ -418,7 +418,7 @@ a:hover{text-decoration:underline}
           </div>
         </div>
         <div style="position:relative">
-          <svg class="trend-svg" viewBox="0 0 700 240" preserveAspectRatio="xMidYMid meet">
+          <svg class="trend-svg" viewBox="0 0 700 260" preserveAspectRatio="xMidYMid meet">
             <defs>
               <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="rgba(0,212,255,0.2)"/>
@@ -450,6 +450,9 @@ a:hover{text-decoration:underline}
             <text class="trend-label" x="570" y="210" text-anchor="middle">Oct</text>
             <text class="trend-label" x="625" y="210" text-anchor="middle">Nov</text>
             <text class="trend-label" x="680" y="210" text-anchor="middle">Dec</text>
+            <!-- Axis titles -->
+            <text x="15" y="105" text-anchor="middle" fill="var(--text-secondary)" font-size="11" font-weight="600" font-family="Inter,sans-serif" transform="rotate(-90,15,105)">Risk Score</text>
+            <text x="377" y="235" text-anchor="middle" fill="var(--text-secondary)" font-size="11" font-weight="600" font-family="Inter,sans-serif">Timeline in Months</text>
             <!-- Target line at 650 (mapped: y=20+(1000-650)/1000*160=76) -->
             <line class="trend-target" x1="60" y1="76" x2="680" y2="76"/>
             <text class="trend-label" x="50" y="80" text-anchor="end" fill="#22C55E" opacity="0.6" font-size="10">650</text>
