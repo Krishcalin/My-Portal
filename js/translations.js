@@ -19,7 +19,7 @@
     },
     'hero.subtitle': {
       nl: 'PhalanxCyber is een non-profit initiatief van een Cyber Security Professional met 25 jaar ervaring in engineering, operations en consulting bij het oplossen van complexe cybersecurity-problemen.<br><br>Het is een collectie van 44 verschillende cybertools voor applicatiecode, cloudinfrastructuur, SaaS-platforms, netwerkapparaten, dreigingsdetectie, red teaming en risicokwantificering. 5.800+ beveiligingsregels over 20+ compliance-frameworks. Gebouwd door een practitioner. Gratis voor altijd.',
-      en: 'PhalanxCyber is a not for profit initiative by a Cyber Security Professional with 25 years of engineering, operations and consulting experience in dealing with complex cyber security problems.<br><br>It is a collection of 44 different cyber tools covering application code, cloud infrastructure, SaaS platforms, network devices, threat detection, red teaming, and risk quantification. 5,800+ security rules across 20+ compliance frameworks. Built by a practitioner. Free forever.'
+      en: 'PhalanxCyber is a not for profit initiative by a Cyber Security Professional with 25 years of engineering, operations and consulting experience in dealing with complex cyber security problems.<br><br>It is a collection of 44 different cyber tools covering application code, cloud infrastructure, SaaS platforms, network devices, threat detection, red teaming, and risk quantification. 5,800+ security rules across 20+ compliance frameworks. Built by a practitioner. Open-Source for ever.'
     },
     'hero.cta1': {
       nl: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> Bekijk tools',
