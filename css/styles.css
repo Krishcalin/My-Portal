@@ -333,11 +333,13 @@ button { cursor: pointer; font: inherit; border: none; background: none; color: 
     linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
   background-size: 60px 60px;
+  pointer-events: none;
 }
 .hero__glow {
   position: absolute;
   border-radius: 50%;
   filter: blur(120px);
+  pointer-events: none;
 }
 .hero__glow--1 {
   width: 600px;
@@ -359,6 +361,8 @@ button { cursor: pointer; font: inherit; border: none; background: none; color: 
   align-items: center;
   text-align: center;
   padding: 80px 0;
+  position: relative;
+  z-index: 2;
 }
 .hero__badge {
   display: inline-flex;
