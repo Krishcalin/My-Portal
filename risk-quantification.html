@@ -657,7 +657,7 @@ a:hover{text-decoration:underline}
           <span class="lec-badge lec-badge--el">Expected Loss &mdash; $64M</span>
         </div>
       </div>
-      <svg class="lec-svg" viewBox="0 0 750 320" preserveAspectRatio="xMidYMid meet">
+      <svg class="lec-svg" viewBox="0 0 750 330" preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id="lecFill" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="rgba(0,212,255,0.15)"/>
@@ -678,6 +678,8 @@ a:hover{text-decoration:underline}
         <text class="lec-label" x="70" y="174" text-anchor="end">40%</text>
         <text class="lec-label" x="70" y="224" text-anchor="end">20%</text>
         <text class="lec-label" x="70" y="274" text-anchor="end">0%</text>
+        <!-- Y axis title -->
+        <text x="18" y="150" text-anchor="middle" fill="var(--text-secondary)" font-size="11" font-weight="600" font-family="Inter,sans-serif" transform="rotate(-90,18,150)">Exceedance Probability</text>
         <!-- X axis labels (loss amount) -->
         <text class="lec-label" x="80" y="295" text-anchor="middle">$0</text>
         <text class="lec-label" x="208" y="295" text-anchor="middle">$100M</text>
@@ -685,6 +687,8 @@ a:hover{text-decoration:underline}
         <text class="lec-label" x="464" y="295" text-anchor="middle">$300M</text>
         <text class="lec-label" x="592" y="295" text-anchor="middle">$400M</text>
         <text class="lec-label" x="720" y="295" text-anchor="middle">$500M</text>
+        <!-- X axis title -->
+        <text x="400" y="315" text-anchor="middle" fill="var(--text-secondary)" font-size="11" font-weight="600" font-family="Inter,sans-serif">Annual Loss Amount</text>
         <!-- Area fill -->
         <path class="lec-area" id="lecArea" fill="url(#lecFill)"
           d="M80,20 C120,20 140,30 180,52 C220,80 260,110 300,140 C340,165 380,186 420,204 C460,220 500,234 540,246 C580,254 620,260 660,264 C690,266 710,268 720,270 L720,270 L80,270 Z"/>
