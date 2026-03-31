@@ -13,7 +13,7 @@ const TOOLS = [
     version: "4.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Static-Application-Security-Testing",
-    sampleReport: "sast-report.html",
+    sampleReport: "reports/sast-report.html",
     status: "public",
     icon: "code",
     highlights: [
@@ -36,7 +36,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Dynamic-Application-Security-Testing",
-    sampleReport: "dast-report.html",
+    sampleReport: "reports/dast-report.html",
     status: "public",
     icon: "globe",
     highlights: [
@@ -60,7 +60,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/API-Security",
-    sampleReport: "api-security-report.html",
+    sampleReport: "reports/api-security-report.html",
     status: "public",
     icon: "api",
     highlights: [
@@ -76,7 +76,7 @@ const TOOLS = [
     id: "owasp-llm-scanner",
     name: "OWASP LLM Top 10 Scanner",
     tagline: "Dedicated SAST scanner for LLM/AI applications with 73 rules covering all 10 OWASP LLM Top 10 categories plus 16 dependency CVEs",
-    sampleReport: "owasp-llm-report.html",
+    sampleReport: "reports/owasp-llm-report.html",
     category: "appsec",
     tags: ["LLM", "OWASP LLM Top 10", "Prompt Injection", "AI Security", "SAST"],
     stats: { rules: 73, categories: 10, cves: 16 },
@@ -104,7 +104,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/SAP-Code-Vulnerability-Analyzer",
-    sampleReport: "sap-abap-report.html",
+    sampleReport: "reports/sap-abap-report.html",
     status: "public",
     icon: "sap",
     highlights: [
@@ -126,7 +126,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Mobile-Application-Security-Testing",
-    sampleReport: "mast-report.html",
+    sampleReport: "reports/mast-report.html",
     status: "public",
     icon: "code",
     highlights: [
@@ -149,7 +149,7 @@ const TOOLS = [
     version: "1.1.0",
     language: "Python",
     github: "https://github.com/Krishcalin/AI-Secure-Posture-Management",
-    sampleReport: "ai-spm-report.html",
+    sampleReport: "reports/ai-spm-report.html",
     status: "public",
     icon: "brain",
     highlights: [
@@ -173,7 +173,7 @@ const TOOLS = [
     version: "1.1.0",
     language: "Python",
     github: "https://github.com/Krishcalin/AWS-Security-Scanner",
-    sampleReport: "aws-security-report.html",
+    sampleReport: "reports/aws-security-report.html",
     status: "public",
     icon: "cloud",
     highlights: [
@@ -196,7 +196,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Bash",
     github: "https://github.com/Krishcalin/Azure-Security-Scanner",
-    sampleReport: "azure-security-report.html",
+    sampleReport: "reports/azure-security-report.html",
     status: "public",
     icon: "cloud",
     highlights: [
@@ -212,7 +212,7 @@ const TOOLS = [
     id: "gcp-scanner",
     name: "GCP CNAPP Scanner",
     tagline: "Cloud-Native Application Protection Platform for GCP with 67+ checks across 5 CNAPP pillars and 15 audit modules",
-    sampleReport: "gcp-cnapp-report.html",
+    sampleReport: "reports/gcp-cnapp-report.html",
     category: "cloud",
     tags: ["GCP", "CNAPP", "CSPM", "CIEM", "CWPP", "GKE", "CIS", "NIST"],
     stats: { checks: "67+", pillars: 5, modules: 15, loc: "1,837" },
@@ -240,7 +240,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/MultiCloud-Security-Audit-Tool",
-    sampleReport: "multicloud-report.html",
+    sampleReport: "reports/multicloud-report.html",
     status: "public",
     icon: "cloud",
     highlights: [
@@ -263,7 +263,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Cloud-Detection-Response",
-    sampleReport: "cdr-report.html",
+    sampleReport: "reports/cdr-report.html",
     status: "public",
     icon: "shield",
     highlights: [
@@ -288,7 +288,7 @@ const TOOLS = [
     version: "2.1.0",
     language: "Python",
     github: "https://github.com/Krishcalin/SSPM-O365",
-    sampleReport: "m365-sspm-report.html",
+    sampleReport: "reports/m365-sspm-report.html",
     status: "public",
     icon: "saas",
     highlights: [
@@ -310,7 +310,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/SSPM-ServiceNow",
-    sampleReport: "servicenow-sspm-report.html",
+    sampleReport: "reports/servicenow-sspm-report.html",
     status: "public",
     icon: "saas",
     highlights: [
@@ -332,7 +332,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/SAP-SuccessFactors",
-    sampleReport: "sap-successfactors-report.html",
+    sampleReport: "reports/sap-successfactors-report.html",
     status: "public",
     icon: "sap",
     highlights: [
@@ -355,7 +355,7 @@ const TOOLS = [
     version: "0.1.0",
     language: "Python",
     github: "https://github.com/Krishcalin/SSPM-Tableau",
-    sampleReport: "tableau-sspm-report.html",
+    sampleReport: "reports/tableau-sspm-report.html",
     status: "public",
     icon: "saas",
     highlights: [
@@ -378,7 +378,7 @@ const TOOLS = [
     version: "2.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/SAP-S4HANA-RISE-Security-Scanner",
-    sampleReport: "sap-s4hana-report.html",
+    sampleReport: "reports/sap-s4hana-report.html",
     status: "public",
     icon: "sap",
     highlights: [
@@ -402,7 +402,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Oracle-EBS-Security-Audit",
-    sampleReport: "oracle-ebs-report.html",
+    sampleReport: "reports/oracle-ebs-report.html",
     status: "public",
     icon: "saas",
     highlights: [
@@ -421,7 +421,7 @@ const TOOLS = [
     id: "fortinet-scanner",
     name: "Fortinet FortiGate Scanner",
     tagline: "Live FortiOS REST API security scanner with 260+ rules, 30 MITRE ATT&CK resilience tests, 30 CVEs, 5 compliance frameworks, and multi-device fleet scanning",
-    sampleReport: "fortinet-report.html",
+    sampleReport: "reports/fortinet-report.html",
     category: "infra",
     tags: ["FortiGate", "FortiOS", "NGFW", "REST API", "CVE", "MITRE ATT&CK", "VPN", "ZTNA", "CIS", "PCI-DSS", "NIST"],
     stats: { rules: "260+", categories: 18, cves: 30, mitre: 30, loc: "5,174" },
@@ -450,7 +450,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Cisco-Network-Security",
-    sampleReport: "cisco-nss-report.html",
+    sampleReport: "reports/cisco-nss-report.html",
     status: "public",
     icon: "firewall",
     highlights: [
@@ -473,7 +473,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/PaloAlto-Network-Security",
-    sampleReport: "paloalto-pan-report.html",
+    sampleReport: "reports/paloalto-pan-report.html",
     status: "public",
     icon: "firewall",
     highlights: [
@@ -490,7 +490,7 @@ const TOOLS = [
     id: "kspm-scanner",
     name: "Kubernetes KSPM",
     tagline: "Agentless Kubernetes Security Posture Management with 150+ checks, 19 check groups, OPA/Rego + Kyverno integration, and supply chain security",
-    sampleReport: "kspm-report.html",
+    sampleReport: "reports/kspm-report.html",
     category: "infra",
     tags: ["Kubernetes", "K8s", "KSPM", "CIS Benchmark", "RBAC", "OPA", "Kyverno", "Supply Chain"],
     stats: { checks: "150+", groups: 19, frameworks: 6, loc: "5,564" },
@@ -519,7 +519,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Vulnerability-Management",
-    sampleReport: "vuln-mgmt-report.html",
+    sampleReport: "reports/vuln-mgmt-report.html",
     status: "public",
     icon: "target",
     highlights: [
@@ -542,7 +542,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Bash",
     github: "https://github.com/Krishcalin/Linux-Hardening",
-    overview: "linux-hardening-overview.html",
+    overview: "reports/linux-hardening-overview.html",
     status: "public",
     icon: "terminal",
     highlights: [
@@ -562,7 +562,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "PowerShell",
     github: "https://github.com/Krishcalin/Windows-Hardening",
-    overview: "windows-hardening-overview.html",
+    overview: "reports/windows-hardening-overview.html",
     status: "public",
     icon: "terminal",
     highlights: [
@@ -579,7 +579,7 @@ const TOOLS = [
     id: "ot-security-scanner",
     name: "OT/ICS Security Scanner",
     tagline: "Passive PCAP analysis for OT/ICS environments with dual scanners covering 7+ industrial protocols and 130+ vendor OUI fingerprints",
-    sampleReport: "ot-security-report.html",
+    sampleReport: "reports/ot-security-report.html",
     category: "infra",
     tags: ["OT", "ICS", "SCADA", "Modbus", "DNP3", "S7comm", "IEC 61850", "IEC 62443"],
     stats: { protocols: "7+", vendors: "130+", scanners: 2, loc: "559" },
@@ -609,7 +609,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "YAML/SPL",
     github: "https://github.com/Krishcalin/Detection-Engineering",
-    overview: "detection-engineering-overview.html",
+    overview: "reports/detection-engineering-overview.html",
     status: "public",
     icon: "shield",
     highlights: [
@@ -631,7 +631,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/CrowdStrike-Red-Teaming-Test",
-    sampleReport: "crowdstrike-redteam-report.html",
+    sampleReport: "reports/crowdstrike-redteam-report.html",
     status: "public",
     icon: "target",
     highlights: [
@@ -654,7 +654,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/CrowdStrike-Falcon-Validation-Scanner",
-    sampleReport: "crowdstrike-falcon-report.html",
+    sampleReport: "reports/crowdstrike-falcon-report.html",
     status: "public",
     icon: "shield",
     highlights: [
@@ -678,7 +678,7 @@ const TOOLS = [
     version: "4.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Attack-Surface-Management",
-    sampleReport: "easm-report.html",
+    sampleReport: "reports/easm-report.html",
     status: "public",
     icon: "radar",
     highlights: [
@@ -703,7 +703,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Cyber-Risk-Quantification",
-    sampleReport: "crq-report.html",
+    sampleReport: "reports/crq-report.html",
     status: "public",
     icon: "shield",
     highlights: [
@@ -728,7 +728,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Windows-Red-Teaming",
-    sampleReport: "windows-redteam-report.html",
+    sampleReport: "reports/windows-redteam-report.html",
     status: "public",
     icon: "target",
     highlights: [
@@ -751,7 +751,7 @@ const TOOLS = [
     version: "0.1.0",
     language: "Python",
     github: "https://github.com/Krishcalin/RHEL-Red-Teaming",
-    overview: "rhel-redteam-overview.html",
+    overview: "reports/rhel-redteam-overview.html",
     status: "public",
     icon: "target",
     highlights: [
@@ -773,7 +773,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Markdown/YAML",
     github: "https://github.com/Krishcalin/Active-Directory-Attack-Scenarios",
-    overview: "ad-attack-overview.html",
+    overview: "reports/ad-attack-overview.html",
     status: "public",
     icon: "target",
     highlights: [
@@ -795,7 +795,7 @@ const TOOLS = [
     version: "2.3.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Autonomous-Pen-Testing",
-    sampleReport: "autonomous-pentest-report.html",
+    sampleReport: "reports/autonomous-pentest-report.html",
     status: "public",
     icon: "target",
     highlights: [
@@ -820,7 +820,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/SSPM-Oracle-SaaS-Cloud",
-    sampleReport: "oracle-saas-report.html",
+    sampleReport: "reports/oracle-saas-report.html",
     status: "public",
     icon: "saas",
     highlights: [
@@ -842,7 +842,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/SSPM-Snowflake-Data-Platform",
-    sampleReport: "snowflake-sspm-report.html",
+    sampleReport: "reports/snowflake-sspm-report.html",
     status: "public",
     icon: "saas",
     highlights: [
@@ -864,7 +864,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/SAP-Ariba-Security-Scanner",
-    sampleReport: "sap-ariba-report.html",
+    sampleReport: "reports/sap-ariba-report.html",
     status: "public",
     icon: "sap",
     highlights: [
@@ -888,7 +888,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/OCI-CNAPP-Security-Scanner",
-    sampleReport: "oci-cnapp-report.html",
+    sampleReport: "reports/oci-cnapp-report.html",
     status: "public",
     icon: "cloud",
     highlights: [
@@ -912,7 +912,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Zscaler-Security-Scanner",
-    sampleReport: "zscaler-report.html",
+    sampleReport: "reports/zscaler-report.html",
     status: "public",
     icon: "firewall",
     highlights: [
@@ -936,7 +936,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Responsible-AI-Framework",
-    overview: "responsible-ai-overview.html",
+    overview: "reports/responsible-ai-overview.html",
     status: "public",
     icon: "brain",
     highlights: [
@@ -958,7 +958,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Continuous-Threat-Exposure-Management",
-    overview: "ctem-overview.html",
+    overview: "reports/ctem-overview.html",
     status: "public",
     icon: "radar",
     highlights: [
@@ -980,7 +980,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Risk-Operation-Center",
-    overview: "risk-ops-overview.html",
+    overview: "reports/risk-ops-overview.html",
     status: "public",
     icon: "shield",
     highlights: [
@@ -1002,7 +1002,7 @@ const TOOLS = [
     version: "1.0.0",
     language: "Python",
     github: "https://github.com/Krishcalin/Third-Party-Risk-Management",
-    overview: "tprm-overview.html",
+    overview: "reports/tprm-overview.html",
     status: "public",
     icon: "shield",
     highlights: [
