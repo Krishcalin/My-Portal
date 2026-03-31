@@ -89,8 +89,7 @@ a:hover{text-decoration:underline}
 .gauge-wrap svg{width:100%;height:100%;overflow:visible}
 .gauge-seg{fill:none;stroke-width:18;stroke-linecap:butt;opacity:0.15}
 .gauge-seg--active{opacity:1}
-.gauge-needle{fill:var(--text);transition:transform 2s cubic-bezier(0.4,0,0.2,1);transform-origin:150px 160px}
-.gauge-score{position:absolute;top:45%;left:50%;transform:translate(-50%,-10%);display:flex;flex-direction:column;align-items:center}
+.gauge-score{position:absolute;top:42%;left:50%;transform:translate(-50%,0);display:flex;flex-direction:column;align-items:center}
 .gauge-score__num{font-size:3.6rem;font-weight:800;line-height:1}
 .gauge-score__label{font-size:1.1rem;font-weight:700;margin-top:2px}
 .gauge-score--low .gauge-score__num{color:#22C55E}
@@ -365,31 +364,25 @@ a:hover{text-decoration:underline}
             <div class="gauge-header__date">Last Calculated<br>31 Mar 2026, 09:42 AM</div>
           </div>
         </div>
-        <div class="gauge-wrap" style="width:300px;height:200px">
-          <svg viewBox="0 0 300 200" overflow="visible">
+        <div class="gauge-wrap" style="width:340px;height:210px">
+          <svg viewBox="0 0 340 210" overflow="visible">
             <!-- Arcs drawn by JS -->
-            <path class="gauge-seg" id="segLow" d="" stroke="#22C55E" stroke-width="22"/>
-            <path class="gauge-seg" id="segMed" d="" stroke="#F59E0B" stroke-width="22"/>
-            <path class="gauge-seg gauge-seg--active" id="segHigh" d="" stroke="#EF4444" stroke-width="22"/>
-            <path class="gauge-seg" id="segCrit" d="" stroke="#991B1B" stroke-width="22"/>
+            <path class="gauge-seg" id="segLow" d="" stroke="#22C55E" stroke-width="26"/>
+            <path class="gauge-seg" id="segMed" d="" stroke="#F59E0B" stroke-width="26"/>
+            <path class="gauge-seg gauge-seg--active" id="segHigh" d="" stroke="#EF4444" stroke-width="26"/>
+            <path class="gauge-seg" id="segCrit" d="" stroke="#991B1B" stroke-width="26"/>
             <!-- Labels positioned by JS -->
-            <text id="lblLow" fill="var(--text-muted)" font-size="9" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
-            <text id="lblMed" fill="var(--text-muted)" font-size="9" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
-            <text id="lblHigh" fill="var(--text-secondary)" font-size="9" font-family="Inter,sans-serif" font-weight="700" text-anchor="middle"></text>
-            <text id="lblCrit" fill="var(--text-muted)" font-size="9" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
-            <!-- Needle -->
-            <g class="gauge-needle" id="gaugeNeedle">
-              <line x1="150" y1="160" x2="150" y2="40" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round"/>
-              <circle cx="150" cy="160" r="6" fill="var(--bg-surface)" stroke="var(--text-secondary)" stroke-width="2"/>
-              <circle cx="150" cy="160" r="3" fill="var(--text)"/>
-            </g>
+            <text id="lblLow" fill="var(--text-muted)" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
+            <text id="lblMed" fill="var(--text-muted)" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
+            <text id="lblHigh" fill="var(--text-secondary)" font-size="9.5" font-family="Inter,sans-serif" font-weight="700" text-anchor="middle"></text>
+            <text id="lblCrit" fill="var(--text-muted)" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
           </svg>
           <div class="gauge-score gauge-score--high">
             <div class="gauge-score__num" id="gaugeNum">0</div>
             <div class="gauge-score__label">High</div>
           </div>
         </div>
-        <div class="gauge-markers" style="width:280px"><span>0</span><span>1000</span></div>
+        <div class="gauge-markers" style="width:320px"><span>0</span><span>1000</span></div>
         <div class="gauge-peers">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           <span><strong style="color:var(--sev-high)">48.2%</strong> of peers in this industry are performing better.</span>
@@ -905,7 +898,7 @@ document.querySelectorAll('.metrics-bar').forEach(el => counterObserver.observe(
    ============================ */
 /* Draw segmented arc gauge */
 (function drawGaugeArcs() {
-  const cx = 150, cy = 160, r = 120;
+  const cx = 170, cy = 175, r = 140;
   const startAngle = 225, totalSweep = -270; // 225° CCW sweep (clockwise in screen coords: from bottom-left up-around to bottom-right)
   // In standard math angles: 225° is bottom-left, sweeping CW to -45° (315°) = bottom-right
   // Using SVG arc (always draws in screen space), we go from 225° down to -45°
@@ -961,33 +954,7 @@ function animateGauge() {
   if (gaugeAnimated) return;
   gaugeAnimated = true;
   const score = 785;
-  const maxScore = 1000;
-  const SA = 135, TS = 270;
-  // Needle angle in screen degrees: 135 + (785/1000)*270 = 135 + 211.95 = 346.95°
-  const targetScreenAngle = SA + (score / maxScore) * TS;
-
-  const needle = document.getElementById('gaugeNeedle');
   const numEl = document.getElementById('gaugeNum');
-
-  // The needle line points from (150,160) to (150,40) = straight UP = -90° in screen coords
-  // To point at screen angle A, we need to rotate by (A - (-90)) = A + 90
-  // Start: point to 135° screen → rotate = 135+90 = 225°
-  // Target: point to 346.95° screen → rotate = 346.95+90 = 436.95° but normalize: 436.95-360 = 76.95°
-  // Actually simpler: rotation from "up" = screenAngle + 90
-  const startRotate = SA + 90;         // 225°
-  const endRotate = targetScreenAngle + 90; // 436.95°
-
-  // Set initial position immediately (no transition)
-  needle.style.transition = 'none';
-  needle.style.transform = `rotate(${startRotate}deg)`;
-
-  // Force reflow then animate
-  needle.offsetHeight;
-  needle.style.transition = 'transform 2s cubic-bezier(0.4,0,0.2,1)';
-
-  setTimeout(() => {
-    needle.style.transform = `rotate(${endRotate}deg)`;
-  }, 300);
 
   // Animate number
   const duration = 2000;
