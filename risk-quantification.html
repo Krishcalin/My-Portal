@@ -81,32 +81,28 @@ a:hover{text-decoration:underline}
 @media(max-width:900px){.dashboard-grid{grid-template-columns:1fr}}
 
 /* Gauge */
-.gauge-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:36px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.gauge-header{display:flex;justify-content:space-between;align-items:flex-start;width:100%;margin-bottom:8px}
-.gauge-header__title{font-size:1.1rem;font-weight:700;text-align:left}
-.gauge-header__date{font-size:0.72rem;color:var(--text-muted);text-align:left;line-height:1.4;margin-top:4px}
-.gauge-wrap{position:relative;width:280px;height:180px;margin:0 auto 12px;overflow:visible}
+.gauge-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:36px 28px 28px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.gauge-wrap{position:relative;width:380px;height:220px;margin:0 auto 0}
 .gauge-wrap svg{width:100%;height:100%;overflow:visible}
-.gauge-seg{fill:none;stroke-width:18;stroke-linecap:butt;opacity:0.15}
-.gauge-seg--active{opacity:1}
-.gauge-score{position:absolute;top:42%;left:50%;transform:translate(-50%,0);display:flex;flex-direction:column;align-items:center}
-.gauge-score__num{font-size:3.6rem;font-weight:800;line-height:1}
-.gauge-score__label{font-size:1.1rem;font-weight:700;margin-top:2px}
-.gauge-score--low .gauge-score__num{color:#22C55E}
-.gauge-score--low .gauge-score__label{color:#22C55E}
-.gauge-score--medium .gauge-score__num{color:#F59E0B}
-.gauge-score--medium .gauge-score__label{color:#F59E0B}
-.gauge-score--high .gauge-score__num{color:#EF4444}
-.gauge-score--high .gauge-score__label{color:#EF4444}
-.gauge-score--critical .gauge-score__num{color:#991B1B}
-.gauge-score--critical .gauge-score__label{color:#991B1B}
-.gauge-markers{display:flex;justify-content:space-between;width:260px;margin:0 auto}
-.gauge-markers span{font-size:0.78rem;color:var(--text-muted);font-weight:600}
-.gauge-grade{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:20px;font-weight:700;font-size:0.88rem;margin-top:12px}
-.gauge-grade--high{background:rgba(239,68,68,0.12);color:#EF4444}
-.gauge-peers{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:0.82rem;color:var(--text-secondary)}
-.gauge-peers svg{flex-shrink:0}
-.gauge-label{font-size:0.82rem;color:var(--text-muted);margin-top:8px}
+.gauge-track{fill:none;stroke:rgba(255,255,255,0.06);stroke-width:28;stroke-linecap:butt}
+.gauge-needle-g{transition:transform 2s cubic-bezier(0.4,0,0.2,1);transform-origin:190px 190px}
+.gauge-score{position:absolute;top:38%;left:50%;transform:translate(-50%,0);display:flex;flex-direction:column;align-items:center}
+.gauge-score__num{font-size:4.5rem;font-weight:800;line-height:1;color:var(--text)}
+.gauge-score__label{font-size:1.15rem;font-weight:700;margin-top:4px;color:#EF4444;text-transform:uppercase;letter-spacing:0.06em}
+.gauge-markers{display:flex;justify-content:space-between;width:360px;margin:-4px auto 0}
+.gauge-markers span{font-size:0.85rem;color:var(--text-muted);font-weight:700}
+.gauge-peer{width:100%;max-width:380px;margin:20px auto 0}
+.gauge-peer__header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:0.82rem}
+.gauge-peer__header span:first-child{color:var(--text-muted)}
+.gauge-peer__header span:last-child{color:var(--text);font-weight:700}
+.gauge-peer__bar{height:10px;border-radius:5px;background:rgba(255,255,255,0.08);position:relative;overflow:visible}
+.gauge-peer__fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#22C55E,#F59E0B 50%,#EF4444 80%,#991B1B)}
+.gauge-peer__marker{position:absolute;top:-4px;width:3px;height:18px;background:var(--text);border-radius:2px}
+.gauge-peer__labels{display:flex;justify-content:space-between;margin-top:4px;font-size:0.75rem;color:var(--text-muted)}
+.gauge-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:18px}
+.gauge-legend__item{display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--text-secondary)}
+.gauge-legend__dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.gauge-date{font-size:0.78rem;color:var(--text-muted);margin-top:14px}
 
 /* Trend Chart */
 .trend-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px}
@@ -358,35 +354,55 @@ a:hover{text-decoration:underline}
     <div class="dashboard-grid">
       <!-- Risk Score Gauge -->
       <div class="gauge-card reveal">
-        <div class="gauge-header">
-          <div>
-            <div class="gauge-header__title">Composite Risk Score</div>
-            <div class="gauge-header__date">Last Calculated<br>31 Mar 2026, 09:42 AM</div>
-          </div>
-        </div>
-        <div class="gauge-wrap" style="width:340px;height:210px">
-          <svg viewBox="0 0 340 210" overflow="visible">
-            <!-- Arcs drawn by JS -->
-            <path class="gauge-seg" id="segLow" d="" stroke="#22C55E" stroke-width="26"/>
-            <path class="gauge-seg" id="segMed" d="" stroke="#F59E0B" stroke-width="26"/>
-            <path class="gauge-seg gauge-seg--active" id="segHigh" d="" stroke="#EF4444" stroke-width="26"/>
-            <path class="gauge-seg" id="segCrit" d="" stroke="#991B1B" stroke-width="26"/>
-            <!-- Labels positioned by JS -->
-            <text id="lblLow" fill="var(--text-muted)" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
-            <text id="lblMed" fill="var(--text-muted)" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
-            <text id="lblHigh" fill="var(--text-secondary)" font-size="9.5" font-family="Inter,sans-serif" font-weight="700" text-anchor="middle"></text>
-            <text id="lblCrit" fill="var(--text-muted)" font-size="9.5" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
+        <!-- Gauge arc -->
+        <div class="gauge-wrap">
+          <svg viewBox="0 0 380 220" overflow="visible">
+            <defs>
+              <!-- Tick marks at intervals -->
+            </defs>
+            <!-- Background track -->
+            <path id="gaugeTrack" class="gauge-track" d=""/>
+            <!-- Colored arc (filled portion) drawn by JS -->
+            <path id="gaugeFill" fill="none" stroke-width="28" stroke-linecap="butt" d=""/>
+            <!-- Tick marks drawn by JS -->
+            <g id="gaugeTicks"></g>
+            <!-- Needle -->
+            <g class="gauge-needle-g" id="gaugeNeedle">
+              <line x1="190" y1="190" x2="190" y2="42" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="190" cy="190" r="7" fill="var(--bg-surface)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+              <circle cx="190" cy="190" r="3" fill="var(--text)"/>
+            </g>
           </svg>
-          <div class="gauge-score gauge-score--high">
+          <div class="gauge-score">
             <div class="gauge-score__num" id="gaugeNum">0</div>
-            <div class="gauge-score__label">High</div>
+            <div class="gauge-score__label">HIGH RISK</div>
           </div>
         </div>
-        <div class="gauge-markers" style="width:320px"><span>0</span><span>1000</span></div>
-        <div class="gauge-peers">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span><strong style="color:var(--sev-high)">48.2%</strong> of peers in this industry are performing better.</span>
+        <div class="gauge-markers"><span>0</span><span>1000</span></div>
+        <!-- Peer benchmark bar -->
+        <div class="gauge-peer">
+          <div class="gauge-peer__header">
+            <span>Peer benchmark</span>
+            <span>51.8th percentile</span>
+          </div>
+          <div class="gauge-peer__bar">
+            <div class="gauge-peer__fill" style="width:100%"></div>
+            <div class="gauge-peer__marker" style="left:51.8%"></div>
+          </div>
+          <div class="gauge-peer__labels">
+            <span>Better than peers</span>
+            <span>Worse than peers</span>
+          </div>
         </div>
+        <!-- Legend -->
+        <div class="gauge-legend">
+          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#22C55E"></div>Low 0&ndash;499</div>
+          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#F59E0B"></div>Medium 500&ndash;699</div>
+          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#EF4444"></div>High 700&ndash;849</div>
+          <div class="gauge-legend__item"><div class="gauge-legend__dot" style="background:#991B1B"></div>Critical 850&ndash;1000</div>
+        </div>
+        <!-- Date -->
+        <div class="gauge-date">Last calculated: 31 Mar 2026, 09:42 AM</div>
       </div>
 
       <!-- Risk Trend Chart -->
@@ -896,57 +912,59 @@ document.querySelectorAll('.metrics-bar').forEach(el => counterObserver.observe(
 /* ============================
    GAUGE ANIMATION
    ============================ */
-/* Draw segmented arc gauge */
-(function drawGaugeArcs() {
-  const cx = 170, cy = 175, r = 140;
-  const startAngle = 225, totalSweep = -270; // 225° CCW sweep (clockwise in screen coords: from bottom-left up-around to bottom-right)
-  // In standard math angles: 225° is bottom-left, sweeping CW to -45° (315°) = bottom-right
-  // Using SVG arc (always draws in screen space), we go from 225° down to -45°
-  // Let's use 135° to 405° convention (screen angles where 0°=right, 90°=down)
-  const SA = 135, TS = 270; // screen angles
+/* Draw gauge */
+(function drawGauge() {
+  const cx = 190, cy = 190, r = 150;
+  const SA = 135, TS = 270;
 
-  function arc(sDeg, eDeg) {
+  function arcPath(sDeg, eDeg, radius) {
     const s = sDeg * Math.PI / 180, e = eDeg * Math.PI / 180;
-    const x1 = cx + r * Math.cos(s), y1 = cy + r * Math.sin(s);
-    const x2 = cx + r * Math.cos(e), y2 = cy + r * Math.sin(e);
+    const x1 = cx + radius * Math.cos(s), y1 = cy + radius * Math.sin(s);
+    const x2 = cx + radius * Math.cos(e), y2 = cy + radius * Math.sin(e);
     const large = (eDeg - sDeg > 180) ? 1 : 0;
-    return `M${x1},${y1} A${r},${r} 0 ${large} 1 ${x2},${y2}`;
+    return `M${x1},${y1} A${radius},${radius} 0 ${large} 1 ${x2},${y2}`;
   }
 
-  // Segments with gap between them
-  const gap = 2; // degrees gap
-  const segs = [
-    { id:'segLow',  lbl:'lblLow',  text:'Low (0-499)',       pct:0.499 },
-    { id:'segMed',  lbl:'lblMed',  text:'Medium (500-699)',   pct:0.200 },
-    { id:'segHigh', lbl:'lblHigh', text:'High (700-849)',     pct:0.150 },
-    { id:'segCrit', lbl:'lblCrit', text:'Critical (850-1000)',pct:0.151 },
-  ];
+  // Background track
+  document.getElementById('gaugeTrack').setAttribute('d', arcPath(SA, SA + TS, r));
 
-  let angle = SA;
-  const labelR = r + 18; // label radius (outside the arc)
-
-  segs.forEach(s => {
-    const sweep = TS * s.pct;
-    const el = document.getElementById(s.id);
-    if (el) el.setAttribute('d', arc(angle + gap/2, angle + sweep - gap/2));
-
-    // Position label at midpoint of segment, outside the arc
-    const midAngle = (angle + sweep / 2) * Math.PI / 180;
-    const lx = cx + labelR * Math.cos(midAngle);
-    const ly = cy + labelR * Math.sin(midAngle);
-    const lblEl = document.getElementById(s.lbl);
-    if (lblEl) {
-      lblEl.setAttribute('x', lx);
-      lblEl.setAttribute('y', ly);
-      // Rotate text to follow the arc
-      const rotDeg = angle + sweep / 2;
-      // Flip text if on the left side so it reads correctly
-      const flip = (rotDeg > 180 && rotDeg < 360) ? rotDeg - 180 : rotDeg;
-      lblEl.setAttribute('transform', `rotate(${flip},${lx},${ly})`);
-      lblEl.textContent = s.text;
-    }
-    angle += sweep;
+  // Colored fill up to score 785/1000
+  const fillSweep = TS * (785 / 1000);
+  const fill = document.getElementById('gaugeFill');
+  fill.setAttribute('d', arcPath(SA, SA + fillSweep, r));
+  // Gradient
+  const svg = fill.closest('svg');
+  const defs = svg.querySelector('defs');
+  const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+  grad.id = 'gaugeGrad';
+  grad.setAttribute('x1', '0%'); grad.setAttribute('y1', '50%');
+  grad.setAttribute('x2', '100%'); grad.setAttribute('y2', '50%');
+  [[0,'#22C55E'],[0.35,'#22C55E'],[0.50,'#F59E0B'],[0.70,'#EF4444'],[0.85,'#EF4444'],[1.0,'#991B1B']].forEach(([off,col]) => {
+    const s = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+    grad.appendChild(s);
   });
+  defs.appendChild(grad);
+  fill.setAttribute('stroke', 'url(#gaugeGrad)');
+
+  // Tick marks
+  const ticksG = document.getElementById('gaugeTicks');
+  for (let i = 0; i <= 20; i++) {
+    const pct = i / 20;
+    const angle = (SA + TS * pct) * Math.PI / 180;
+    const isMajor = i % 5 === 0;
+    const innerR = r - 14 - (isMajor ? 8 : 4);
+    const outerR = r - 14;
+    const x1 = cx + innerR * Math.cos(angle), y1 = cy + innerR * Math.sin(angle);
+    const x2 = cx + outerR * Math.cos(angle), y2 = cy + outerR * Math.sin(angle);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+    line.setAttribute('stroke', isMajor ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.12)');
+    line.setAttribute('stroke-width', isMajor ? '2' : '1');
+    line.setAttribute('stroke-linecap', 'round');
+    ticksG.appendChild(line);
+  }
 })();
 
 let gaugeAnimated = false;
@@ -954,7 +972,20 @@ function animateGauge() {
   if (gaugeAnimated) return;
   gaugeAnimated = true;
   const score = 785;
+  const SA = 135, TS = 270;
+  const targetAngle = SA + (score / 1000) * TS;
+
+  const needle = document.getElementById('gaugeNeedle');
   const numEl = document.getElementById('gaugeNum');
+
+  // Needle rotation: line points UP (-90 screen), rotate by angle+90
+  const startRotate = SA + 90;
+  const endRotate = targetAngle + 90;
+  needle.style.transition = 'none';
+  needle.style.transform = "rotate(" + startRotate + "deg)";
+  needle.offsetHeight;
+  needle.style.transition = 'transform 2s cubic-bezier(0.4,0,0.2,1)';
+  setTimeout(function(){ needle.style.transform = "rotate(" + endRotate + "deg)"; }, 300);
 
   // Animate number
   const duration = 2000;
