@@ -106,15 +106,15 @@
     <div class="hero__glow hero__glow--1"></div>
     <div class="hero__glow hero__glow--2"></div>
     <canvas id="heroParticles" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
-    <div class="hero__inner container" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;text-align:left">
-      <div class="hero__text" style="align-items:flex-start">
+    <div class="hero__inner container" style="display:flex;flex-direction:column;align-items:center;text-align:center">
+      <div class="hero__text" style="align-items:center">
         <div class="hero__badge" data-i18n="hero.badge">
           <span class="hero__badge-dot"></span>44 Open-Source Security Tools
         </div>
-        <h1 class="hero__title" data-i18n="hero.title" style="text-align:left">
+        <h1 class="hero__title" data-i18n="hero.title" style="text-align:center">
           Open-Source<br><span class="gradient-text">Security Tools</span>
         </h1>
-        <p class="hero__subtitle" data-i18n="hero.subtitle" style="text-align:left">
+        <p class="hero__subtitle" data-i18n="hero.subtitle" style="text-align:center;max-width:800px">
           PhalanxCyber is a not for profit initiative by a Cyber Security Professional with 25 years of engineering, operations and consulting experience in dealing with complex cyber security problems.
           <br><br>
           It is a collection of 44 different cyber tools covering application code, cloud infrastructure, SaaS platforms, network devices, threat detection, red teaming, and risk quantification. 5,800+ security rules across 20+ compliance frameworks. Built by a practitioner. Open-Source for ever.
@@ -131,31 +131,6 @@
         </div>
       </div>
 
-      <!-- Terminal Demo -->
-      <div class="hero__terminal">
-        <div class="hero__terminal-bar">
-          <span class="dot dot--red"></span>
-          <span class="dot dot--yellow"></span>
-          <span class="dot dot--green"></span>
-          <span class="hero__terminal-title">phalanx-scan &mdash; live demo</span>
-        </div>
-        <div class="hero__terminal-body">
-          <div class="term-line"><span class="term-prompt">$</span> <span class="term-cmd">python java_scanner.py</span> <span class="term-flag">./src --severity HIGH</span></div>
-          <div class="term-line"><span class="term-dim">[*] Java SAST Scanner v4.0.0</span></div>
-          <div class="term-line"><span class="term-dim">[*] Scanning 847 files in 23 directories...</span></div>
-          <div class="term-line">&nbsp;</div>
-          <div class="term-line"><span class="term-crit">[CRITICAL]</span> JAVA-DESER-001 &mdash; Insecure deserialization</div>
-          <div class="term-line"><span class="term-dim">  File: src/api/UserController.java:142</span></div>
-          <div class="term-line"><span class="term-high">[HIGH]</span> &nbsp;&nbsp;&nbsp;&nbsp;JAVA-SQLI-003 &mdash; SQL injection via string concat</div>
-          <div class="term-line"><span class="term-dim">  File: src/dao/OrderDAO.java:89</span></div>
-          <div class="term-line"><span class="term-high">[HIGH]</span> &nbsp;&nbsp;&nbsp;&nbsp;DEP-JAVA-CVE-2021-44228 &mdash; Log4Shell RCE</div>
-          <div class="term-line"><span class="term-dim">  Fix:  Upgrade log4j-core to &gt;= 2.17.1</span></div>
-          <div class="term-line">&nbsp;</div>
-          <div class="term-line"><span class="term-result">Scan complete: </span><span class="term-crit">3 CRITICAL</span> <span class="term-high">7 HIGH</span> <span class="term-warn">12 MEDIUM</span></div>
-          <div class="term-line"><span class="term-pass">JSON report saved to: scan_report.json</span></div>
-          <div class="term-line"><span class="term-pass">HTML report saved to: scan_report.html</span></div>
-        </div>
-      </div>
     </div>
   </section>
 
