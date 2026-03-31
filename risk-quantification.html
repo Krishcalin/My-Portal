@@ -89,8 +89,8 @@ a:hover{text-decoration:underline}
 .gauge-wrap svg{width:100%;height:100%;overflow:visible}
 .gauge-seg{fill:none;stroke-width:18;stroke-linecap:butt;opacity:0.15}
 .gauge-seg--active{opacity:1}
-.gauge-needle{fill:var(--text);transition:transform 2s cubic-bezier(0.4,0,0.2,1);transform-origin:140px 140px}
-.gauge-score{position:absolute;top:50%;left:50%;transform:translate(-50%,-20%);display:flex;flex-direction:column;align-items:center}
+.gauge-needle{fill:var(--text);transition:transform 2s cubic-bezier(0.4,0,0.2,1);transform-origin:150px 160px}
+.gauge-score{position:absolute;top:45%;left:50%;transform:translate(-50%,-10%);display:flex;flex-direction:column;align-items:center}
 .gauge-score__num{font-size:3.6rem;font-weight:800;line-height:1}
 .gauge-score__label{font-size:1.1rem;font-weight:700;margin-top:2px}
 .gauge-score--low .gauge-score__num{color:#22C55E}
@@ -365,27 +365,23 @@ a:hover{text-decoration:underline}
             <div class="gauge-header__date">Last Calculated<br>31 Mar 2026, 09:42 AM</div>
           </div>
         </div>
-        <div class="gauge-wrap">
-          <svg viewBox="0 0 280 180" overflow="visible">
-            <!-- Segmented arc: 270° sweep from 135° to 405° (bottom-left to bottom-right) -->
-            <!-- Low (0-499): 135° to 269.5° = green -->
-            <path class="gauge-seg" id="segLow" d="" stroke="#22C55E" stroke-width="18"/>
-            <!-- Medium (500-699): 269.5° to 323.5° = amber -->
-            <path class="gauge-seg" id="segMed" d="" stroke="#F59E0B" stroke-width="18"/>
-            <!-- High (700-849): 323.5° to 364° = red -->
-            <path class="gauge-seg gauge-seg--active" id="segHigh" d="" stroke="#EF4444" stroke-width="18"/>
-            <!-- Critical (850-1000): 364° to 405° = dark red -->
-            <path class="gauge-seg" id="segCrit" d="" stroke="#991B1B" stroke-width="18"/>
-            <!-- Segment labels (rotated along arc) -->
-            <text x="52" y="82" fill="var(--text-muted)" font-size="8.5" font-family="Inter,sans-serif" font-weight="600" transform="rotate(-55,52,82)">Low (0-499)</text>
-            <text x="95" y="24" fill="var(--text-muted)" font-size="8.5" font-family="Inter,sans-serif" font-weight="600" transform="rotate(-15,95,24)">Medium (500-699)</text>
-            <text x="190" y="18" fill="var(--text-secondary)" font-size="8.5" font-family="Inter,sans-serif" font-weight="700" transform="rotate(20,190,18)">High (700-849)</text>
-            <text x="242" y="62" fill="var(--text-muted)" font-size="8.5" font-family="Inter,sans-serif" font-weight="600" transform="rotate(55,242,62)">Critical (850-1000)</text>
+        <div class="gauge-wrap" style="width:300px;height:200px">
+          <svg viewBox="0 0 300 200" overflow="visible">
+            <!-- Arcs drawn by JS -->
+            <path class="gauge-seg" id="segLow" d="" stroke="#22C55E" stroke-width="22"/>
+            <path class="gauge-seg" id="segMed" d="" stroke="#F59E0B" stroke-width="22"/>
+            <path class="gauge-seg gauge-seg--active" id="segHigh" d="" stroke="#EF4444" stroke-width="22"/>
+            <path class="gauge-seg" id="segCrit" d="" stroke="#991B1B" stroke-width="22"/>
+            <!-- Labels positioned by JS -->
+            <text id="lblLow" fill="var(--text-muted)" font-size="9" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
+            <text id="lblMed" fill="var(--text-muted)" font-size="9" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
+            <text id="lblHigh" fill="var(--text-secondary)" font-size="9" font-family="Inter,sans-serif" font-weight="700" text-anchor="middle"></text>
+            <text id="lblCrit" fill="var(--text-muted)" font-size="9" font-family="Inter,sans-serif" font-weight="600" text-anchor="middle"></text>
             <!-- Needle -->
             <g class="gauge-needle" id="gaugeNeedle">
-              <line x1="140" y1="140" x2="140" y2="30" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round"/>
-              <circle cx="140" cy="140" r="6" fill="var(--bg-surface)" stroke="var(--text-secondary)" stroke-width="2"/>
-              <circle cx="140" cy="140" r="3" fill="var(--text)"/>
+              <line x1="150" y1="160" x2="150" y2="40" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="150" cy="160" r="6" fill="var(--bg-surface)" stroke="var(--text-secondary)" stroke-width="2"/>
+              <circle cx="150" cy="160" r="3" fill="var(--text)"/>
             </g>
           </svg>
           <div class="gauge-score gauge-score--high">
@@ -393,7 +389,7 @@ a:hover{text-decoration:underline}
             <div class="gauge-score__label">High</div>
           </div>
         </div>
-        <div class="gauge-markers"><span>0</span><span>1000</span></div>
+        <div class="gauge-markers" style="width:280px"><span>0</span><span>1000</span></div>
         <div class="gauge-peers">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           <span><strong style="color:var(--sev-high)">48.2%</strong> of peers in this industry are performing better.</span>
@@ -909,27 +905,53 @@ document.querySelectorAll('.metrics-bar').forEach(el => counterObserver.observe(
    ============================ */
 /* Draw segmented arc gauge */
 (function drawGaugeArcs() {
-  const cx = 140, cy = 140, r = 110;
-  const startAngle = 135, totalSweep = 270;
-  function arc(startDeg, endDeg) {
-    const s = startDeg * Math.PI / 180, e = endDeg * Math.PI / 180;
+  const cx = 150, cy = 160, r = 120;
+  const startAngle = 225, totalSweep = -270; // 225° CCW sweep (clockwise in screen coords: from bottom-left up-around to bottom-right)
+  // In standard math angles: 225° is bottom-left, sweeping CW to -45° (315°) = bottom-right
+  // Using SVG arc (always draws in screen space), we go from 225° down to -45°
+  // Let's use 135° to 405° convention (screen angles where 0°=right, 90°=down)
+  const SA = 135, TS = 270; // screen angles
+
+  function arc(sDeg, eDeg) {
+    const s = sDeg * Math.PI / 180, e = eDeg * Math.PI / 180;
     const x1 = cx + r * Math.cos(s), y1 = cy + r * Math.sin(s);
     const x2 = cx + r * Math.cos(e), y2 = cy + r * Math.sin(e);
-    const large = (endDeg - startDeg > 180) ? 1 : 0;
+    const large = (eDeg - sDeg > 180) ? 1 : 0;
     return `M${x1},${y1} A${r},${r} 0 ${large} 1 ${x2},${y2}`;
   }
-  // Ranges: Low 0-499 (49.9%), Medium 500-699 (20%), High 700-849 (15%), Critical 850-1000 (15.1%)
+
+  // Segments with gap between them
+  const gap = 2; // degrees gap
   const segs = [
-    { id:'segLow',  pct:0.499 },
-    { id:'segMed',  pct:0.200 },
-    { id:'segHigh', pct:0.150 },
-    { id:'segCrit', pct:0.151 },
+    { id:'segLow',  lbl:'lblLow',  text:'Low (0-499)',       pct:0.499 },
+    { id:'segMed',  lbl:'lblMed',  text:'Medium (500-699)',   pct:0.200 },
+    { id:'segHigh', lbl:'lblHigh', text:'High (700-849)',     pct:0.150 },
+    { id:'segCrit', lbl:'lblCrit', text:'Critical (850-1000)',pct:0.151 },
   ];
-  let angle = startAngle;
+
+  let angle = SA;
+  const labelR = r + 18; // label radius (outside the arc)
+
   segs.forEach(s => {
-    const sweep = totalSweep * s.pct;
+    const sweep = TS * s.pct;
     const el = document.getElementById(s.id);
-    if (el) el.setAttribute('d', arc(angle, angle + sweep));
+    if (el) el.setAttribute('d', arc(angle + gap/2, angle + sweep - gap/2));
+
+    // Position label at midpoint of segment, outside the arc
+    const midAngle = (angle + sweep / 2) * Math.PI / 180;
+    const lx = cx + labelR * Math.cos(midAngle);
+    const ly = cy + labelR * Math.sin(midAngle);
+    const lblEl = document.getElementById(s.lbl);
+    if (lblEl) {
+      lblEl.setAttribute('x', lx);
+      lblEl.setAttribute('y', ly);
+      // Rotate text to follow the arc
+      const rotDeg = angle + sweep / 2;
+      // Flip text if on the left side so it reads correctly
+      const flip = (rotDeg > 180 && rotDeg < 360) ? rotDeg - 180 : rotDeg;
+      lblEl.setAttribute('transform', `rotate(${flip},${lx},${ly})`);
+      lblEl.textContent = s.text;
+    }
     angle += sweep;
   });
 })();
@@ -938,25 +960,36 @@ let gaugeAnimated = false;
 function animateGauge() {
   if (gaugeAnimated) return;
   gaugeAnimated = true;
-  const score = 785;  // out of 1000
+  const score = 785;
   const maxScore = 1000;
-  const startAngle = 135, totalSweep = 270;
-  const targetAngle = startAngle + (score / maxScore) * totalSweep; // 135 + 211.95 = 346.95°
+  const SA = 135, TS = 270;
+  // Needle angle in screen degrees: 135 + (785/1000)*270 = 135 + 211.95 = 346.95°
+  const targetScreenAngle = SA + (score / maxScore) * TS;
 
   const needle = document.getElementById('gaugeNeedle');
   const numEl = document.getElementById('gaugeNum');
 
-  // Initial position: needle at start (135°, pointing bottom-left)
-  // CSS transform rotates around cx=140, cy=140
-  // At 0° (up), needle points up. We need 135° start → targetAngle
-  const needleStartRotate = startAngle - 90; // SVG 0 is right, we offset
-  const needleEndRotate = targetAngle - 90;
+  // The needle line points from (150,160) to (150,40) = straight UP = -90° in screen coords
+  // To point at screen angle A, we need to rotate by (A - (-90)) = A + 90
+  // Start: point to 135° screen → rotate = 135+90 = 225°
+  // Target: point to 346.95° screen → rotate = 346.95+90 = 436.95° but normalize: 436.95-360 = 76.95°
+  // Actually simpler: rotation from "up" = screenAngle + 90
+  const startRotate = SA + 90;         // 225°
+  const endRotate = targetScreenAngle + 90; // 436.95°
+
+  // Set initial position immediately (no transition)
+  needle.style.transition = 'none';
+  needle.style.transform = `rotate(${startRotate}deg)`;
+
+  // Force reflow then animate
+  needle.offsetHeight;
+  needle.style.transition = 'transform 2s cubic-bezier(0.4,0,0.2,1)';
 
   setTimeout(() => {
-    needle.style.transform = `rotate(${needleEndRotate}deg)`;
+    needle.style.transform = `rotate(${endRotate}deg)`;
   }, 300);
 
-  // Animate number from 0 to score
+  // Animate number
   const duration = 2000;
   const start = performance.now();
   function step(now) {
