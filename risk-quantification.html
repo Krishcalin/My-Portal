@@ -1057,11 +1057,6 @@ function animateGauge() {
     if (progress < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-
-  // Set initial needle position
-  needle.style.transform = `rotate(${needleStartRotate}deg)`;
 }
 
 // Observe gauge card
