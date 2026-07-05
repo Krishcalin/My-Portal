@@ -8,9 +8,9 @@
   var translations = {
     /* ---- HERO ---- */
     'hero.badge': {
-      nl: '<span class="hero__badge-dot"></span>44 Open-Source Beveiligingstools',
-      de: '<span class="hero__badge-dot"></span>44 Open-Source Sicherheitstools',
-      en: '<span class="hero__badge-dot"></span>44 Open-Source Security Tools'
+      nl: '<span class="hero__badge-dot"></span>48 Open-Source Beveiligingstools',
+      de: '<span class="hero__badge-dot"></span>48 Open-Source Sicherheitstools',
+      en: '<span class="hero__badge-dot"></span>48 Open-Source Security Tools'
     },
     'hero.title': {
       nl: 'Open-Source<br><span class="gradient-text">Beveiligingstools</span>',
@@ -18,8 +18,8 @@
       en: 'Open-Source<br><span class="gradient-text">Security Tools</span>'
     },
     'hero.subtitle': {
-      nl: 'Enterprise-beveiliging zou geen zevenenhalf-cijferig budget moeten vereisen.<br><br>PhalanxCyber biedt 44 beveiligingstools, 5.800+ detectieregels en dekking over 20+ compliance-frameworks aan elk beveiligingsteam — van startups tot de Fortune 500. Applicatiecode, cloudinfrastructuur, SaaS, netwerk, dreigingsdetectie, red teaming, risicokwantificering — alles in één open-source platform.<br><br>Gebouwd door een cybersecurity-professional met 25 jaar praktijkervaring in engineering, operations en consulting. Niet door een productteam dat ARR najaagt.<br><br><strong>Open-source. Non-profit. Voor altijd.</strong>',
-      en: 'Enterprise security shouldn\'t require a seven-figure budget.<br><br>PhalanxCyber puts 44 security tools, 5,800+ detection rules, and coverage across 20+ compliance frameworks into the hands of every security team — from startups to the Fortune 500. Application code, cloud infrastructure, SaaS, network, threat detection, red teaming, risk quantification — all in one open-source platform.<br><br>Built by a cybersecurity professional with 25 years of hands-on engineering, operations, and consulting experience. Not by a product team chasing ARR.<br><br><strong>Open-source. Not-for-profit. Forever.</strong>'
+      nl: 'Enterprise-beveiliging zou geen zevenenhalf-cijferig budget moeten vereisen.<br><br>PhalanxCyber biedt 48 beveiligingstools, 5.800+ detectieregels en dekking over 20+ compliance-frameworks aan elk beveiligingsteam — van startups tot de Fortune 500. Applicatiecode, cloudinfrastructuur, SaaS, netwerk, dreigingsdetectie, red teaming, risicokwantificering — alles in één open-source platform.<br><br>Gebouwd door een cybersecurity-professional met 25 jaar praktijkervaring in engineering, operations en consulting. Niet door een productteam dat ARR najaagt.<br><br><strong>Open-source. Non-profit. Voor altijd.</strong>',
+      en: 'Enterprise security shouldn\'t require a seven-figure budget.<br><br>PhalanxCyber puts 48 security tools, 5,800+ detection rules, and coverage across 20+ compliance frameworks into the hands of every security team — from startups to the Fortune 500. Application code, cloud infrastructure, SaaS, network, threat detection, red teaming, risk quantification — all in one open-source platform.<br><br>Built by a cybersecurity professional with 25 years of hands-on engineering, operations, and consulting experience. Not by a product team chasing ARR.<br><br><strong>Open-source. Not-for-profit. Forever.</strong>'
     },
     'hero.cta1': {
       nl: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> Bekijk tools',

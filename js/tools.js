@@ -1013,6 +1013,104 @@ const TOOLS = [
       "Supply chain risk mapping and nth-party dependency tracking",
       "Remediation tracking and vendor risk register management"
     ]
+  },
+
+  // ── Recently added tools (Barracuda WAF · LogOcean · IT-GRC · RedChain) ──
+  {
+    id: "barracuda-waf-security-testing",
+    name: "Barracuda WAF Security Testing",
+    tagline: "Read-only Python auditor for Barracuda WAF appliances — 169 config checks across 16 categories via the REST API, with posture scoring and compliance mapping.",
+    category: "infra",
+    tags: ["barracuda-waf", "web-application-firewall", "configuration-audit", "rest-api", "cis-benchmark", "owasp-top-10", "pci-dss", "python"],
+    stats: { "Checks": "169", "Categories": "16", "Unit Tests": "48", "Known CVEs": "12" },
+    version: "1.0.0",
+    language: "Python",
+    github: "https://github.com/Krishcalin/Barracuda-WAF-Security-Testing",
+    overview: "reports/barracuda-overview.html",
+    status: "public",
+    icon: "firewall",
+    highlights: [
+      "Audits 169 distinct security checks across 16 modules of a Barracuda WAF — WAF policies (25), SSL/TLS (15), access control (11), authentication (12), services (12), DDoS, bot, API, logging, network, backup, licensing and more",
+      "Read-only assessment by design: the REST API client issues only GET requests for data collection plus a login POST and logout DELETE, never PUT/PATCH — no WAF configuration is ever modified",
+      "Maps every finding to real compliance controls via 105 entries covering CIS Barracuda WAF Benchmark, OWASP Top 10 2021, PCI DSS v4.0 and NIST CSF 2.0",
+      "Matches firmware against a database of 12 known Barracuda WAF/ESG CVEs (including CVE-2023-2868 and CVE-2023-7102) with CVSS scores and version-gap analysis",
+      "Computes a 0-100 posture score with A-F letter grades using weighted severity (CRITICAL x15, HIGH x5, MEDIUM x2, LOW x0.5) across CRITICAL/HIGH/MEDIUM/LOW/INFO levels",
+      "Generates self-contained dark-theme HTML reports plus structured JSON for SIEM/CI ingestion, with severity dashboards and per-category charts",
+      "CI/CD-friendly with severity-based exit codes (0 clean, 1 HIGH, 2 CRITICAL) and YAML scan profiles for selective category runs",
+      "Ships 48 unit tests driven by mock API responses so all 16 check modules run offline with no live WAF connection"
+    ]
+  },
+  {
+    id: "logocean-siem",
+    name: "LogOcean",
+    tagline: "Self-hosted, agentless SIEM: 29 vendor parsers, 90 detection + 10 correlation rules, and a MITRE ATT&CK coverage scoreboard over PostgreSQL.",
+    category: "threat",
+    tags: ["SIEM", "threat-detection", "MITRE ATT&CK", "log-parsing", "correlation", "OT-ICS", "UEBA", "PostgreSQL", "Sigma"],
+    stats: { "Parsers": "29", "Detection Rules": "90", "ATT&CK Techniques": "82", "Unit Tests": "303" },
+    version: "1.0.0",
+    language: "Python (FastAPI)",
+    github: "https://github.com/Krishcalin/SIEM-Lite",
+    overview: "reports/logocean-overview.html",
+    status: "public",
+    icon: "radar",
+    highlights: [
+      "29 auto-detected vendor parsers spanning network/firewall, endpoint/IDS, cloud, identity, and OT/ICS, all normalized to one common event schema (verified: len(parsers.PARSERS)=29, matches README)",
+      "Sigma-based detection engine ships 90 detection + 10 correlation rules (brute-force, password-spray, port-scan, host-sweep, connection-flood), confirmed by engine.load_rules=90 and correlation.load_correlation_rules=10",
+      "Detection-coverage scoreboard measuring 82 MITRE ATT&CK Enterprise + 11 ICS techniques covered, with 36 of those techniques covered at high fidelity (from coverage.coverage_report over the loaded detection + correlation rules)",
+      "Three ingest front doors: web upload, HTTP ingest API (API-key auth, gzip-aware), and a syslog receiver over UDP/TCP/TLS",
+      "PostgreSQL storage RANGE-partitioned by month with GIN full-text and jsonb search, retaining events for 3+ years (schema.sql, README)",
+      "Agentless collectors for Okta, GitHub, GitLab, AWS CloudTrail, Entra ID, GCP, and Microsoft 365 (app/collectors/)",
+      "Compliance reporting mapped to 8 frameworks — NIST 800-53, CIS v8, ISO 27001, SOC 2, PCI DSS v4, HIPAA, IEC 62443-3-3, NERC CIP (app/compliance.py FRAMEWORKS)",
+      "UEBA entity risk, kill-chain reconstruction, threat-intel enrichment, passive OT/ICS monitoring, and an optional AI SOC copilot; 303 unit tests green in CI across Python 3.11-3.13"
+    ]
+  },
+  {
+    id: "itgrc-portal-iso27001",
+    name: "IT-GRC Portal — ISO 27001:2022",
+    tagline: "Open-source ISO 27001:2022 GRC portal: 93 Annex A controls, 30 ISMS clauses, 5-framework crosswalk (NIST CSF, SOC 2, IEC 62443), on FastAPI + React.",
+    category: "risk",
+    tags: ["iso-27001", "grc", "risk-management", "compliance", "isms", "nist-csf", "soc2", "iec-62443", "fastapi"],
+    stats: { "Annex A Controls": "93", "Frameworks": "5", "Crosswalk Maps": "96", "ISMS Clauses": "30" },
+    version: "1.0.0",
+    language: "Python (FastAPI) + TypeScript (React)",
+    github: "https://github.com/Krishcalin/IT-GRC",
+    overview: "reports/itgrc-overview.html",
+    status: "public",
+    icon: "shield",
+    highlights: [
+      "All 93 ISO 27001:2022 Annex A controls pre-seeded across 4 themes (Organizational 37, People 8, Physical 14, Technological 34), plus all 30 mandatory ISMS clause requirements for Clauses 4-10 and the 17 mandatory documented-information records (Clause 7.5)",
+      "Unified multi-framework control catalog cross-mapping 5 frameworks — ISO 27001:2022, ISO/IEC 27019:2024 (energy/ICS), NIST CSF 2.0 (22 categories), SOC 2 (13 criteria) and ISA/IEC 62443-2-1:2024 (8 OT program elements) — with 96 seeded crosswalk mappings and a coverage matrix",
+      "Full ISMS workflow across 20+ modules: risk register (5x5 likelihood x impact matrix), Statement of Applicability, evidence, audits/findings, policies, incidents, suppliers, assets, plus a cross-cutting task/approval sign-off engine",
+      "Control self-assessments with CMMI-style maturity scoring (0-5) and vendor security questionnaires, with one-click populate-from-framework generation",
+      "Analytics: 5x5 risk heat map (inherent/residual), daily ISMS posture-trend snapshots, and KPI/KRI/KCI metric trend history with auto-derived RAG status",
+      "RBAC with 6 roles (CISO, GRC Manager, Risk Owner, Control Owner, Auditor, Viewer), JWT + bcrypt auth and SAML/OIDC-ready enterprise IdP integration",
+      "FastAPI + async SQLAlchemy 2.0 + PostgreSQL 16 backend and React 18 + TypeScript + Tailwind frontend, Docker-Compose deployed with Alembic migrations and GitHub Actions CI (pytest + alembic up/down + tsc build)",
+      "Also available as a LAMP/Laravel (PHP 8.2 / MySQL) edition in the sibling IT-GRC-LAMP-Stack repo — a faithful re-implementation of the same tool"
+    ]
+  },
+  {
+    id: "redchain-orchestrator",
+    name: "RedChain",
+    tagline: "Gated multi-agent red-team orchestrator on the Anthropic SDK: each Kill Chain phase runs a specialist agent, emits a validated artifact, gated until complete.",
+    category: "redteam",
+    tags: ["red-team", "orchestration", "kill-chain", "multi-agent", "anthropic-sdk", "offensive-security", "pentest", "python", "alpha"],
+    stats: { "Phases Wired": "3 / 9", "Unit Tests": "12", "Source LOC": "1,687", "Maturity": "Alpha" },
+    version: "0.1.0",
+    language: "Python",
+    github: "https://github.com/Krishcalin/RedChain",
+    overview: "reports/redchain-overview.html",
+    status: "public",
+    icon: "target",
+    highlights: [
+      "Gated state-machine orchestrator (runtime/orchestrator.py): each Kill Chain phase produces a validated artifact and cannot advance until its Gate.validate() passes, keeping transitions deterministic instead of letting the model freelance",
+      "Models the 9-phase Cyber Kill Chain (scope -> recon -> weaponize -> delivery -> exploit -> installation -> c2 -> objectives -> report); 3 phases (scope/recon/report) are wired end-to-end in v0.1.0, the rest are declared stubs",
+      "Specialist-agent design on the Anthropic SDK: Planner and NetworkAnalyst agent classes call the API through an AgentSession wrapper that applies ephemeral prompt caching (cache_control) to the system prompt",
+      "Deterministic checkpoint/resume: engagement state persists to SQLite (state.sqlite) plus manifest.yaml, and `redchain resume` re-enters at the next unsatisfied phase for multi-day engagements",
+      "Full audit trail: one Jinja2-rendered markdown artifact per phase (scope_brief, recon_dossier, executive_report) and per-agent JSONL transcripts for every run",
+      "--dry-run mode runs the entire pipeline from canned fixtures with no API key (CI-friendly); 12 unit tests cover gates, the SQLite state store, and the dry-run orchestrator",
+      "Nmap integration (subprocess + XML parse of `nmap -sV`) and a CWE-mapped vulnerability reference library of 5 web-app patterns (SQLi, XSS, IDOR, SSRF, open redirect)",
+      "Typer CLI with 5 commands (engage, resume, status, list-presets, version); ruff + mypy configured, MIT licensed, Development Status: 3 - Alpha"
+    ]
   }
 ];
 

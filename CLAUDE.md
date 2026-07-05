@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Static web portal showcasing 44 open-source security tools across 9 domains. No backend — HTML + CSS + vanilla JS. Deployed via GitHub Pages.
+Static web portal showcasing 48 open-source security tools across 9 domains. No backend — HTML + CSS + vanilla JS. Deployed via GitHub Pages.
 
 ## Repository Structure
 
@@ -12,7 +12,7 @@ about.html                     # About / founder page
 strategy.html                  # Cybersecurity strategy page
 risk-quantification.html       # Risk quantification dashboard page
 css/styles.css                 # All styles (dark theme, glassmorphic cards, responsive grid)
-js/tools.js                    # TOOLS array (44 entries), TOOL_CATEGORIES, TOOL_ICONS
+js/tools.js                    # TOOLS array (48 entries), TOOL_CATEGORIES, TOOL_ICONS
 js/main.js                     # Card rendering, search, filters, detail expansion, counter animations
 js/translations.js             # i18n (EN, NL) for hero, nav, stats, footer
 assets/favicon.svg             # Favicon
@@ -20,7 +20,7 @@ reports/                       # All report/overview pages and generators
   generate_reports.py           # Batch generator: scanner JSON/HTML → portal report pages
   generate_overviews.py         # Batch generator: tool data → overview pages
   *-report.html (35 files)     # Self-contained sample report pages
-  *-overview.html (9 files)    # Self-contained tool overview pages
+  *-overview.html (13 files)    # Self-contained tool overview pages
 synthetic_data/                # JSON data for tools without local repos (Ariba, Zscaler)
 LICENSE                        # GPL-3.0
 ```
@@ -84,7 +84,7 @@ Self-contained page with inline CSS/JS featuring:
 
 ## Key Conventions
 
-- **Tool count:** Currently 44 — update in `index.html` (5 places), `js/translations.js` (4 places: EN/NL badge + subtitle)
+- **Tool count:** Currently 48 — update in `index.html` (5 places), `js/translations.js` (4 places: EN/NL badge + subtitle)
 - **Stats counter:** `data-target` attribute on `.stats__number` spans drives the animation
 - **Design tokens:** All in `:root` in `css/styles.css` — `--bg`, `--accent-1` (#00D4FF), `--accent-2` (#7B61FF)
 - **Fonts:** Inter (400–900) + JetBrains Mono (report pages only)
@@ -109,7 +109,7 @@ Self-contained page with inline CSS/JS featuring:
 # Regenerate all 35 sample report pages
 python reports/generate_reports.py
 
-# Regenerate all 9 overview pages
+# Regenerate all 13 overview pages
 python reports/generate_overviews.py
 ```
 

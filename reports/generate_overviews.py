@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 generate_overviews.py
-Generates 9 professional "Tool Overview" HTML pages for non-scanner tools
+Generates 13 professional "Tool Overview" HTML pages for non-scanner tools
 in the Phalanx Cyber portal.
 """
 
@@ -410,6 +410,221 @@ TOOLS = [
             "lab_setup/",
         ],
     },
+    {
+        "filename": "barracuda-overview.html",
+        "title_plain": "Barracuda WAF Security Testing",
+        "title_h1": ("Barracuda WAF ", "Security Testing"),
+        "description": "Open-source Python assessment tool that connects to the Barracuda Web Application Firewall REST API (read-only) and audits its security configuration across 16 categories, producing scored HTML/JSON reports with compliance mapping.",
+        "github": "https://github.com/Krishcalin/Barracuda-WAF-Security-Testing",
+        "stats": [
+            ("Security Checks", "169"),
+            ("Check Categories", "16"),
+            ("Unit Tests", "48"),
+            ("Known CVEs", "12"),
+        ],
+        "highlights": [
+            "169 distinct configuration checks across 16 modules covering WAF policies, SSL/TLS, access control, authentication, services, network, DDoS, bot, API security, logging, firmware, content rules, adaptive profiling, backup, licensing and CVEs",
+            "Strictly read-only Barracuda WAF REST API client (GET data collection + login/logout only) with token auth, retry logic and --insecure support for self-signed labs",
+            "Posture scoring from 0-100 with A-F grades based on weighted severity, plus severity-based CI/CD exit codes",
+            "105 finding-to-control mappings across CIS Barracuda WAF Benchmark, OWASP Top 10 2021, PCI DSS v4.0 and NIST CSF 2.0",
+            "Firmware CVE assessment against 12 known Barracuda WAF/ESG vulnerabilities with CVSS scoring and version-gap analysis",
+            "Self-contained dark-theme HTML reports and structured JSON output for SIEM and pipeline ingestion",
+            "YAML scan profiles and --checks flag for selective, targeted category scans",
+            "48 offline unit tests backed by mock API responses covering all 16 check modules",
+        ],
+        "categories": [
+            "WAF Policy Audit",
+            "SSL/TLS Hardening",
+            "Access Control",
+            "Admin Authentication",
+            "Virtual Service Security",
+            "Network & HA",
+            "DDoS Protection",
+            "Bot Mitigation",
+            "API Security",
+            "Logging & SIEM",
+            "Firmware & CVE",
+            "Compliance Mapping",
+        ],
+        "compliance": [
+            ("CIS Barracuda WAF Benchmark 1.0", "Findings mapped to CIS Barracuda WAF hardening controls (sections 1-11) referenced in config/compliance_maps.yaml"),
+            ("OWASP Top 10 2021", "Checks tagged to A01-A10 web risk categories such as Broken Access Control, Cryptographic Failures and Injection"),
+            ("PCI DSS v4.0", "Controls mapped to PCI requirements 1, 2, 4, 6, 8, 10, 11 for firewall, crypto, access and logging"),
+            ("NIST CSF 2.0", "Findings aligned to Protect/Detect/Identify functions (PR.AC, PR.DS, PR.PT, DE.AE, ID.RA)"),
+        ],
+        "language": "Python 3.9+",
+        "components": [
+            "barracuda_waf_scanner.py",
+            "checks/",
+            "utils/",
+            "config/",
+            "tests/",
+            "assets/",
+            "requirements.txt",
+            "README.md",
+        ],
+    },
+    {
+        "filename": "logocean-overview.html",
+        "title_plain": "LogOcean SIEM",
+        "title_h1": ("LogOcean — ", "Agentless SIEM"),
+        "description": "LogOcean is a self-hosted, agentless SIEM that ingests, parses, normalizes, detects, and retains security logs from 29 vendors in PostgreSQL, with a MITRE ATT&CK coverage scoreboard, correlation, UEBA, and OT/ICS monitoring.",
+        "github": "https://github.com/Krishcalin/SIEM-Lite",
+        "stats": [
+            ("Vendor parsers", "29"),
+            ("Detection + correlation rules", "90 + 10"),
+            ("ATT&CK techniques covered", "82 Ent / 11 ICS"),
+            ("Unit tests", "303"),
+        ],
+        "highlights": [
+            "Ingests network, endpoint, cloud, identity, and OT/ICS logs via web upload, HTTP API, and a UDP/TCP/TLS syslog receiver",
+            "Auto-detects log format and normalizes every record to one schema (time, vendor, type, src/dst IP+port, user, host, action)",
+            "Sigma-style detection plus distinct-count correlation for brute-force, password-spray, port-scan, and host-sweep",
+            "Detection-coverage scoreboard rolls rules up by MITRE ATT&CK (Enterprise + ICS) tactic, fidelity, and data source, and also tracks a MITRE ATLAS matrix",
+            "PostgreSQL retention RANGE-partitioned by month with GIN full-text and jsonb search for 3+ years",
+            "Triage workflow with cases, suppression/allowlists, notifications, and agentless response with auto-revert",
+            "UEBA entity risk, kill-chain reconstruction, threat-intel IOC enrichment, and an optional Anthropic-Claude AI SOC copilot",
+            "Auth/RBAC, CSRF and security headers, audit log, and compliance reporting across 8 frameworks",
+        ],
+        "categories": [
+            "Log parsing & normalization",
+            "SIEM",
+            "Threat detection",
+            "Event correlation",
+            "MITRE ATT&CK coverage",
+            "Cloud & identity monitoring",
+            "OT/ICS monitoring",
+            "UEBA / entity risk",
+            "Kill-chain reconstruction",
+            "Threat intelligence",
+            "Compliance reporting",
+            "Agentless collection",
+        ],
+        "compliance": [
+            ("MITRE ATT&CK (Enterprise + ICS)", "Rules tagged to techniques; a coverage scoreboard scores 82 Enterprise and 11 ICS techniques by tactic, fidelity, and data source."),
+            ("NIST 800-53", "Detection rules mapped to controls so the /compliance page shows per-control coverage."),
+            ("ISO 27001 (2022 Annex A)", "Control-level coverage reporting driven by technique-to-control mappings."),
+            ("PCI DSS v4", "Included in the compliance framework set for control-coverage reporting."),
+            ("IEC 62443-3-3 / NERC CIP", "OT/ICS-focused frameworks mapped for the passive ICS monitoring rule pack."),
+        ],
+        "language": "Python (FastAPI, Jinja2, psycopg/PostgreSQL)",
+        "components": [
+            "app/",
+            "rules/",
+            "tests/",
+            "schema.sql",
+            "docker-compose.yml",
+            "docs/",
+            "playbooks/",
+            "README.md",
+        ],
+    },
+    {
+        "filename": "itgrc-overview.html",
+        "title_plain": "IT-GRC Portal — ISO 27001:2022",
+        "title_h1": ("ISO 27001:2022 ", "IT-GRC Portal"),
+        "description": "An open-source IT Governance, Risk & Compliance portal for managing an ISO 27001:2022 ISMS end to end — controls, clauses, risks, Statement of Applicability, audits and cross-framework mapping — deployable internally with Docker Compose.",
+        "github": "https://github.com/Krishcalin/IT-GRC",
+        "stats": [
+            ("Annex A Controls", "93"),
+            ("Frameworks Cross-Mapped", "5"),
+            ("ISMS Clauses (4-10)", "30"),
+            ("Crosswalk Mappings", "96"),
+        ],
+        "highlights": [
+            "93 ISO 27001:2022 Annex A controls + 12 ISO/IEC 27019:2024 energy-sector (ENR) controls pre-loaded and filterable by framework, theme and status",
+            "30 mandatory ISMS Clause 4-10 requirements and 17 mandatory documented-information records tracked for conformity and readiness",
+            "Unified control framework cross-maps ISO 27001, ISO 27019, NIST CSF 2.0, SOC 2 and IEC 62443-2-1 (148 controls total) with 96 seeded crosswalk mappings and a cross-framework coverage matrix",
+            "Risk register with 5x5 inherent/residual matrix, treatment tracking, and links to controls, assets and evidence",
+            "Assessments with CMMI maturity scoring (0-5) and vendor questionnaires; audits, incidents (5.24-5.28), suppliers (5.19-5.23) and awareness/training modules",
+            "Dashboards for compliance posture, risk heat map, posture-trend snapshots and KPI/KRI/KCI RAG metrics",
+            "6-role RBAC (CISO, GRC Manager, Risk/Control Owner, Auditor, Viewer) with JWT+bcrypt and SAML/OIDC readiness",
+            "Also shipped as a LAMP/Laravel (PHP 8.2/MySQL) edition in the sibling IT-GRC-LAMP-Stack repo",
+        ],
+        "categories": [
+            "Risk Register",
+            "Controls Library",
+            "Statement of Applicability",
+            "ISMS Clause Conformity",
+            "Multi-Framework Crosswalk",
+            "Audit & Findings Management",
+            "Incident Management",
+            "Supplier / Third-Party Risk",
+            "Evidence Management",
+            "Policy Management",
+            "Assessments & Maturity",
+            "Awareness & Training",
+        ],
+        "compliance": [
+            ("ISO 27001:2022", "Full Annex A (93 controls across 4 themes) plus all 30 mandatory Clause 4-10 management-system requirements and 17 mandatory documents"),
+            ("ISO/IEC 27019:2024", "12 energy-sector ENR controls for SCADA/ICS process-control systems, loaded as a distinct filterable framework"),
+            ("NIST CSF 2.0", "22 categories across the Govern/Identify/Protect/Detect/Respond/Recover functions, cross-mapped to ISO 27001"),
+            ("SOC 2 (Trust Services Criteria)", "13 criteria (Common Criteria CC1-CC9 + Availability/Confidentiality/Processing Integrity/Privacy) cross-mapped to ISO 27001"),
+            ("ISA/IEC 62443-2-1:2024", "8 OT/IACS security program elements bridging the IT-ISMS to OT security programs for energy/ICS"),
+        ],
+        "language": "Python (FastAPI) + TypeScript (React)",
+        "components": [
+            "backend/",
+            "frontend/",
+            "docker-compose.yml",
+            ".env.example",
+            "README.md",
+            "CLAUDE.md",
+            ".github/workflows/ci.yml",
+            "banner.svg",
+        ],
+    },
+    {
+        "filename": "redchain-overview.html",
+        "title_plain": "RedChain",
+        "title_h1": ("Gated Red-Team ", "Engagement Orchestrator"),
+        "description": "RedChain runs offensive security engagements as a gated state machine of Kill Chain phases — each phase is driven by a specialist Anthropic-SDK agent, emits a validated artifact, and is blocked by a code gate until complete. Early-stage MVP (Alpha v0.1.0) with scope/recon/report wired end-to-end.",
+        "github": "https://github.com/Krishcalin/RedChain",
+        "stats": [
+            ("Kill Chain phases wired", "3 of 9"),
+            ("Source LOC (Python)", "1,687"),
+            ("Unit tests", "12"),
+            ("Version", "0.1.0 (Alpha)"),
+        ],
+        "highlights": [
+            "Orchestrator iterates preset phases, dispatching one Phase + one exit Gate each; a failed gate pauses the engagement in a resumable state rather than advancing",
+            "Cyber Kill Chain phase model with hard, in-code gates — the README explicitly contrasts this with autonomous tool-use loops where phase order is tracked but not enforced",
+            "AgentSession wraps the Anthropic client with dry-run fixtures, transcript persistence, and ephemeral prompt caching; usage/cache-token metadata is captured per call",
+            "Engagement layout on disk: manifest.yaml, state.sqlite, artifacts/*.md, and transcripts/<phase>-<agent>-<ts>.jsonl for reproducibility and auditability",
+            "Jinja2 artifact templates plus a CWE-tagged vulnref pattern library queryable by phase; Nmap tool wrapper parses service/version XML",
+            "Modular extension points documented in CLAUDE.md: add a phase, agent, gate, skill, integration, or preset by subclassing a base and registering it",
+            "Ships an example dry-run engagement walkthrough (examples/dryrun_engagement.md) and a bundled webapp preset for single-target web-app engagements",
+        ],
+        "categories": [
+            "Red-Team Orchestration",
+            "Cyber Kill Chain",
+            "Multi-Agent Pipeline",
+            "Gated State Machine",
+            "Reconnaissance",
+            "Scope Management",
+            "Engagement Reporting",
+            "Checkpoint / Resume",
+            "Vulnerability Reference (CWE)",
+            "Nmap Integration",
+            "Prompt Caching",
+            "Dry-Run / CI",
+        ],
+        "compliance": [
+            ("Cyber Kill Chain", "The pipeline models a Cyber Kill Chain progression (scope -> recon -> weaponize -> delivery -> exploit -> installation -> c2 -> objectives -> report); the repo names it the 'Kill Chain', and in v0.1.0 only scope/recon/report have implemented phase modules."),
+            ("CWE (Common Weakness Enumeration)", "The vulnref pattern library tags each web-app weakness with a CWE id (CWE-89 SQLi, CWE-79 XSS, CWE-639 IDOR, CWE-918 SSRF, CWE-601 Open Redirect)."),
+        ],
+        "language": "Python (3.10+)",
+        "components": [
+            "src/redchain/",
+            "tests/",
+            "pyproject.toml",
+            "README.md",
+            "CLAUDE.md",
+            "examples/dryrun_engagement.md",
+            "docs/banner.svg",
+            "LICENSE",
+        ],
+    },
 ]
 
 
@@ -607,7 +822,7 @@ a:hover{{text-decoration:underline}}
 <!-- ======== BACK NAV ======== -->
 <nav class="back-nav">
   <div class="container">
-    <a href="index.html">
+    <a href="../index.html">
       {SVG_BACK}
       Back to Portal
     </a>
@@ -675,7 +890,7 @@ a:hover{{text-decoration:underline}}
         <a href="{esc(tool["github"])}" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
           {SVG_GITHUB} View on GitHub
         </a>
-        <a href="index.html" class="btn btn--outline">
+        <a href="../index.html" class="btn btn--outline">
           {SVG_ARROW_RIGHT} Back to Portal
         </a>
       </div>
@@ -686,7 +901,7 @@ a:hover{{text-decoration:underline}}
 <!-- ======== FOOTER ======== -->
 <footer class="report-footer">
   <div class="container">
-    &copy; 2026 <a href="index.html">PhalanxCyber</a> &mdash; Open-Source Cybersecurity Platform
+    &copy; 2026 <a href="../index.html">PhalanxCyber</a> &mdash; Open-Source Cybersecurity Platform
   </div>
 </footer>
 
