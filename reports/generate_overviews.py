@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 generate_overviews.py
-Generates 13 professional "Tool Overview" HTML pages for non-scanner tools
+Generates 14 professional "Tool Overview" HTML pages for non-scanner tools
 in the Phalanx Cyber portal.
 """
 
@@ -623,6 +623,59 @@ TOOLS = [
             "examples/dryrun_engagement.md",
             "docs/banner.svg",
             "LICENSE",
+        ],
+    },
+    {
+        "filename": "exploit-poc-overview.html",
+        "title_plain": "Exploit PoC & Detection Lab",
+        "title_h1": ("Exploit PoC ", "& Detection Lab"),
+        "description": "A library of benign-by-default exploit proof-of-concepts for disclosed CVEs and ATT&CK techniques, each paired with Sigma/YARA/KQL detections and lab guides so defenders can reproduce the attack in an isolated lab and validate detection coverage.",
+        "github": "https://github.com/Krishcalin/Exploit-PoC",
+        "stats": [
+            ("PoC Packs", "5"),
+            ("Detection Rules", "11"),
+            ("CISA KEV", "2"),
+            ("Max CVSS", "9.8"),
+        ],
+        "highlights": [
+            "Five self-contained PoC packs, each for a publicly disclosed and patched CVE or ATT&CK technique",
+            "Benign-by-default payloads that only prove execution; destructive actions are behind default-OFF switches",
+            "Detection-paired: 5 Sigma rules, 4 KQL hunting queries, a YARA rule, a Suricata rule and Sysmon configs",
+            "Covers LPE, unauthenticated RCE, .NET deserialization, file-upload webshell, kernel overflow and LSASS credential dumping",
+            "2 packs are CISA KEV-listed; CVE-2026-47291 ships only as a non-destructive exposure assessment",
+            "Every pack has a full README (CVSS, patched versions, lab guide, cleanup, references); 2 packs (CVE-2025-21293, CVE-2025-59287) also ship dedicated lab setup/cleanup scripts",
+            "Authorized-lab-use-only scope with explicit anti-weaponization guardrails documented in CLAUDE.md",
+        ],
+        "categories": [
+            "Local Privilege Escalation",
+            "Unauthenticated RCE",
+            ".NET Deserialization",
+            "File-Upload / Webshell",
+            "Kernel Overflow",
+            "Credential Access",
+            "Sigma Detections",
+            "KQL Threat Hunting",
+            "YARA / Suricata",
+            "Sysmon Tuning",
+            "Purple-Team Validation",
+            "Lab Provisioning",
+        ],
+        "compliance": [
+            ("MITRE ATT&CK", "PoCs and detections mapped to techniques including T1003.001 (LSASS credential dumping)"),
+            ("CISA KEV", "2 packs (WSUS CVE-2025-59287, SAP NetWeaver CVE-2025-31324) are on the CISA Known Exploited Vulnerabilities catalog"),
+            ("Sigma", "5 SIEM-agnostic detection rules shipped for blue-team validation"),
+            ("CVSS v3.1", "Each pack documents its NVD CVSS severity, up to 9.8 Critical"),
+        ],
+        "language": "Python / PowerShell / C",
+        "components": [
+            "CVE-2025-21293-PoC/",
+            "CVE-2025-59287-PoC/",
+            "CVE-2025-31324-PoC/",
+            "CVE-2026-47291-PoC/",
+            "T1003.001-LSASS-comsvcs-PoC/",
+            "<pack>/detection/  (Sigma / YARA / KQL / Suricata / Sysmon)",
+            "<pack>/lab/  (setup/cleanup - CVE-2025-21293 & CVE-2025-59287 only)",
+            "CLAUDE.md",
         ],
     },
 ]

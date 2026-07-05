@@ -1,6 +1,6 @@
 # Phalanx Cyber — Open-Source Security Tools Portal
 
-A single-page web portal showcasing **48 open-source security tools** across 9 security domains. Built as a static site with no backend — just HTML, CSS, and vanilla JavaScript.
+A single-page web portal showcasing **49 open-source security tools** across 9 security domains. Built as a static site with no backend — just HTML, CSS, and vanilla JavaScript.
 
 **Live site:** Deployed via GitHub Pages
 
@@ -10,12 +10,12 @@ A single-page web portal showcasing **48 open-source security tools** across 9 s
 
 | Metric | Value |
 |--------|-------|
-| Tools | 48 |
+| Tools | 49 |
 | Security Domains | 9 |
 | Compliance Frameworks | 20+ |
 | Security Rules (across all tools) | 5,800+ |
 | Sample Report Pages | 35 |
-| Tool Overview Pages | 13 |
+| Tool Overview Pages | 14 |
 | Languages | EN, NL |
 
 ---
@@ -29,7 +29,7 @@ A single-page web portal showcasing **48 open-source security tools** across 9 s
 | SaaS / SSPM | 9 | M365, ServiceNow, SuccessFactors, Tableau, SAP S/4HANA, Oracle EBS, Snowflake, Oracle SaaS, SAP Ariba |
 | Infrastructure | 10 | Fortinet, Cisco, Palo Alto, Kubernetes KSPM, Vulnerability Mgmt, Linux/Windows Hardening, OT/ICS, Zscaler, Barracuda WAF |
 | Threat Detection | 4 | Detection Engineering, CrowdStrike Red Team, CrowdStrike Falcon, LogOcean SIEM |
-| Red Teaming | 5 | Windows Red Team, RHEL Red Team, AD Attack Scenarios, Autonomous Pentest, RedChain |
+| Red Teaming | 6 | Windows Red Team, RHEL Red Team, AD Attack Scenarios, Autonomous Pentest, RedChain, Exploit-PoC |
 | Attack Surface | 1 | EASM Scanner |
 | Governance & Risk | 6 | Cyber Risk Quantification, Responsible AI, CTEM, Risk OpCenter, TPRM, IT-GRC |
 
@@ -46,7 +46,7 @@ My-Portal/
 ├── css/
 │   └── styles.css                # Portal styles (dark theme, glassmorphic cards)
 ├── js/
-│   ├── tools.js                  # Tool data array (48 entries) + categories + icons
+│   ├── tools.js                  # Tool data array (49 entries) + categories + icons
 │   ├── main.js                   # Card rendering, search, filters, detail expansion
 │   └── translations.js           # i18n engine (EN, NL)
 ├── assets/
@@ -55,7 +55,7 @@ My-Portal/
 │   ├── generate_reports.py       # Batch generator for sample report HTML pages
 │   ├── generate_overviews.py     # Batch generator for tool overview HTML pages
 │   ├── *-report.html (35 files)  # Interactive sample report pages (scanner tools)
-│   └── *-overview.html (13 files) # Tool overview pages (non-scanner tools)
+│   └── *-overview.html (14 files) # Tool overview pages (non-scanner tools)
 ├── synthetic_data/               # Synthetic JSON data for tools without local repos
 │   ├── ariba_report.json
 │   └── zscaler_report.json
@@ -89,7 +89,7 @@ Every tool card has three action buttons:
    - Expandable finding accordions with issue/recommendation/CWE
    - Real-time search + severity/category dropdown filters
    - Compliance framework mapping
-3. **Overview** (purple, 13 tools) — Capability showcase page with:
+3. **Overview** (purple, 14 tools) — Capability showcase page with:
    - Key stats grid
    - Feature highlights as styled cards
    - Category/coverage tags
@@ -102,7 +102,7 @@ Every tool card has three action buttons:
 # Regenerate all 35 sample report pages
 python reports/generate_reports.py
 
-# Regenerate all 13 overview pages
+# Regenerate all 14 overview pages
 python reports/generate_overviews.py
 ```
 

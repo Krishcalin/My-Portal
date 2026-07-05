@@ -1111,6 +1111,29 @@ const TOOLS = [
       "Nmap integration (subprocess + XML parse of `nmap -sV`) and a CWE-mapped vulnerability reference library of 5 web-app patterns (SQLi, XSS, IDOR, SSRF, open redirect)",
       "Typer CLI with 5 commands (engage, resume, status, list-presets, version); ruff + mypy configured, MIT licensed, Development Status: 3 - Alpha"
     ]
+  },
+  {
+    id: "exploit-poc",
+    name: "Exploit PoC & Detection Lab",
+    tagline: "Benign-by-default exploit PoCs for 5 disclosed CVEs/techniques, each paired with Sigma/YARA/KQL detections so blue teams can validate coverage in a lab.",
+    category: "redteam",
+    tags: ["exploit-poc", "detection-engineering", "blue-team", "CISA-KEV", "sigma", "yara", "kql", "purple-team", "CVE"],
+    stats: { "PoC Packs": "5", "Detection Rules": "11", "CISA KEV": "2", "Max CVSS": "9.8" },
+    version: "1.0.0",
+    language: "Python / PowerShell / C",
+    github: "https://github.com/Krishcalin/Exploit-PoC",
+    overview: "reports/exploit-poc-overview.html",
+    status: "public",
+    icon: "terminal",
+    highlights: [
+      "5 self-contained PoC packs for publicly disclosed, patched issues: AD DS Network Configuration Operators LPE to SYSTEM (CVE-2025-21293), WSUS unauth .NET-deserialization RCE (CVE-2025-59287), SAP NetWeaver Visual Composer unauth file-upload RCE (CVE-2025-31324), HTTP.sys overflow RCE (CVE-2026-47291), and LSASS credential dump via comsvcs.dll (ATT&CK T1003.001)",
+      "Benign by default: payloads only prove execution (write a proof file / show identity); impactful actions like SPAWN_SHELL or ADD_ADMIN are gated behind clearly-labeled, default-OFF switches",
+      "Every pack ships detection content - 5 Sigma rules, 4 KQL hunting queries, a YARA rule, a Suricata rule, and Sysmon configs - so blue teams can confirm their detections fire",
+      "2 of the 5 are on the CISA Known Exploited Vulnerabilities (KEV) catalog (WSUS, SAP NetWeaver); CVSS up to 9.8",
+      "CVE-2026-47291 ships as a safe, non-destructive assessment (patch / MaxRequestBytes / exposure checker), not a weaponized exploit",
+      "Each pack is runnable and cleanable in isolation with its own README (CVSS, affected/patched versions, lab setup, step-by-step run, cleanup, references); 2 of the 5 packs (CVE-2025-21293, CVE-2025-59287) also ship dedicated lab provisioning scripts",
+      "Explicitly scoped for isolated, snapshotted lab targets and authorized testing only - no weaponization, no evasion tuning, no secrets committed"
+    ]
   }
 ];
 
