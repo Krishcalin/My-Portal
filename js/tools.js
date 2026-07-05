@@ -1134,6 +1134,126 @@ const TOOLS = [
       "Each pack is runnable and cleanable in isolation with its own README (CVSS, affected/patched versions, lab setup, step-by-step run, cleanup, references); 2 of the 5 packs (CVE-2025-21293, CVE-2025-59287) also ship dedicated lab provisioning scripts",
       "Explicitly scoped for isolated, snapshotted lab targets and authorized testing only - no weaponization, no evasion tuning, no secrets committed"
     ]
+  },
+
+  // ── Batch 2: AI Guardrail · SBOM · Secrets · AD Assessment · Alpha-AI ──
+  {
+    id: "ai-runtime-guardrail",
+    name: "AI Runtime Guardrail (Prompt Firewall)",
+    tagline: "Real-time provider-agnostic LLM firewall: inspects prompts and completions for injection, jailbreak and PII/secret leaks with block/redact/alert enforcement.",
+    category: "appsec",
+    tags: ["prompt-injection", "jailbreak-detection", "llm-security", "dlp", "prompt-firewall", "ai-dr", "owasp-llm", "guardrails"],
+    stats: { "Detectors": "5", "Detection Rules": "24", "Tests": "36", "Phases": "7/7" },
+    version: "0.1.0",
+    language: "Python",
+    github: "https://github.com/Krishcalin/AI-Runtime-Guardrail-Prompt-Firewall",
+    overview: "reports/ai-runtime-guardrail-overview.html",
+    status: "public",
+    icon: "brain",
+    highlights: [
+      "Three-layer cheapest-first detection: 13 regex injection signatures, a heuristic layer (zero-width chars, base64-smuggled instructions, entropy), and a gated Claude LLM-judge backstop that fires only when cheap layers find nothing",
+      "Provider-agnostic inline reverse proxy (FastAPI) with Anthropic Messages and OpenAI-compatible adapters via a registry; input BLOCK/REDACT run before the upstream call",
+      "Bidirectional inspection: inputs (prompt injection, jailbreak, PII/secret leakage) and outputs (system-prompt leak, data exfiltration) with X-Guardrail-Action headers",
+      "24 YAML-driven detection rules (13 injection signatures + 11 PII/secret DLP patterns) — add a rule with no code change",
+      "Four enforcement actions (block / redact / alert / allow) resolved most-severe-wins from a YAML policy, safe-by-default monitor mode that never blocks",
+      "Adversarial benchmark harness over a 30-entry labeled corpus (15 attacks / 15 benign, 9 techniques) reporting recall, FPR, F1 and latency, wired as a CI regression gate",
+      "Every detection mapped to OWASP LLM Top 10 (2025), NIST AI RMF and MITRE ATLAS for GRC reporting, with immutable JSONL audit log plus SIEM/webhook alerting",
+      "36 tests across 6 per-phase suites, CI-gated on Python 3.10/3.11/3.12 with an adversarial-benchmark recall/FPR gate"
+    ]
+  },
+  {
+    id: "sbom-security",
+    name: "SBOM Security",
+    tagline: "CycloneDX + SPDX SBOMs across Python, Node, Maven, and Go with OSV vulnerability correlation, dependency drift, and license/policy CI gating.",
+    category: "appsec",
+    tags: ["SBOM", "CycloneDX", "SPDX", "OSV", "supply-chain", "purl", "dependency-drift", "policy-compliance"],
+    stats: { "Ecosystems": "4", "SBOM Formats": "2", "Tests": "55", "CLI Commands": "7" },
+    version: "0.1.0",
+    language: "Python",
+    github: "https://github.com/Krishcalin/SBOM-Security",
+    overview: "reports/sbom-security-overview.html",
+    status: "public",
+    icon: "container",
+    highlights: [
+      "Generates SBOMs in two formats: CycloneDX 1.5 (core/cyclonedx.py) and SPDX 2.3 (core/spdx.py), each with spec-correct package URLs (purl) per component",
+      "Parses four ecosystems from lockfiles/manifests: Python (requirements/poetry.lock/Pipfile.lock), Node (package-lock v1-v3, yarn.lock), Maven (pom.xml, gradle.lockfile), and Go (go.mod/go.sum)",
+      "Correlates components with known vulnerabilities via OSV.dev by purl, attaching CVSS score, severity, and fixed-in version; network errors fail safe with no false positives",
+      "Tracks dependency drift against a baseline snapshot (added/removed/upgraded/downgraded) and can report only newly-introduced vulnerabilities via audit --baseline",
+      "Enforces YAML policy for allowed/denied SPDX licenses, banned packages, and a max vulnerability-severity gate; error-level violations fail the build",
+      "Produces combined JSON/CSV/self-contained HTML reports rolling up SBOM, vulns, policy, and GRC compliance mapping",
+      "Ships CI gates via .pre-commit-hooks.yaml (sbom-audit, sbom-policy) and a GitHub Actions workflow with a Python 3.10-3.12 matrix",
+      "Minimal stdlib-first dependencies (click, rich, structlog, pyyaml); 55 pytest tests, all vulnerability tests run offline with an injected HTTP layer"
+    ]
+  },
+  {
+    id: "secrets-scanner",
+    name: "Secrets Scanner",
+    tagline: "Detects hardcoded credentials across source, config, and git history with 28 YAML rules, redacted reporting, baseline triage, and opt-in live verification.",
+    category: "appsec",
+    tags: ["secrets-detection", "credential-scanning", "git-history-scan", "entropy-analysis", "ci-security-gate", "compliance-mapping", "pre-commit", "python"],
+    stats: { "Detectors": "28", "Tests": "51", "Live Verifiers": "6", "CLI Commands": "4" },
+    version: "0.1.0",
+    language: "Python",
+    github: "https://github.com/Krishcalin/Secrets-Scanner",
+    overview: "reports/secrets-overview.html",
+    status: "public",
+    icon: "code",
+    highlights: [
+      "28 signature detection rules spanning cloud (AWS/Azure/GCP), VCS/CI (GitHub/GitLab), AI/LLM (OpenAI/Anthropic), SaaS, package registries, and generic secrets — all defined as YAML data, not code",
+      "Redacted by design: findings carry a masked preview (AKIA...8N) plus a stable fingerprint, so the raw secret never lands in a log, baseline, or report",
+      "Git-history scanning walks every commit on every ref to catch leaked-then-removed secrets, attributing each to the introducing commit, author, and date",
+      "Opt-in live verification makes one read-only call per unique secret to 6 providers (GitHub, GitLab, OpenAI, Anthropic, Stripe, SendGrid), reporting VALID / INVALID / UNVERIFIED / SKIPPED",
+      "Three-layer noise control: default allowlist for doc samples/placeholders, baseline suppression with incremental --update, and inline # pragma: allowlist secret",
+      "CI fail-gate (--fail-on / --fail-on-valid), a pre-commit hook, and JSON/CSV/HTML reports with CWE/OWASP/PCI-DSS/NIST compliance roll-up",
+      "51 pytest tests run on a GitHub Actions matrix (Python 3.10-3.12) with a dogfooded self-scan gate over a committed baseline"
+    ]
+  },
+  {
+    id: "active-directory-security-assessment",
+    name: "Active Directory Security Assessment",
+    tagline: "Read-only LDAP/LDAPS and optional WinRM scanner for Microsoft AD: 86 defensive checks across 15 categories with posture scoring and PowerShell remediation.",
+    category: "infra",
+    tags: ["active-directory", "ldap", "kerberos", "ad-cs", "python", "defensive", "posture-scoring", "winrm"],
+    stats: { "Checks": "86", "Categories": "15", "Unit Tests": "28" },
+    version: "1.0.0",
+    language: "Python",
+    github: "https://github.com/Krishcalin/Active-Directory-Security-Assessment",
+    overview: "reports/ad-assess-overview.html",
+    status: "public",
+    icon: "shield",
+    highlights: [
+      "86 distinct security checks across 15 modules covering Kerberos attacks, AD CS abuse, privileged accounts, password policy, trusts, authentication, and lateral movement (verified via distinct finding IDs in checks/).",
+      "Read-only by design: LDAP/LDAPS search plus WinRM Get-* cmdlets only, never modifying AD objects, enforced by the development guidelines in CLAUDE.md.",
+      "Dual data sources: LDAP/LDAPS (389/636) for AD objects and optional WinRM (5985/5986) for registry and audit checks, gracefully skipped when unavailable.",
+      "Posture scoring from 0-100 with an A-F letter grade using 100 - (CRIT*15 + HIGH*5 + MED*2 + LOW*0.5), implemented in utils/severity.py.",
+      "Self-contained dark-theme HTML report with severity filters and search, plus a machine-readable JSON export (utils/report_generator.py).",
+      "Every finding carries a PowerShell remediation command shown for display only and never executed (99 findings.append entries include remediation_cmd).",
+      "AD CS certificate-abuse coverage for ESC1, ESC2, ESC6, and ESC8 template/CA misconfigurations (checks/certificate_services.py).",
+      "CI/CD-friendly exit codes (0 clean, 1 HIGH, 2 CRITICAL) with 28 offline unit tests using mock LDAP responses, requiring no live AD."
+    ]
+  },
+  {
+    id: "alpha-ai",
+    name: "Alpha-AI",
+    tagline: "Agentic AI red-team framework exposing 9 pentest tools to LLM agents over MCP + REST, gated by a target-authorization whitelist. Early-stage MVP (v0.1.0).",
+    category: "redteam",
+    tags: ["agentic-ai", "mcp", "red-team", "pentest", "offensive-security", "fastapi", "llm-tools", "kali"],
+    stats: { "Security Tools": "9", "Unit Tests": "24", "Maturity": "Alpha" },
+    version: "0.1.0",
+    language: "Python",
+    github: "https://github.com/Krishcalin/Alpha-AI",
+    overview: "reports/alpha-ai-overview.html",
+    status: "public",
+    icon: "target",
+    highlights: [
+      "Dual agent surface: a FastMCP stdio server (10 @mcp.tool shims) and a FastAPI REST API (9 /tools routes) share one tool registry, so each tool is written once and exposed to LLM agents both ways.",
+      "Target-authorization guardrail runs before any remote tool: TargetAuthorizer allows only whitelisted hosts (literal, CIDR, or glob) and raises UnauthorizedTargetError, which the REST API maps to HTTP 403.",
+      "9 security tools wrapped across recon/web/network/cred/exploit: nmap, nuclei, gobuster, ffuf, sqlmap, enum4linux, crackmapexec, hydra, and searchsploit.",
+      "Pure, side-effect-free parsers normalize each tool's stdout/XML/JSON into typed Finding objects carrying severity, evidence, references, and CVE lists.",
+      "Result cache keyed on sha256(tool, target, args) avoids re-running expensive scans; use_cache=False forces re-execution, and every invocation is logged via structlog.",
+      "Ships as a Kali Linux container (Dockerfile) with all binaries preinstalled; searchsploit is the only local-only tool that opts out of authorization.",
+      "Honest early-stage maturity: 4 commits, 24 unit tests (parsers/auth/registry/dispatcher), no CI yet, authorized-use-only MVP scope."
+    ]
   }
 ];
 
