@@ -52,5 +52,20 @@
     "controls": [
       "easm-scanner-riskscoring.png"
     ]
+  },
+  "sap-abap-scanner": {
+    "hero": [
+      "sap-abap-scanner-dualmode.png"
+    ],
+    "features": [
+      "sap-abap-scanner-modules.png"
+    ],
+    "controls": [
+      "sap-abap-scanner-checks.png"
+    ],
+    "architecture": [
+      "sap-abap-scanner-architecture.png",
+      "sap-abap-scanner-pipeline.png"
+    ]
   }
 }
