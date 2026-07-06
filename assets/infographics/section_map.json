@@ -67,5 +67,20 @@
       "sap-abap-scanner-architecture.png",
       "sap-abap-scanner-pipeline.png"
     ]
+  },
+  "windows-red-teaming": {
+    "hero": [
+      "windows-red-teaming-hero.png"
+    ],
+    "features": [
+      "windows-red-teaming-capabilities.png"
+    ],
+    "controls": [
+      "windows-red-teaming-reference.png"
+    ],
+    "architecture": [
+      "windows-red-teaming-architecture.png",
+      "windows-red-teaming-pipeline.png"
+    ]
   }
 }
