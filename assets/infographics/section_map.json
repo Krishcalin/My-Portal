@@ -1,0 +1,14 @@
+{
+  "logocean-siem": {
+    "hero": [
+      "logocean-siem-graph.png"
+    ],
+    "overview": [
+      "logocean-siem-terminal.png"
+    ],
+    "architecture": [
+      "logocean-siem-stack.png",
+      "logocean-siem-pipeline.png"
+    ]
+  }
+}
