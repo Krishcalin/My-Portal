@@ -97,5 +97,20 @@
       "sbom-security-architecture.png",
       "sbom-security-pipeline.png"
     ]
+  },
+  "autonomous-pentest": {
+    "hero": [
+      "autonomous-pentest-hero.png"
+    ],
+    "features": [
+      "autonomous-pentest-capabilities.png"
+    ],
+    "controls": [
+      "autonomous-pentest-reference.png"
+    ],
+    "architecture": [
+      "autonomous-pentest-architecture.png",
+      "autonomous-pentest-pipeline.png"
+    ]
   }
 }
