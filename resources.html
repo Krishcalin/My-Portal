@@ -18,6 +18,10 @@
   .rcard p{font-size:var(--step--1);color:var(--text-secondary);line-height:1.65}
   .rcard__go{margin-top:14px;font-size:var(--step--1);font-weight:700;color:var(--accent-cyan)}
   .rtag{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:3px 10px;border-radius:20px;background:var(--gradient-soft);color:var(--accent-cyan);margin-bottom:12px}
+  a.article-card{text-decoration:none;color:inherit;position:relative}
+  a.article-card:hover{color:inherit;border-color:var(--border-strong);transform:translateY(-3px);box-shadow:var(--shadow-md)}
+  a.article-card h3{color:var(--text)}
+  a.article-card::after{content:"Read →";display:block;margin-top:14px;font-size:var(--step--1);font-weight:700;color:var(--accent-cyan)}
 </style>
 </head>
 <body>
@@ -101,7 +105,7 @@
 <section class="section" style="background:var(--bg-subtle);border-block:1px solid var(--border)"><div class="container-wide">
   <div class="section-head"><span class="eyebrow">Thought Leadership</span><h2>Research &amp; <span class="gradient-text">Writing</span></h2><p>Published technical research and strategic analysis — red teaming, threat intelligence, AI in security, and enterprise defense.</p></div>
   <div class="feature-grid">
-    <article class="card article-card"><span class="pill pill--accent">Research</span><h3>OT Vulnerability Management: A Risk-Based Approach</h3><p>A framework for prioritizing remediation in operational-technology environments where patching is constrained by uptime and safety.</p></article>
+    <a class="card article-card" href="articles/ot-vulnerability-management.html"><span class="pill pill--accent">Research</span><h3>OT Vulnerability Management: A Risk-Based Approach</h3><p>A framework for prioritizing remediation in operational-technology environments where patching is constrained by uptime and safety.</p></a>
     <article class="card article-card"><span class="pill pill--accent">Case Study</span><h3>Live Red Teaming Assignment: Real-World Engagement</h3><p>Documented methodology and findings from a production red-team engagement — attack chain from initial access through lateral movement to domain dominance.</p></article>
     <article class="card article-card"><span class="pill pill--accent">Threat Intel</span><h3>Cobalt Strike &amp; BlackSuit Ransomware: Technical Analysis</h3><p>Deep-dive into a ransomware operation: C2 infrastructure, initial-access vectors, and defensive detection strategies for SOC teams.</p></article>
     <article class="card article-card"><span class="pill pill--accent">AI + Security</span><h3>Agentic AI-Based Red Teaming: Pentest Copilot</h3><p>How agentic AI systems can augment penetration testing — automating reconnaissance, vulnerability discovery, and exploit-chain construction.</p></article>
