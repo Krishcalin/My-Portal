@@ -10,5 +10,19 @@
       "logocean-siem-stack.png",
       "logocean-siem-pipeline.png"
     ]
+  },
+  "sap-s4hana-scanner": {
+    "hero": [
+      "sap-s4hana-scanner-dashboard.png"
+    ],
+    "architecture": [
+      "sap-s4hana-scanner-pipeline.png"
+    ],
+    "features": [
+      "sap-s4hana-scanner-modules.png"
+    ],
+    "compliance": [
+      "sap-s4hana-scanner-standards.png"
+    ]
   }
 }
