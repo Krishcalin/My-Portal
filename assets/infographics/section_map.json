@@ -112,5 +112,20 @@
       "autonomous-pentest-architecture.png",
       "autonomous-pentest-pipeline.png"
     ]
+  },
+  "ai-runtime-guardrail": {
+    "hero": [
+      "ai-runtime-guardrail-hero.png"
+    ],
+    "features": [
+      "ai-runtime-guardrail-capabilities.png"
+    ],
+    "controls": [
+      "ai-runtime-guardrail-reference.png"
+    ],
+    "architecture": [
+      "ai-runtime-guardrail-architecture.png",
+      "ai-runtime-guardrail-pipeline.png"
+    ]
   }
 }
