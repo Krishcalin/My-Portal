@@ -76,6 +76,8 @@ def nav_html(prefix=".."):
     <a href="{prefix}/strategy.html">Strategy</a>
     <a href="{prefix}/risk-quantification.html">Risk</a>
     <a href="{prefix}/about.html">Founder Bio</a>
+    <a href="{prefix}/resources.html">Resources</a>
+    <a href="{prefix}/about.html#contact">Contact Me</a>
   </div>
   <div class="nav__actions">
     <button class="theme-toggle" onclick="pcxToggle()" aria-label="Toggle theme">{tsun}{tmoon}</button>
