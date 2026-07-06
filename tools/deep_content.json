@@ -2,9 +2,8 @@
  "app-security-scanner": {
   "id": "app-security-scanner",
   "summary": [
-   "Static Application Security Testing (SAST) is a toolkit of self-contained, zero-dependency Python scanners that hunt source-code vulnerabilities across five language ecosystems - Java, PHP, Python, MERN/Node.js, and AI/LLM applications - plus a live Microsoft 365 + Entra ID posture scanner. Every scanner is a single .py file that runs on stock Python 3.8+ with no pip install, no agents, and no cloud back-end, so a security engineer can drop one file onto a build box or into a CI job and start scanning immediately.",
+   "Static Application Security Testing (SAST) is a toolkit of self-contained, zero-dependency Python scanners that hunt source-code vulnerabilities across five language ecosystems - Java, PHP, Python, MERN/Node.js, and AI/LLM applications. Every scanner is a single .py file that runs on stock Python 3.8+ with no pip install, no agents, and no cloud back-end, so a security engineer can drop one file onto a build box or into a CI job and start scanning immediately.",
    "Under the hood the toolkit ships roughly 257 regex-driven detection rules and 97 dependency-CVE signatures, all tagged with CWE identifiers and paired with concrete remediation advice. It goes beyond classic injection and crypto checks: the Java scanner unpacks WAR/JAR/EAR archives and flags Log4Shell, Spring4Shell, Struts and Shiro-550; the Python and MERN scanners cover framework misconfigurations and secrets; and a dedicated OWASP LLM Top 10 (2025) scanner catches modern AI failure modes like prompt injection, excessive agency (ShellTool / PythonREPLTool), unsafe LLM-output handling, and unbounded token consumption.",
-   "Rounding out the toolkit, the Microsoft 365 + Entra ID SSPM scanner makes live Microsoft Graph API calls under an OAuth2 client-credentials flow to audit 50 real configuration checks - Security Defaults, Conditional Access, MFA, PIM/privileged access, app-registration hygiene, guest access, Exchange/SharePoint/Teams, and Identity Protection - producing the same console/JSON output as the SAST scanners plus a self-contained HTML report.",
    "It is built for AppSec engineers, DevSecOps teams, and consultants who want a fast, auditable, dependency-free way to gate merges (exit code 1 on any CRITICAL/HIGH finding) and to bring both traditional and AI-era code under one consistent scanning model."
   ],
   "features": [
@@ -21,10 +20,6 @@
     "description": "Parses pom.xml, build.gradle, package.json, requirements.txt, Pipfile, and pyproject.toml against 97 version-ranged CVE signatures including Log4Shell, Spring4Shell, Struts and Shiro-550."
    },
    {
-    "title": "Microsoft 365 + Entra ID SSPM",
-    "description": "Makes live Microsoft Graph API calls to evaluate 50 real tenant checks across MFA, Conditional Access, privileged access, guest sharing, and Exchange/SharePoint/Teams posture."
-   },
-   {
     "title": "AI / agentic-specific Python detections",
     "description": "Flags LangChain allow_dangerous_deserialization, ShellTool/PythonREPLTool, LLM output piped to eval/exec, and leaked sk- / cloud API keys that generic scanners miss."
    },
@@ -34,7 +29,7 @@
    },
    {
     "title": "Zero-dependency single-file design",
-    "description": "Each SAST scanner is one standalone Python file using only the standard library, so it drops into any build box, container, or air-gapped host with no install step."
+    "description": "Each scanner is one standalone Python file using only the standard library, so it drops into any build box, container, or air-gapped host with no install step."
    },
    {
     "title": "CI/CD exit-code gating",
@@ -42,11 +37,11 @@
    },
    {
     "title": "CWE-tagged findings with remediation",
-    "description": "Every finding carries a CWE ID (53 distinct weaknesses covered), file/line reference, and specific fix guidance citing NIST SP 800-131A/800-63B where relevant."
+    "description": "Every finding carries a CWE ID (53 distinct weaknesses covered), file/line reference, and specific fix guidance citing NIST SP 800-131A for cryptographic weaknesses where relevant."
    },
    {
-    "title": "Multi-format reporting",
-    "description": "Colour-coded ANSI console output, machine-readable JSON for pipelines, and self-contained dark-themed HTML reports (SSPM) with filterable severity tables."
+    "title": "Console + JSON reporting",
+    "description": "Colour-coded ANSI severity console output plus machine-readable JSON (rule_id, name, category, severity, file, line, description, recommendation, cwe, cve) for pipeline consumption."
    },
    {
     "title": "Config & secret misconfiguration checks",
@@ -57,7 +52,7 @@
     "description": "A shared --severity flag on every scanner shows only findings at or above CRITICAL/HIGH/MEDIUM/LOW/INFO for triage-friendly output."
    }
   ],
-  "architecture_summary": "Each scanner is a self-contained single Python file that follows one identical pipeline: module-level rule dictionaries feed a path walker and file dispatcher, which routes each file to a per-line regex SAST scan and a manifest version-range CVE analyzer; matches become Finding objects (memory-efficient via __slots__) that pass through a severity filter into console/JSON/HTML reporting with exit-code gating. The Microsoft 365 SSPM scanner reuses the same Finding/report layers but swaps the file-walker front-end for a live Microsoft Graph API collector authenticated with OAuth2 client credentials.",
+  "architecture_summary": "Each scanner is a self-contained single Python file that follows one identical pipeline: module-level rule dictionaries feed a path walker and file dispatcher, which routes each file to a per-line regex SAST scan and a manifest version-range CVE analyzer; matches become Finding objects that pass through a severity filter into console and JSON reporting with exit-code gating.",
   "architecture_layers": [
    {
     "name": "Rule engine (module-level dicts)",
@@ -69,7 +64,7 @@
    },
    {
     "name": "SAST regex scanner",
-    "description": "_sast_scan iterates every line against the applicable rule list, emitting a Finding on each regex match with the offending line captured."
+    "description": "Per-language _scan_*_source functions (with _sast_scan in the LLM scanner) iterate every line against the applicable rule list, emitting a Finding on each regex match with the offending line captured."
    },
    {
     "name": "Dependency / version analyzer",
@@ -77,15 +72,11 @@
    },
    {
     "name": "Finding model",
-    "description": "A __slots__-based Finding class carries rule_id, name, category, severity, file, line, description, recommendation, cwe and cve for every detection."
+    "description": "A Finding class carries rule_id, name, category, severity, file, line, description, recommendation, cwe and cve for every detection."
    },
    {
     "name": "Reporting & gating layer",
-    "description": "print_report (ANSI severity colours), save_json (schema with metadata, findings array, summary counts), save_html (Catppuccin Mocha dark theme, SSPM), plus filter_severity and 0/1 exit codes."
-   },
-   {
-    "name": "M365 Graph API collector",
-    "description": "The SSPM scanner authenticates via OAuth2 client credentials and queries Microsoft Graph endpoints, evaluating live tenant configuration against 50 posture checks in 12 categories."
+    "description": "print_report (ANSI severity colours), save_json (schema with metadata, findings array, summary counts), plus filter_severity and 0/1 exit codes."
    }
   ],
   "project_structure": [
@@ -110,12 +101,8 @@
     "description": "OWASP LLM Top 10 (2025) scanner: 69 rules across Python/JS/env/YAML plus 27 vulnerable LLM package CVEs."
    },
    {
-    "path": "m365_scanner.py",
-    "description": "Microsoft 365 + Entra ID SSPM scanner (~2,258 lines): 50 live Graph API posture checks with HTML report support."
-   },
-   {
     "path": "tests/samples/",
-    "description": "Eleven intentionally-vulnerable fixtures (VulnerableApp.java, vulnerable.php, vulnerable_agent.py, vulnerable_mern.js, pom.xml, php.ini, .env, etc.) that exercise the scanner rules."
+    "description": "Eleven intentionally-vulnerable fixtures (VulnerableApp.java, vulnerable.php, vulnerable_agent.py, vulnerable_mern.js, pom.xml, php.ini, .env, application.properties, gap_services_bad.yaml, etc.) that exercise the scanner rules."
    },
    {
     "path": "README.md",
@@ -131,7 +118,7 @@
    },
    {
     "path": "LICENSE",
-    "description": "MIT license."
+    "description": "GNU General Public License v3 text (the LICENSE file is GPLv3, although the README labels the project MIT)."
    },
    {
     "path": ".gitignore",
@@ -173,11 +160,7 @@
    },
    {
     "area": "JWT & authentication weaknesses",
-    "detail": "Weak/hardcoded JWT secrets and algorithms:['none'] bypass in Node apps, plus M365 MFA and password-policy checks aligned to NIST SP 800-63B."
-   },
-   {
-    "area": "M365 / Entra ID posture",
-    "detail": "50 live checks across Security Defaults, Conditional Access (MFA, legacy auth, risky sign-in), privileged access (Global Admin count, PIM, break-glass), app-registration secret/cert hygiene, guest/external sharing, and Exchange/SharePoint/Teams/audit/Identity-Protection settings."
+    "detail": "Weak/hardcoded JWT secrets and algorithms:['none'] bypass in Node/MERN apps, plus broken-authentication and insecure-session patterns flagged across the language scanners."
    }
   ],
   "tech_stack": [
@@ -187,19 +170,15 @@
    },
    {
     "label": "Dependencies",
-    "value": "Standard library only for SAST scanners; requests for the M365 SSPM scanner"
+    "value": "Standard library only - no third-party packages required"
    },
    {
     "label": "Core libraries",
     "value": "re, xml.etree.ElementTree, zipfile (WAR/JAR/EAR), json, argparse, pathlib"
    },
    {
-    "label": "Cloud API",
-    "value": "Microsoft Graph API via OAuth2 client-credentials flow"
-   },
-   {
     "label": "Reporting",
-    "value": "ANSI colour console, JSON, self-contained HTML (Catppuccin Mocha dark theme)"
+    "value": "ANSI colour console output and machine-readable JSON"
    },
    {
     "label": "Testing",
@@ -219,7 +198,6 @@
    "python3 python_scanner.py requirements.txt --verbose",
    "python3 mern_scanner.py /path/to/mern-app --json report.json",
    "python3 owasp_llm_scanner.py /path/to/ai-project --severity HIGH",
-   "pip install requests && python3 m365_scanner.py --tenant-id <id> --client-id <id> --client-secret <secret> --html report.html",
    "python3 php_scanner.py tests/samples/   # run against the intentionally-vulnerable fixtures"
   ],
   "compliance": [
@@ -237,23 +215,13 @@
    },
    {
     "name": "NIST SP 800-131A",
-    "desc": "Weak-cryptography findings reference approved algorithm-strength guidance."
-   },
-   {
-    "name": "NIST SP 800-63B",
-    "desc": "Authentication and password/MFA recommendations for Python/MERN and M365 checks."
-   },
-   {
-    "name": "Microsoft 365 / Entra ID baseline",
-    "desc": "Security Defaults, Conditional Access, MFA, and privileged-access checks aligned to Microsoft identity best practices."
+    "desc": "Weak-cryptography findings reference approved algorithm-strength guidance (present in the Java and Python scanners)."
    }
   ],
   "integrations": [
    "JSON report export (schema with scanner metadata, findings array, and summary counts) for pipeline consumption",
-   "Self-contained HTML reports (SSPM, Catppuccin Mocha dark theme) with filterable severity tables",
    "ANSI colour console output for interactive use",
    "CI/CD exit-code gating (0 clean, 1 on CRITICAL/HIGH)",
-   "Microsoft Graph API (OAuth2 client credentials) for live M365/Entra posture",
    "Manifest parsing across Maven (pom.xml), Gradle, npm (package.json), and PyPI (requirements.txt/Pipfile/pyproject.toml)"
   ],
   "stats": [
@@ -267,11 +235,11 @@
    },
    {
     "label": "Single-file scanners",
-    "value": "6"
+    "value": "5"
    },
    {
-    "label": "M365 / Entra checks",
-    "value": "50"
+    "label": "Language ecosystems",
+    "value": "5"
    },
    {
     "label": "Distinct CWEs covered",
@@ -279,12 +247,11 @@
    }
   ],
   "evidence": [
-   "Scanner inventory and per-language vulnerability/CVE tables read directly from README.md and CLAUDE.md; line counts confirmed with wc -l (java 3,752 / php 917 / python 1,363 / mern 1,302 / owasp_llm 1,998; m365 2,258 in the repo tree).",
-   "Rule counts computed by counting '\"id\":' entries within each rule list's line boundaries via a Python script: Java 30 SAST + 8 Spring, PHP 36 + 11 php.ini, Python 56, MERN 39 + 8 .env, LLM 45 py + 16 js + 4 env + 4 yaml = 257 total SAST rules (tagline '200+').",
-   "Dependency-CVE signatures counted via '\"cve\":' fields per package dict: Java VULNERABLE_DEPENDENCIES 19, PYTHON_VULNERABLE_PACKAGES 26, NODE_PACKAGE_CVES 25, LLM 23 + npm 4 = 97 (tagline '80+').",
-   "M365 scanner: 50 distinct M365-<CAT>-NNN check IDs across 12 category prefixes (SEC/CA/MFA/PRIV/PWD/APP/GUEST/EXO/SPO/TEAMS/AUDIT/IDP) via grep sort -u.",
-   "OWASP LLM01 through LLM10 all present in owasp_llm_scanner.py; 53 distinct CWE-#### identifiers found across the five SAST scanners.",
-   "Framework references grounded by grep: OWASP LLM Top 10 (explicit), NIST SP 800-131A and 800-63B (in remediation text), and CWE (395 mentions). Note: java_scanner.py is a combined engine that also embeds PHP/Python/MERN rule sets; m365_scanner.py is fully documented in README/CLAUDE.md and present in the repo directory tree (with a compiled .pyc in __pycache__), while the git-tracked top level currently ships the five SAST scanners."
+   "Line counts confirmed with wc -l on the git-tracked HEAD (commit ce2698e): java 3,752 / php 917 / python 1,363 / mern 1,302 / owasp_llm 1,998. m365_scanner.py was removed from the repo at HEAD ('Remove m365_scanner and add 22 new SAST rules'); it survives only in a stale nested checkout of the parent commit, so all Microsoft 365 / Entra ID SSPM claims were dropped from this content.",
+   "Rule counts recomputed by counting \"id\": entries per rule-list block: Java 30 SAST + 8 Spring, PHP 36 + 11 php.ini, Python 56, MERN 39 + 8 .env, LLM 45 py + 16 js + 4 env + 4 yaml = 257 total SAST detection rules. java_scanner.py is a combined engine that embeds the PHP/Python/MERN rule sets, so counts were taken from the standalone scanners to avoid double-counting.",
+   "Dependency-CVE signatures counted via \"cve\": fields per package dict: Java VULNERABLE_DEPENDENCIES 19, PYTHON_VULNERABLE_PACKAGES 26, NODE_PACKAGE_CVES 25, LLM_VULNERABLE_PACKAGES 23, LLM_NPM 4 = 97.",
+   "53 distinct CWE-#### identifiers found across the five SAST scanners (grep -o | sort -u). NIST SP 800-131A appears in java/python remediation text; NIST SP 800-63B is NOT present in any tracked file (it lived only in the removed m365 scanner), so that framework and the M365 baseline were dropped.",
+   "No __slots__, no save_html/HTML output, and no real 'import requests' exist in the tracked scanners: the Finding class uses a plain __init__, reporting is console + JSON only, and everything runs on the standard library. The LICENSE file is GNU GPL v3 despite the README labelling the project MIT."
   ]
  },
  "dast-scanner": {
@@ -538,12 +505,12 @@
    }
   ],
   "evidence": [
-   "Rule count grounded by `grep -oE 'DAST-[A-Z]+-[0-9]+' dast_scanner.py | sort -u | wc -l` = 109 distinct rule IDs, matching the README's '109 Rules' heading; per-category distinct counts sum to 109 across 23 categories.",
-   "Check-module count from the CHECK_MODULES list at dast_scanner.py:3171-3194 = 22 registered generator modules (LDAP & XPath combined into one), run via ThreadPoolExecutor(max_workers=4) at line 3280.",
-   "WAF vendor count = 8, confirmed from the WAF signature dict at dast_scanner.py:397-404 (Cloudflare, AWS WAF, Imperva, Akamai, ModSecurity, F5 BIG-IP, Sucuri, Barracuda).",
+   "Rule count grounded by `grep -oE 'DAST-[A-Z]+-[0-9]+' dast_scanner.py | sort -u | wc -l` = 109 distinct rule IDs, matching the README's '109 Rules' heading; per-category distinct counts sum to 109 across 23 rule-ID prefixes.",
+   "Check-module count from the CHECK_MODULES list in dast_scanner.py (SCANNER ORCHESTRATOR section) = 22 registered generator modules (LDAP & XPath combined into one), run via ThreadPoolExecutor(max_workers=4) at line 3280.",
+   "WAF vendor count = 8, confirmed from the WAF_SIGNATURES dict at dast_scanner.py:397 (Cloudflare, AWS WAF, Imperva, Akamai, ModSecurity, F5 BIG-IP, Sucuri, Barracuda).",
    "CWE count from `grep -oE 'CWE-[0-9]+' dast_scanner.py | sort -u | wc -l` = 47 distinct CWE IDs.",
-   "Single-dependency / stdlib claim verified from the import block (dast_scanner.py:15-32): only `requests` is third-party; version __version__ = '1.3.0' at line 36; file length 3,653 lines via wc -l (README's ~2,200 estimate is stale).",
-   "The task tagline's '58 checks' is stale; both the source and README establish the true current count as 109. No .github/workflows directory exists in the repo, so CI is documented-by-example (README) rather than shipped as a workflow file."
+   "Single-dependency / stdlib claim verified from the import block: only `requests` (plus its own urllib3) is third-party; __version__ = '1.3.0' at line 36; file length 3,653 lines via wc -l (README's ~2,200 estimate at line 523 is stale).",
+   "OWASP mapping = 9 of 10 categories confirmed by `grep -oE 'A[0-9]{2}:2021' | sort -u` = A01-A08, A10; five authentication modes confirmed at argparse choices=['none','bearer','cookie','basic','form']; CRITICAL/HIGH exit gate at line 3649 `return 1 if s['CRITICAL'] + s['HIGH'] > 0 else 0`. No .github/workflows directory exists, so CI is documented-by-example (README) rather than shipped as a workflow file."
   ]
  },
  "api-security-scanner": {
@@ -821,12 +788,12 @@
   ],
   "evidence": [
    "Rule count: `grep -cE '\"id\"\\s*:' api_security_scanner.py` = 112, and distinct id values also = 112; per-prefix counts (API1=6, API2=10, API8=10, etc.) sum to 112 across 22 *_RULES lists.",
-   "Category count: 22 module-level *_RULES lists confirmed via `grep -nE '^[A-Za-z_]+ *: *list' api_security_scanner.py` (BOLA through PROTO), matching the README's 22-row rule table.",
-   "Severity distribution of rules: `grep -oE '\"severity\":\"[A-Z]+\"'` yields 26 CRITICAL, 50 HIGH, 31 MEDIUM, 5 LOW = 112.",
+   "Category count: 22 module-level *_RULES lists confirmed via `grep -nE '^[A-Za-z_]+_RULES' api_security_scanner.py` (BOLA through PROTO), matching the README's 22-row rule table.",
+   "Severity distribution of rules: `grep -oE '\"severity\":\\s*\"[A-Z]+\"'` yields 26 CRITICAL, 50 HIGH, 31 MEDIUM, 5 LOW = 112.",
    "CWE coverage: `grep -oE 'CWE-[0-9]+' | sort -u | wc -l` = 47 distinct CWE identifiers.",
-   "Runtime verification: `python api_security_scanner.py tests/samples/` scans 9 files and reports 248 findings, and prints the discovered API inventory — confirming the engine, dispatcher, and inventory detection all work.",
-   "Zero-dependency claim verified by reading the import block — only Python stdlib modules (re, os, argparse, json, datetime, dataclasses, pathlib, hashlib, textwrap, typing); file is ~1,163 lines (`wc -l`).",
-   "Compliance frameworks: COMPLIANCE_MAP defines OWASP-API1..API10 plus PCI-DSS, GDPR, HIPAA, DORA (5 frameworks) — confirmed at lines 31-46.",
+   "Runtime verification: `python api_security_scanner.py tests/samples/` reports 248 findings (CRITICAL 69, HIGH 101, MEDIUM 72, LOW 6) across the 9 vulnerable fixtures, and prints the discovered API inventory — confirming the engine, dispatcher, and inventory detection all work.",
+   "Zero-dependency claim verified by reading the import block — only Python stdlib modules (re, os, argparse, json, datetime, dataclasses, pathlib, hashlib, textwrap, sys, typing); file is 1,163 lines (`wc -l`).",
+   "Compliance frameworks: COMPLIANCE_MAP defines OWASP-API1..API10 plus PCI-DSS, GDPR, HIPAA, DORA (5 frameworks) — confirmed at lines 31-46, and all four non-OWASP frameworks are used as actual rule tags (PCI-DSS 26, GDPR 7, DORA 6, HIPAA 2).",
    "CI status grounded honestly: no committed .github workflows (`ls .github` = none); GitHub Actions/GitLab CI are documented example snippets in README."
   ]
  },
@@ -916,7 +883,7 @@
    },
    {
     "name": "Finding model and reporters",
-    "description": "A __slots__-style Finding object carries rule/severity/file/line/CWE/CVE; summary, filter_severity, print_report (ANSI color) and save_json render results and drive the exit code."
+    "description": "A Finding object carries rule/severity/file/line/CWE/CVE; summary, filter_severity, print_report (ANSI color) and save_json render results and drive the exit code."
    }
   ],
   "project_structure": [
@@ -1067,7 +1034,7 @@
    },
    {
     "name": "GDPR / HIPAA (data protection)",
-    "desc": "The PII-to-LLM rule (LLM02-004) explicitly calls out sending personal data to external LLM APIs as a data-protection regulation risk."
+    "desc": "The PII-to-LLM rule (LLM02-004) explicitly calls out that sending personal data to external LLM APIs may violate GDPR, HIPAA, and other data-protection regulations."
    }
   ],
   "stats": [
@@ -1102,7 +1069,7 @@
   ],
   "evidence": [
    "Rule counts verified by enumerating rule IDs: grep -oE '\"id\": \"[^\"]+\"' owasp_llm_scanner.py yields 69 dict rules (45 Python LLM*-NNN, 16 LLM*-JS, 4 LLM*-ENV, 4 LLM*-YAML), plus one inline rule_id=\"LLM03-REQ-001\" (unpinned-package heuristic) = 70 total; all IDs span LLM01-LLM10.",
-   "CVE database counted from LLM_VULNERABLE_PACKAGES (14 Python packages, 23 CVE entries) and LLM_NPM_VULNERABLE_PACKAGES (3 npm packages, 3 entries); grep -oE 'CVE-[0-9]{4}-[0-9]+' | sort -u = 23 distinct CVEs (npm entries reuse 3 Python CVEs). Note: README/CLAUDE.md still say '36 Python rules / 13 packages / 16 CVEs' — stale versus the current file.",
+   "CVE database counted from LLM_VULNERABLE_PACKAGES (14 Python packages, 23 CVE entries) and LLM_NPM_VULNERABLE_PACKAGES (3 npm packages, 3 entries); grep -oE 'CVE-[0-9]{4}-[0-9]+' | sort -u = 23 distinct CVEs (the 3 npm entries reuse Python CVEs). Note: README/CLAUDE.md still say '36 Python rules' and list 13 Python + 3 npm vulnerable packages — stale versus the current file (45 Python rules, 14 Python + 3 npm packages, 23 distinct CVEs).",
    "File length confirmed at 1,998 lines via wc -l owasp_llm_scanner.py; VERSION = '1.0.0' and it imports only stdlib (re, os, sys, json, argparse, pathlib, datetime).",
    "Functionality confirmed by running 'python owasp_llm_scanner.py tests/samples/', which produced 25 findings (14 CRITICAL, 9 HIGH, 2 MEDIUM) including LLM03 model-loading, LLM02 .env secrets, and DEP-LLM-CVE-2023-32681 for requests==2.28.0.",
    "Category-to-rule mapping and file dispatch (_dispatch_file by suffix; _sast_scan compiled-regex loop; _version_in_range constraint parser) read directly from owasp_llm_scanner.py lines 1491-1817."
@@ -1333,14 +1300,6 @@
     "desc": "Dependency checks map to published CVEs including RECON (CVE-2020-6287), CVE-2022-22536 and CVE-2023-40309/44487/49583."
    }
   ],
-  "integrations": [
-   "SARIF 2.1.0 export to GitHub code scanning (inline PR findings)",
-   "VS Code SARIF Viewer and Azure DevOps dashboards",
-   "SAP BTP XSUAA OAuth 2.0 / SCIM / Destination Service / Audit Log APIs",
-   "GitHub Actions and GitLab CI pipeline gates (exit code 1 on CRITICAL/HIGH)",
-   "JSON and self-contained HTML report artifacts",
-   "Baseline files for onboarding onto existing codebases"
-  ],
   "stats": [
    {
     "label": "Total security checks",
@@ -1389,7 +1348,7 @@
     "description": "Decodes Android compiled binary XML, extracts DEX string pools, and reads Mach-O strings and Info.plist directly — no apktool, jadx, or Xcode required."
    },
    {
-    "title": "130+ SAST rules across 24 modules",
+    "title": "123 SAST rules across 24 modules",
     "description": "Runs 24 dedicated check modules covering manifest, secrets, crypto, network, storage, WebView, components, auth, resilience, code quality, and privacy for each platform."
    },
    {
@@ -1623,10 +1582,10 @@
   "evidence": [
    "README.md and CLAUDE.md describe the tool as a single-file scanner; `wc -l mast_scanner.py` = 2827 lines, `__version__ = \"2.1.0\"`.",
    "Check-module count grounded via `grep -cE '^def check_'` = 25 functions, minus the check_macho_pie helper (returns bool) = 24 SAST check modules, matching CLAUDE.md's module table.",
-   "Distinct SAST rule IDs grounded via `grep -oE '\"MAST-[A-Z-]+-[0-9]+\"' | sort -u | wc -l` = 123 (README/CLAUDE market this as '130+'/'~130' since some rules emit multiple findings).",
-   "Dependency CVE count grounded via `grep -cE '\"cve\":'` = 39 entries across ANDROID_LIB_CVES / IOS_LIB_CVES / NATIVE_LIB_CVES (35 unique CVE identifiers, some reused across version ranges).",
-   "MASVS coverage grounded via `grep -oE 'MASVS-[A-Z]+-[0-9]+' | sort -u | wc -l` = 22 distinct controls, confirming the '22 of 24' claim.",
-   "Output formats confirmed by save_json/save_html/save_sarif/print_report methods; SARIF version confirmed as 2.1.0 via the `$schema` and `version` fields in save_sarif.",
+   "Distinct SAST rule IDs grounded via `grep -oE '\"MAST-[A-Z-]+-[0-9]+\"' | sort -u | wc -l` = 123, which equals the sum of documented per-module rule counts (Android 71 + iOS 37 + common 15); README/CLAUDE market this as '130+'/'~130' but the true distinct-rule count is 123.",
+   "Dependency CVE count grounded via `grep -cE '\"cve\":'` = 39 entries across ANDROID_LIB_CVES / IOS_LIB_CVES / NATIVE_LIB_CVES spanning 29 library keys (14+8+7); 35 unique CVE identifiers, some reused across version ranges.",
+   "MASVS coverage grounded via `grep -oE 'MASVS-[A-Z]+-[0-9]+' | sort -u | wc -l` = 22 distinct controls, confirming the '22 of 24' numerator (the '24' denominator is the repo's own consistent framing across README, CLAUDE.md, and code).",
+   "Output formats confirmed by save_json/save_html/save_sarif/print_report methods; SARIF version confirmed as 2.1.0 via the OASIS `$schema` and `\"version\": \"2.1.0\"` fields in save_sarif.",
    "Zero-dependency claim confirmed by imports being standard-library only (argparse, zipfile, plistlib, xml.etree, struct, re, hashlib, base64); no requirements.txt, no .github/workflows, and no pytest/unittest tests present."
   ]
  },
@@ -1750,7 +1709,7 @@
    },
    {
     "path": "tests/samples/vulnerable_ai_app.py",
-    "description": "Insecure Python AI patterns (pickle, prompt injection, PII, agents, MCP, fine-tuning, multimodal, bias) — expects 70+ findings."
+    "description": "Insecure Python AI patterns (pickle, prompt injection, PII, agents, MCP, fine-tuning, multimodal, bias) — produces 100 findings when scanned."
    },
    {
     "path": "tests/samples/requirements_ai.txt",
@@ -1804,7 +1763,7 @@
    },
    {
     "area": "Supply-Chain CVEs (AISPM-DEP-CVE)",
-    "detail": "33 curated AI/ML CVEs across PyPI and npm — TensorFlow, PyTorch, LangChain, mlflow, Ray (ShadowRay), Ollama (Probllama), ChromaDB, gradio, vllm — matched by version comparison."
+    "detail": "33 curated AI/ML CVEs across PyPI and npm — TensorFlow, PyTorch, LangChain, mlflow, Ray (ShadowRay), Ollama, ChromaDB, gradio, vllm — matched by version comparison."
    },
    {
     "area": "Compliance & Governance (AISPM-DOC + mappings)",
@@ -1814,7 +1773,7 @@
   "tech_stack": [
    {
     "label": "Language",
-    "value": "Python 3.10+ (uses match/type-hint syntax; stdlib only)"
+    "value": "Python 3.10+ (modern type-hint syntax with `from __future__ import annotations`; stdlib only)"
    },
    {
     "label": "Dependencies",
@@ -1905,10 +1864,10 @@
   ],
   "evidence": [
    "Counted 145 pattern rule definitions via grep -c '\"id\": \"AISPM' on ai_spm_scanner.py (23 module-level *_RULES lists enumerated by grep, matching the CLAUDE.md category table).",
-   "Verified 33 AI/ML CVEs: awk over lines 1349-1383 gives 30 PyPI '\"package\":' entries (23 distinct packages) plus 3 npm entries at 1384-1394; grep -oE 'CVE-[0-9]{4}-[0-9]+' | sort -u also yields 33.",
-   "Confirmed 24 compliance controls across 4 frameworks by reading COMPLIANCE_MAP (lines 55-90): 4 NIST AI RMF + 3 EU AI Act + 10 OWASP ML + 7 MITRE ATLAS.",
-   "Confirmed single-file architecture and version: wc -l reports 2229 lines; __version__ = '1.1.0' at line 52; class AISPMScanner (1413), Finding dataclass (1394), and _dispatch_file/_scan_* handlers (1630-1892) verify the pipeline.",
-   "Validated project structure and file-type coverage against git ls-files (11 tracked files) and the README File Types Scanned table; tests/ contains only vulnerable sample fixtures, not an automated pytest suite."
+   "Verified 33 AI/ML CVEs: 33 '\"package\":' entries total (30 PyPI in AI_VULNERABLE_PACKAGES starting line 1349, plus 3 npm in AI_NPM_VULNERABLE_PACKAGES at line 1384); grep -oE 'CVE-[0-9]{4}-[0-9]+' | sort -u also yields 33.",
+   "Confirmed 24 compliance controls across 4 frameworks by reading COMPLIANCE_MAP (lines 57-86): 4 NIST AI RMF + 3 EU AI Act + 10 OWASP ML + 7 MITRE ATLAS.",
+   "Confirmed single-file architecture and version: wc -l reports 2229 lines; __version__ = '1.1.0' at line 52 (CLI --version prints 'AI-SPM Scanner v1.1.0'); Finding dataclass (1394/1395), class AISPMScanner (1413), _check_model_card (1554), and _dispatch_file/_scan_* handlers (1630-1892) verify the pipeline.",
+   "Validated project structure and file-type coverage against git ls-files (15 tracked files) and the README File Types Scanned table; tests/samples/ contains only vulnerable sample fixtures, not an automated pytest suite."
   ]
  },
  "aws-scanner": {
@@ -1981,7 +1940,7 @@
    },
    {
     "name": "CloudFormation structural engine",
-    "description": "A custom _CF_LOADER parses intrinsic tags, then CF_DISPATCH maps 42 AWS:: resource types via getattr to 38 dedicated _cf_* methods that evaluate resource properties."
+    "description": "A custom _CF_LOADER parses intrinsic tags, then CF_DISPATCH maps 42 AWS:: resource types via getattr to 39 dedicated _cf_* methods that evaluate resource properties."
    },
    {
     "name": "Live boto3 audit engine",
@@ -2168,8 +2127,8 @@
   ],
   "evidence": [
    "Terraform rule count: grep -oE 'AWS-[A-Z0-9]+-TF-[0-9]+' aws_offline_scanner.py | sort -u -> 59 unique rule IDs (TF_SAST_RULES list, lines 49-735).",
-   "CloudFormation checks: sed of the CF_DISPATCH block (lines 737-782) shows 42 distinct AWS:: resource-type keys mapping to 38 _cf_* methods (grep -c 'def _cf_' = 38).",
-   "Live check count: grep of self._add(...,\"XX-NN\") calls in aws_live_scanner.py yields 98 distinct check IDs; CHECK_MAP (lines 2653-2682) contains exactly 25 sections.",
+   "CloudFormation checks: CF_DISPATCH block (starts line 737) has 42 distinct AWS:: resource-type keys mapping to 39 dedicated _cf_* check methods; grep -c 'def _cf_' = 40, which includes the _cf_tag_constructor YAML-tag helper (not a resource check).",
+   "Live check count: grep of self._add(...,\"XX-NN\") calls in aws_live_scanner.py yields 98 distinct check IDs; CHECK_MAP (lines 2653-2679) contains exactly 25 sections.",
    "Tests: grep -c 'def test_' tests/test_live_scanner.py = 28, matching README/CLAUDE.md claims.",
    "LOC and versions: wc -l gives 2,473 (offline) and 3,038 (live); VERSION strings are 1.1.0 (offline) and 2.0.0 (live).",
    "CI absence: git ls-files shows no .github/workflows, requirements.txt, or pyproject.toml, so 'no committed CI' is grounded and README's badges (200+ checks) were not adopted verbatim."
@@ -2179,7 +2138,7 @@
   "id": "azure-scanner",
   "summary": [
    "Azure Security Scanner is a pair of read-only Bash audit scripts that interrogate a live Microsoft Azure subscription and grade its security posture against the CIS Microsoft Azure Foundations Benchmark v4.0.0. Instead of shipping a heavyweight agent or requiring API keys, it rides the operator's existing `az login` session, runs entirely with Azure CLI + Python 3, and never mutates a single resource. Every check emits a color-coded PASS / FAIL / WARN / INFO verdict with the exact CIS control reference, so a security engineer can go from `az login` to a prioritized findings list in one command.",
-   "The project ships two tiers. The base script (`azure_security_audit_scripts.sh`) covers 8 sections and ~36 checks spanning IAM, Storage, Networking, Logging, Key Vault, VMs, App Service and Databases. The enhanced script (`azure_security_audit_enhanced.sh`) is a superset: 16 sections and 70+ effective checks that add Microsoft Defender for Cloud plan coverage, Conditional Access / MFA policy inspection via Microsoft Graph, resource locks, NSG flow logs, Azure Bastion, Container Registry, AKS hardening and orphaned-resource hygiene. Sections 1-8 are byte-identical across both scripts so shared logic stays in sync.",
+   "The project ships two tiers. The base script (`azure_security_audit_scripts.sh`) covers 8 sections and ~36 checks spanning IAM, Storage, Networking, Logging, Key Vault, VMs, App Service and Databases. The enhanced script (`azure_security_audit_enhanced.sh`) is broader: 16 sections and 70+ effective checks that add Microsoft Defender for Cloud plan coverage, Conditional Access / MFA policy inspection via Microsoft Graph, resource locks, NSG flow logs, Azure Bastion, Container Registry, AKS hardening and orphaned-resource hygiene. Both scripts implement the same Sections 1-8 core domains, but the two files are NOT byte-identical — the enhanced script is a more compact rewrite and the per-section check sets differ slightly (e.g. the enhanced script adds Database and Logging checks while the base script carries an extra VM check).",
    "Under the hood it's a deliberately simple, dependency-free design: a Bash driver with `log/pass/fail/warn` helper functions and ANSI counters, hybrid Bash-plus-inline-Python (33 `python3` heredocs) for the multi-resource checks, and Entra ID coverage delivered through `az rest` calls to the Microsoft Graph API. Each run creates a timestamped evidence directory holding per-check JSON/CSV artifacts plus an `AUDIT_MANIFEST.txt` catalog — turning an audit into a reproducible, auditor-friendly evidence package.",
    "It's built for cloud security engineers, Azure admins, compliance teams and consultants who need a fast, transparent, offline-inspectable posture check they can read line-by-line before running it against production. Because it's read-only by design, needs only Reader/Global Reader permissions, and hardcodes no secrets, it's safe to drop into a hardening review, a client engagement, or a pre-audit dry run."
   ],
@@ -2190,7 +2149,7 @@
    },
    {
     "title": "Two-tier audit depth",
-    "description": "A base 8-section script for a quick core review and an enhanced 16-section script for comprehensive coverage, sharing identical Sections 1-8."
+    "description": "A base 8-section script for a quick core review and an enhanced 16-section script for comprehensive coverage, both covering the same Sections 1-8 core domains (though the section code is not byte-identical between the two files)."
    },
    {
     "title": "70+ checks across 16 security domains",
@@ -2267,7 +2226,7 @@
    },
    {
     "path": "azure_security_audit_scripts.sh",
-    "description": "Base audit script — 8 sections, ~36 checks, 901 lines; core IAM/Storage/Network/Logging/KeyVault/VM/App/DB coverage (Sections 1-8 identical to enhanced)."
+    "description": "Base audit script — 8 sections, ~36 checks, 901 lines; core IAM/Storage/Network/Logging/KeyVault/VM/App/DB coverage (same Sections 1-8 domains as the enhanced script, but the code is not byte-identical)."
    },
    {
     "path": "README.md",
@@ -2283,7 +2242,7 @@
    },
    {
     "path": "LICENSE",
-    "description": "GPL-3.0 license."
+    "description": "MIT license (Copyright 2026 KRISH)."
    },
    {
     "path": ".gitignore",
@@ -2305,7 +2264,7 @@
    },
    {
     "area": "Logging & Monitoring (LOG-01..04)",
-    "detail": "Activity Log diagnostic settings, Activity Log alerts on 10 critical operations, Key Vault diagnostic logging and resource-level logging (CIS 7.x)."
+    "detail": "Activity Log diagnostic settings, Activity Log alerts on 10 critical operations, Key Vault diagnostic logging and resource-level logging (CIS 7.x). Note: the base script implements only LOG-01..03."
    },
    {
     "area": "Key Vault (KV-01..04)",
@@ -2313,7 +2272,7 @@
    },
    {
     "area": "Compute / VMs (VM-01..03)",
-    "detail": "OS + data disk encryption, public IP exposure on VMs, managed identity usage and installed-extension auditing."
+    "detail": "OS + data disk encryption, public IP exposure on VMs, managed identity usage and installed-extension auditing (the base script also carries an extra VM-04 check)."
    },
    {
     "area": "App Service (APP-01..05)",
@@ -2321,7 +2280,7 @@
    },
    {
     "area": "Database Services (DB-01..09)",
-    "detail": "SQL auditing + TDE + public access + Entra admin; PostgreSQL and MySQL Flexible Server SSL & public-access; Cosmos DB public access and network rules."
+    "detail": "SQL auditing + TDE + public access + Entra admin; PostgreSQL and MySQL Flexible Server SSL & public-access; Cosmos DB public access and network rules. Note: the base script implements only DB-01..04."
    },
    {
     "area": "Microsoft Defender for Cloud (DEF-01..10)",
@@ -2363,7 +2322,7 @@
    },
    {
     "label": "License",
-    "value": "GPL-3.0"
+    "value": "MIT (LICENSE file; note the README badge/tree mislabel it GPL-3.0)"
    }
   ],
   "usage": [
@@ -2419,11 +2378,12 @@
   ],
   "evidence": [
    "README.md read in full — states 70+ checks across 16 sections, CIS Azure Foundations v4.0.0, read-only design, and per-section check tables (lines 21-108).",
-   "`git ls-files` confirms real top-level structure: two audit scripts, README, LICENSE (GPL-3.0), docs/banner.svg, test_data/azure_report.json, .gitignore.",
-   "`wc -l` gives 923 lines (enhanced) and 901 lines (base); grep of `[A-Z]+-[0-9]+:` deduped yields 62 distinct check IDs in enhanced and 36 in base.",
+   "`git ls-files` confirms real top-level structure: two audit scripts, README, LICENSE, docs/banner.svg, test_data/azure_report.json, .gitignore. LICENSE file content is the MIT License (Copyright 2026 KRISH) — the README badge/tree label of GPL-3.0 is incorrect; corrected to MIT.",
+   "`wc -l` gives 923 lines (enhanced) and 901 lines (base); grep of `[A-Z]+-[0-9]+:` deduped yields 62 distinct check IDs in enhanced and 36 in base (74 vs 39 with a colon-agnostic pattern).",
    "Per-prefix unique-ID grep confirms all 16 domain prefixes (IAM, STG, NET, LOG, KV, VM, APP, DB, DEF, CA, LOCK, FLOW, BASTION, ACR, AKS, MISC); `grep -c PYEOF` = 66 markers = 33 Python heredoc blocks.",
    "Section 9 source shows DEF-01..DEF-10 driven by one Defender pricing loop (fan-out beyond the 62 literal IDs), and `az security pricing list` evidence written to defender_pricing.json.",
-   "`grep graph.microsoft.com` = 9 `az rest` Graph API calls; tail of enhanced script confirms evidence writes to OUTPUT_DIR and AUDIT_MANIFEST.txt generation with PASS/FAIL/WARN tally."
+   "`grep graph.microsoft.com` = 9 `az rest` Graph API calls (7 in Section 1, 2 in Section 10); tail of enhanced script confirms evidence writes to OUTPUT_DIR (`azure_audit_${SUB_ID:0:8}_${TIMESTAMP}`) and AUDIT_MANIFEST.txt generation with PASS/FAIL/WARN tally.",
+   "Diff of Sections 1-8 between the two scripts shows 782 differing lines and different check sets (base = DB-01..04 / LOG-01..03 / VM-01..04 vs enhanced = DB-01..09 / LOG-01..04 / VM-01..03), disproving the README's 'Sections 1-8 identical' claim; the enhanced script is a compact rewrite, not a byte-identical copy, and is not a strict superset (base VM-04 is absent from the enhanced Sections 1-8)."
   ]
  },
  "gcp-scanner": {
@@ -2492,7 +2452,7 @@
    },
    {
     "name": "DataLoader (modules/base.py)",
-    "description": "Maps ~32 logical datasets to expected filenames (with alternate-name fallbacks), loads them as UTF-8 JSON, and reports how many config files were found."
+    "description": "Maps 31 logical datasets to expected filenames (with alternate-name fallbacks), loads them as UTF-8 JSON, and reports how many config files were found."
    },
    {
     "name": "BaseAuditor contract",
@@ -2694,12 +2654,14 @@
    }
   ],
   "evidence": [
-   "Counted 67 unique check IDs via `grep -rohE \"'([A-Z]+-[0-9]{3})'\" modules/ | sort -u | wc -l` = 67, matching the README's 67+ badge; IDs span IAM/NET/COMP/STOR/DB/LOG/BQ/CIEM/SA/GKE/FN/CONT/IAC/CIS/KMS.",
+   "Counted 67 unique check IDs via `grep -rohE 'finding\\(\"[A-Z]+-[0-9]+\"' modules/*.py | grep -oE '[A-Z]+-[0-9]+' | sort -u | wc -l` = 67, matching the README's 67+ badge; IDs span IAM(8)/NET(8)/COMP(6)/STOR(5)/DB(5)/LOG(6)/BQ(2)/CIEM(4)/SA(4)/GKE(8)/FN(3)/CONT(2)/IAC(2)/CIS(1)/KMS(3).",
    "Confirmed 15 auditor engines from MODULE_MAP in gcp_scanner.py and 15 non-base `class *Auditor` definitions across modules/cspm_core.py, cspm_ciem.py, cwpp_iac.py.",
    "Ran the scanner: `PYTHONIOENCODING=utf-8 python gcp_scanner.py --data-dir ./sample_data` completed with 'SCAN COMPLETE - 56 finding(s), CRITICAL: 8 | HIGH: 28 | MEDIUM: 16 | LOW: 4'.",
    "Verified zero-dependency claim: modules/base.py and report_generator.py import only stdlib (csv, json, datetime, pathlib, typing, html); README badge dependencies=zero.",
-   "Verified project structure via `git ls-files`: modules/{base,cspm_core,cspm_ciem,cwpp_iac,report_generator}.py, sample_data with 19 JSON/tfstate exports, docs/banner.svg, LICENSE (MIT), CONTRIBUTING.md; no test suite or CI config present (stated honestly).",
-   "Noted README module sub-headers slightly overstate GKE (labeled 9, code has GKE-001..008 = 8) and understate Logging (labeled 5, code has LOG-001..006 = 6); the total of 67 checks is accurate, so reported per-area counts use verified code counts."
+   "Verified project structure via `git ls-files`: modules/{base,cspm_core,cspm_ciem,cwpp_iac,report_generator}.py, sample_data with 19 tracked JSON/tfstate exports + sample_report.html, docs/banner.svg, LICENSE (MIT), CONTRIBUTING.md; no test suite or CI config present (stated honestly).",
+   "All six compliance frameworks are genuinely referenced in the repo: README lines 442-443 (CIS GCP v2.0, CIS GKE) and 454-457 (NIST SP 800-53 Rev 5, NIST CSF 2.0, SOC 2, ISO/IEC 27001:2022), plus docs/banner.svg (NIST 800-53, SOC 2, ISO 27001) - none are invented.",
+   "Corrected DataLoader dataset count: FILE_MAP in modules/base.py has exactly 31 keys (not ~32).",
+   "Noted README module sub-headers slightly overstate GKE (labeled 9, code has GKE-001..008 = 8) and understate Logging (labeled 5, code has LOG-001..006 = 6); the curated JSON already uses the correct code counts (GKE 8, LOG 6), so it is more accurate than the README and the 67-check total holds."
   ]
  },
  "multicloud-scanner": {
@@ -2914,7 +2876,7 @@
    },
    {
     "label": "License",
-    "value": "MIT"
+    "value": "Apache 2.0"
    }
   ],
   "usage": [
@@ -2982,13 +2944,14 @@
    "Bash remediation script export for guided fixes"
   ],
   "evidence": [
-   "Rule counts verified by file count: `ls providers/*/rules/*.json | grep -v ruleset | wc -l` = 98 (AWS 37, Azure 33, GCP 28), matching README's per-provider table.",
+   "Rule counts verified by file count: `git ls-files 'providers/*/rules/*.json' | grep -v ruleset | wc -l` = 98 (AWS 37, Azure 33, GCP 28), matching README's per-provider table.",
    "Severity breakdown from `grep -h '\"severity\"' providers/*/rules/*.json` = 16 CRITICAL, 35 HIGH, 41 MEDIUM, 6 LOW (sums to 98, cross-checking the rule count).",
-   "Service counts from `ls providers/<cloud>/services/*.py` (excluding __init__) = 16 AWS + 12 Azure + 9 GCP = 37 services, matching CLAUDE.md.",
+   "Service counts from `git ls-files 'providers/<cloud>/services/*.py'` (excluding __init__) = 16 AWS + 12 Azure + 9 GCP = 37 services, matching CLAUDE.md.",
    "Operator count from core/conditions.py: _UNARY_OPS (7) + _BINARY_OPS (25) = 32 leaf operators, with _LOGIC_OPS = and/or/not; grounds the '30+ operators' claim.",
    "Remediation templates counted via `grep -oE '\"[A-Z]+-[0-9]+\"\\s*:' output/remediation.py | wc -l` = 56.",
-   "Compliance frameworks enumerated by grepping rule JSON: CIS (37/33/28), PCI-DSS (35), NIST CSF (18), HIPAA (7), AWS Well-Architected (4), DORA (3), SOC 2 (2); ISO 27001 exists in core/compliance.py's canonical map but no rule currently references it, so it was excluded from stats.",
-   "LOC from `git ls-files '*.py' | xargs wc -l` = 10,017 total. No test suite is present (pytest is commented out in requirements.txt), so no test counts are claimed."
+   "Compliance frameworks enumerated by grepping rule JSON: CIS (all 98), PCI-DSS (35), NIST CSF (18), HIPAA (7), AWS Well-Architected (4), DORA (3), SOC 2 (2); ISO 27001 exists in core/compliance.py's canonical map but no rule currently references it, so it was excluded from stats.",
+   "LOC from `git ls-files '*.py' | xargs wc -l` = 10,017 total. No test suite is present (pytest is commented out in requirements.txt), so no test counts are claimed.",
+   "License corrected to Apache 2.0: the repo's LICENSE file is the Apache License 2.0 (`head -2 LICENSE`), even though the README badge/section say 'MIT' — the operative LICENSE file governs, so the curated 'MIT' value was fixed."
   ]
  },
  "cdr-scanner": {
@@ -3021,7 +2984,7 @@
     "description": "Every finding is tagged with ATT&CK technique IDs resolved against a 40-technique reference map, and reports include a per-tactic detection summary."
    },
    {
-    "title": "Compliance context on every finding",
+    "title": "Compliance context on findings",
     "description": "Findings are annotated with the CIS AWS/Azure/GCP, NIST 800-53, SOC 2, and PCI-DSS controls they violate for audit-ready output."
    },
    {
@@ -3095,7 +3058,7 @@
    },
    {
     "path": "tests/samples/",
-    "description": "Simulated malicious logs -- cloudtrail_malicious.json (35 events), azure_activity_malicious.json (16), gcp_audit_malicious.json (10) -- used as the smoke-test corpus."
+    "description": "Simulated malicious logs -- cloudtrail_malicious.json (36 events), azure_activity_malicious.json (16), gcp_audit_malicious.json (10) -- used as the smoke-test corpus."
    },
    {
     "path": "banner.svg",
@@ -3244,11 +3207,11 @@
    "CI/CD: GitHub Actions and GitLab CI job templates with exit-code gating and report artifact upload"
   ],
   "evidence": [
-   "Rule count 60 verified: `grep -oE 'CDR-(AWS|AZ|GCP)-[A-Z]+-[0-9]+' cdr_scanner.py | sort -u | wc -l` = 60, and the severity-line count also = 60 (CRITICAL 23 / HIGH 24 / MEDIUM 12 / LOW 1). Per-range counts: AWS_RULES=36, AZURE_RULES=14, GCP_RULES=10. Note: README header says '35' AWS / '59' total, but its own AWS table and the code both sum to 36/60 -- honest count reported.",
-   "MITRE mapping: `MITRE_MAP` dict has 40 technique entries (lines 30-69); the rule `mitre` fields reference 24 distinct techniques across 9 tactics -- README's '38 techniques' sits between the map size and the referenced set, so the page uses the 40-technique map / 9-tactic framing.",
-   "Compliance: `COMPLIANCE_MAP` defines 7 frameworks (lines 75-83); grep of rule `compliance` fields shows 6 actively attached (CIS-AWS/AZURE/GCP, NIST-800-53, SOC2, PCI-DSS) with ISO27001 defined but not yet tagged to a rule.",
-   "Runtime behaviour verified: `python cdr_scanner.py tests/samples/` reported Files Scanned 4, Events Analysed 62, Threats Detected 66 (CRITICAL 23 / HIGH 28 / MEDIUM 13 / LOW 2).",
-   "Architecture and helpers read directly from cdr_scanner.py (1126 lines via `wc -l`): parsers `_parse_cloudtrail/_parse_azure_log/_parse_gcp_log`, `_detect_cloud`, extractors `_extract_*_fields`, the `CDRScanner` engine, and `save_json`/`save_html`/`print_report` reporters; CLI and exit-code gate in `main()` (lines 1097-1122)."
+   "Rule count 60 verified: `grep -oE 'CDR-(AWS|AZ|GCP)-[A-Z]+-[0-9]+' cdr_scanner.py | sort -u | wc -l` = 60; per-range via import: AWS_RULES=36, AZURE_RULES=14, GCP_RULES=10. README header stale ('59' total / '35' AWS) but code and its own AWS rule table sum to 36/60 -- true count reported.",
+   "MITRE mapping: `MITRE_MAP` has 40 technique entries (verified via import len); rule `mitre` fields reference 24 distinct techniques across 9 tactics. README's '38 techniques' is inaccurate; page uses the 40-technique map / 9-tactic framing.",
+   "Compliance: `COMPLIANCE_MAP` defines 7 frameworks; import shows only 6 actively attached to rules (CIS-AWS/AZURE/GCP, NIST-800-53, SOC2, PCI-DSS) with ISO27001 defined but not tagged to any rule (verified: 'ISO27001 attached? False').",
+   "Runtime verified: `python cdr_scanner.py tests/samples/` -> Files Scanned 4, Events Analysed 62, Threats Detected 66 (CRITICAL 23 / HIGH 28 / MEDIUM 13 / LOW 2), exit code 1.",
+   "cloudtrail_malicious.json event count corrected 35 -> 36: `grep -c '\"eventName\"'` = 36 and json Records length = 36; total events 62 = 36 AWS + 16 Azure + 10 GCP. Helpers=18 (`grep -cE '^def _(ct|az|gcp)_'`), file length 1126 lines (~1,100 approximation); all 7 project_structure paths confirmed present via git ls-files."
   ]
  },
  "m365-scanner": {
@@ -3362,8 +3325,8 @@
     "description": "Project banner rendered at the top of the README."
    },
    {
-    "path": "requirements.txt / LICENSE",
-    "description": "MIT license and the minimal dependency manifest."
+    "path": "LICENSE",
+    "description": "MIT license granting open-source use of the scanner."
    },
    {
     "path": ".gitignore",
@@ -3427,7 +3390,7 @@
    },
    {
     "label": "Auth",
-    "value": "App-only OAuth 2.0 (client credentials) with ~20 read-only Graph application permissions"
+    "value": "App-only OAuth 2.0 (client credentials) with 19 read-only Graph application permissions"
    },
    {
     "label": "CLI",
@@ -3448,7 +3411,7 @@
   ],
   "usage": [
    "pip install -r requirements.txt",
-   "Register an Entra ID app, add a client secret, grant the ~20 read-only Graph application permissions, and grant admin consent",
+   "Register an Entra ID app, add a client secret, grant the 19 read-only Graph application permissions, and grant admin consent",
    "python o365_scanner.py --tenant-id YOUR_TENANT_ID --client-id YOUR_CLIENT_ID --client-secret YOUR_SECRET",
    "export M365_TENANT_ID=... M365_CLIENT_ID=... M365_CLIENT_SECRET=... && python o365_scanner.py",
    "python o365_scanner.py -t TENANT -c CLIENT -s SECRET --json report.json --html report.html --severity HIGH",
@@ -3502,12 +3465,12 @@
    "Environment-variable credential injection for pipeline secrets"
   ],
   "evidence": [
-   "Counted 88 unique rule IDs and 88 COMPLIANCE_MAP keys via `grep -oE 'M365-[A-Z]+-[0-9]+' o365_scanner.py | sort -u | wc -l` and `grep -oE '\"M365-[A-Z]+-[0-9]+\":' ... | wc -l` — both return 88 (README badge says '87+', so 88 is the true current count).",
+   "Counted 88 unique rule IDs and 88 COMPLIANCE_MAP keys via `grep -oE 'M365-[A-Z]+-[0-9]+' o365_scanner.py | sort -u | wc -l` and `grep -oE '\"M365-[A-Z]+-[0-9]+\":' ... | sort -u | wc -l` — both return 88 (README badge says '87+', so 88 is the true current count).",
    "Confirmed 24 check-group methods via `grep -nE 'def _check_' o365_scanner.py` (24 matches) and cross-checked against the scan() orchestrator listing all 24 calls in three sections.",
-   "Per-category rule counts derived from `grep -oE 'M365-[A-Z]+-[0-9]+' | sed -E 's/-[0-9]+$//' | uniq -c` (e.g., CA=9, PRIV=5, APP=5, IDP=5, MFA=4).",
-   "Line count ~3,773 from `wc -l o365_scanner.py`; single dependency confirmed by reading requirements.txt (requests>=2.28.0).",
-   "Four compliance frameworks, ~20 Graph permissions, and OAuth client-credentials auth confirmed from the o365_scanner.py module docstring and README permission table; 20 distinct CWE IDs via `grep -oE 'CWE-[0-9]+' | sort -u | wc -l`.",
-   "Version 2.1.0 and single-file architecture confirmed from VERSION constant, CLAUDE.md, and git log (v2.1.0 compliance-mapping commit 7571fa3)."
+   "Per-category rule counts derived from `grep -oE 'M365-[A-Z]+-[0-9]+' | sort -u | sed -E 's/-[0-9]+$//' | uniq -c` (e.g., CA=9, PRIV=5, APP=5, IDP=5, MFA=4).",
+   "Line count 3,773 from `wc -l o365_scanner.py`; single dependency confirmed by reading requirements.txt (requests>=2.28.0).",
+   "Four compliance frameworks confirmed in README and COMPLIANCE_MAP; 19 read-only Graph permissions counted from the README permission table; 20 distinct CWE IDs via `grep -oE 'CWE-[0-9]+' | sort -u | wc -l`.",
+   "Version 2.1.0 and single-file architecture confirmed from VERSION constant, CLAUDE.md, and git log (v2.1.0 compliance-mapping commit 7571fa3). Read-only nature confirmed: only 1 requests.post (OAuth token endpoint), all data queries use requests.get."
   ]
  },
  "servicenow-scanner": {
@@ -3758,8 +3721,8 @@
    }
   ],
   "evidence": [
-   "Counted 47 distinct check IDs via `grep -oE 'SN-[A-Z]+-[0-9]+' servicenow_scanner.py | sort -u | wc -l` = 47, composed of 28 PROPERTY_RULES ('\"id\": ' entries) + 19 method-emitted findings ('rule_id=' entries); the provided tagline said 43, but the true current count is 47.",
-   "13 posture domains derived by grouping the 20 fine-grained category strings (grep of \"category\" values) — the five Authentication: * labels collapse to Authentication and the four OAuth: * labels to OAuth.",
+   "Counted 47 distinct check IDs via `grep -oE 'SN-[A-Z]+-[0-9]+' servicenow_scanner.py | sort -u | wc -l` = 47, composed of 28 PROPERTY_RULES (SN- 'id' entries in the rules block) + 19 distinct method-emitted findings ('rule_id=' values); the provided tagline said 43, but the true current count is 47.",
+   "13 posture domains derived by grouping the 20 fine-grained category strings (grep of category values) — the five Authentication: * labels collapse to Authentication and the four OAuth: * labels to OAuth.",
    "7 ServiceNow tables confirmed from _api_get call sites: sys_properties, sys_user, sys_user_has_role, oauth_entity, sys_acl, sys_syslog_config, ecc_queue.",
    "Architecture and layers read directly from servicenow_scanner.py (scan(), _api_get pagination at sysparm_limit=500, _fetch_properties nameIN batch query, _check_* modules, Finding class, save_json/save_html) — 1,696 lines via wc -l.",
    "Compliance alignments quoted from the module docstring (Palo Alto SSPM, CIS, OWASP) and inline rule text (NIST SP 800-63B in SN-PWD-001; PCI DSS/HIPAA in SN-LOG-003).",
@@ -3928,7 +3891,7 @@
    },
    {
     "area": "Live password-policy engine (online)",
-    "detail": "Data-driven PASSWORD_POLICY_RULES (SF-PWD-000..010): minimum length, upper/lower/number/symbol complexity, expiry, history, lockout threshold, and temp-password TTL evaluated against the live PasswordPolicy entity, each mapped to CWE-521."
+    "detail": "Data-driven PASSWORD_POLICY_RULES (10 rules, SF-PWD-001..010) plus a policy-accessibility check (SF-PWD-000): minimum length, upper/lower/number/symbol complexity, expiry, history, lockout threshold, and temp-password TTL evaluated against the live PasswordPolicy entity; most rules map to CWE-521, with the lockout threshold mapped to CWE-307 and temp-password TTL to CWE-640."
    },
    {
     "area": "Live user & role posture (online)",
@@ -4039,10 +4002,10 @@
   "evidence": [
    "Offline check count verified by grep of unique rule IDs across modules/: `grep -rhoE '\"(RBP|AUTH|SSO|API|PRIV|INST|LOG)-[A-Z0-9-]+\"' modules/ | sort -u | wc -l` = 49 (RBP 7, AUTH 7, SSO 9, API 8, PRIV 8, INST 4, LOG 6).",
    "Online check count re-counted from distinct rule IDs: `grep -hoE '\"SF-[A-Z]+-[0-9]+\"' successfactors_onlinescanner.py | sort -u` = 35 (PWD 11 incl SF-PWD-000, USER 5, ROLE 2, AUTH 4, SESS 2, LOG 4, PRIV 3, INT 4). Note: README/CLAUDE.md claim '45+', but the grep-verified distinct rule IDs total 35 — honest count used.",
-   "Online scanner LOC (1,599) and module LOC from `wc -l`; report_generator.py is 748 lines; total tracked Python ~3,830 lines.",
-   "14 distinct CWEs confirmed via `grep -hoE 'CWE-[0-9]+' successfactors_onlinescanner.py | sort -u | wc -l`.",
-   "Framework alignment (NIST SP 800-63B, GDPR, CIS, OWASP, SAP hardening) read directly from the online scanner module docstring (lines 6-11); GDPR referenced 18 times across the repo.",
-   "Sample data confirmed as 22 config files (excluding sample_report.html) via `ls sample_data/`; OData entities and pagination logic read from successfactors_onlinescanner.py _api_get (lines 304-378). No tests/ or .github/ CI directory exists in the repo (verified by find)."
+   "Online scanner LOC (1,599) and module LOC from `wc -l`; report_generator.py is 748 lines; total tracked Python 3,830 lines.",
+   "14 distinct CWEs confirmed via `grep -hoE 'CWE-[0-9]+' successfactors_onlinescanner.py | sort -u | wc -l`. Password-policy CWE mapping is mixed: SF-PWD-001..007/009 = CWE-521, SF-PWD-008 (lockout) = CWE-307, SF-PWD-010 (temp-password TTL) = CWE-640, SF-PWD-000 (policy accessibility) = CWE-16 — so the 'each mapped to CWE-521' claim was corrected.",
+   "Framework alignment (Palo Alto SSPM, SAP hardening guide, CIS HR SaaS, OWASP, GDPR, NIST SP 800-63B) read directly from the online scanner module docstring (lines 6-11); SOX also referenced in data-retention checks. Data-center host map covers US/EU/US2/APAC/Canada.",
+   "Sample data confirmed as 22 config files (excluding sample_report.html) via `ls sample_data/`; nine OData entities and $top/$skip pagination read from successfactors_onlinescanner.py _api_get. All project_structure paths verified present via git ls-files. No tests/ or .github/ CI directory exists in the repo."
   ]
  },
  "tableau-scanner": {
@@ -4251,7 +4214,7 @@
    },
    {
     "name": "Data protection",
-    "desc": "Embedded-credential auditing, extract-encryption-at-rest, and sensitive-data naming checks map to encryption and data-handling requirements common to SOC 2 / ISO 27001 programs."
+    "desc": "Embedded-credential auditing, extract-encryption-at-rest, and sensitive-data naming checks map to standard encryption and data-handling requirements for sensitive BI data."
    },
    {
     "name": "Tableau security best practices",
@@ -4290,10 +4253,10 @@
   ],
   "evidence": [
    "45 controls confirmed by grep of unique check_id=\"XXX-NNN\" across src/tableau_sspm/checks/ -> 45 total, 9 each for ACCS/API/AUTH/DATA/LOG; cross-checks with identity.py (9 _check_* methods) + 36 _check_* in the other four modules = 45.",
-   "58 unit tests confirmed by counting 'def test_' in tests/ (51 in test_checks.py + 7 in test_scoring.py).",
+   "58 unit tests confirmed by counting 'def test_' in tests/ (51 in test_checks.py + 7 in test_scoring.py), each marked @pytest.mark.unit.",
    "9 read-only REST endpoints grounded in collector.py collect_all() (users, groups, projects, datasources, workbooks, site_settings, schedules, flows -- with a per-datasource connections call) and the README 'API Endpoints Used' table.",
-   "Severity weights (CRITICAL 25 / HIGH 15 / MEDIUM 8 / LOW 3 / INFO 0) read directly from SEVERITY_WEIGHT in models.py; PASS/WARN/FAIL/SKIP scoring logic verified in scoring.py calculate_score().",
-   "Tech stack and CI gates grounded in pyproject.toml (deps tableauserverclient>=0.30, jinja2>=3.0; ruff/mypy config) and .github/workflows/ci.yml (Python 3.10-3.12 matrix, --cov-fail-under=80, bandit, pip-audit --strict).",
+   "Severity weights (CRITICAL 25 / HIGH 15 / MEDIUM 8 / LOW 3 / INFO 0) read directly from SEVERITY_WEIGHT in models.py; PASS/WARN/FAIL scoring logic verified in scoring.py calculate_score().",
+   "Tech stack and CI gates grounded in pyproject.toml (deps tableauserverclient>=0.30, jinja2>=3.0; ruff/mypy config) and .github/workflows/ci.yml (Python 3.10-3.12 matrix, --cov-fail-under=80 overriding the pyproject local default of 60, bandit, pip-audit --strict).",
    "Read-only + PAT auth confirmed in collector.py (only TSC.Pager GET calls, PersonalAccessTokenAuth) and README/CLAUDE.md statements."
   ]
  },
@@ -4303,7 +4266,7 @@
    "SAP S/4HANA RISE Security Scanner is an offline, agentless security config-review tool for SAP S/4HANA RISE and BTP landscapes. Instead of connecting to the system, it ingests configuration you export from SAP as CSV/JSON (user master, AGR_1251 role content, profile parameters, RFC destinations, HANA system views, BTP Cockpit/Cloud Connector/CPI dumps, and more), runs 20 auditor modules over it, and produces a self-contained interactive HTML dashboard plus a multi-page PDF hand-over report ranked by severity with concrete remediation. Because it never opens an RFC or SQL session, it is purpose-built for RISE tenants where SAP runs the basis layer and customer RFC/DB access is restricted.",
    "The scanner runs entirely on the Python 3.8+ standard library with zero third-party runtime dependencies — no agent, no connector, nothing to get approved through a change board. It ships 289+ checks spanning the classic ABAP stack (users, critical authorizations, SoD, security parameters, transports, custom code) and the cloud era (BTP subaccounts, Cloud Connector, destinations, IAS, CPI/Event Mesh, OAuth, S/4HANA business roles and CDS authorization). A standout is its GRC-style offline Access Risk Analysis: it resolves each user's transactions AND authorization object/field/activity across all roles from AGR_1251 + AGR_USERS, then evaluates a 25-conflict-plus-critical-access ruleset at the permission level so display-only access is not flagged as a false positive — honouring documented mitigating controls and producing a per-user risk score.",
    "Every finding is backed by a bundled knowledge base (data/finding_details.json, 323 entries keyed by check-id) that supplies an in-depth Security Risk narrative and a numbered, step-by-step remediation naming the exact SAP transactions, reports, IMG paths, tables and parameters to change. Findings cite real SAP Notes, the SAP Security Baseline, CIS SAP and DSAG guidance, and the tool refuses to fabricate SAP identifiers — note numbers, CVEs and authorization objects are verified before shipping. The SAP Security Notes / HotNews module even diffs your SNOTE export against a curated catalog of major notes since 2020 (RECON, ICMAD, the 2025 NetWeaver VC RCE) and flags actively-exploited CVEs from CISA KEV.",
-   "It is built for SAP security architects, GRC teams, Basis administrators and external assessors who need a repeatable, evidence-based posture review without deploying tooling into a production SAP system. A crafted sample_data set (93 exports) triggers every check for demos and CI, and a pytest suite runs all 20 modules end-to-end on Python 3.8–3.12 so regressions that silence a check are caught automatically."
+   "It is built for SAP security architects, GRC teams, Basis administrators and external assessors who need a repeatable, evidence-based posture review without deploying tooling into a production SAP system. A crafted sample_data set (92 exports) triggers every check for demos and CI, and a pytest suite runs all 20 modules end-to-end on Python 3.8–3.12 so regressions that silence a check are caught automatically."
   ],
   "features": [
    {
@@ -4363,7 +4326,7 @@
    },
    {
     "name": "DataLoader (modules/data_loader.py)",
-    "description": "Maps ~101 logical data sources to candidate filenames, parses CSV into dicts with UPPERCASE/underscore-normalized headers and stripped values, loads JSON as objects, and returns None for missing files so checks self-skip."
+    "description": "Maps 102 logical data sources to candidate filenames, parses CSV into dicts with UPPERCASE/underscore-normalized headers and stripped values, loads JSON as objects, and returns None for missing files so checks self-skip."
    },
    {
     "name": "BaseAuditor + 20 auditor modules",
@@ -4409,7 +4372,7 @@
    },
    {
     "path": "sample_data/",
-    "description": "93 crafted demo exports that trigger every check, used for demos, the pytest suite and the CI smoke run."
+    "description": "92 crafted demo export files that trigger every check, used for demos, the pytest suite and the CI smoke run."
    },
    {
     "path": "tests/",
@@ -4447,7 +4410,7 @@
    },
    {
     "area": "Security parameters & SAP Security Baseline",
-    "detail": "21 baseline profile parameters plus password/login/RFC/gateway/TLS/audit checks: rfc_authority_check, SNC insecure fallback, SAP GUI scripting, weak legacy password hashes, sapstartsrv/Host-Agent methods, gateway ACL mode, SSO/session cookies and ICM logging."
+    "detail": "22 baseline profile parameters plus password/login/RFC/gateway/TLS/audit checks: rfc_authority_check, SNC insecure fallback, SAP GUI scripting, weak legacy password hashes, sapstartsrv/Host-Agent methods, gateway ACL mode, SSO/session cookies and ICM logging."
    },
    {
     "area": "BTP cloud attack surface",
@@ -4570,11 +4533,11 @@
    "SIEM: checks log-forwarding/SIEM integration config (siem_config.json) for coverage gaps"
   ],
   "evidence": [
-   "Module count: `grep 'class .*Auditor' modules/` returns 21 classes; minus BaseAuditor = 20 auditor modules, matching the --modules choices list in sap_scanner.py (line 79).",
-   "Check count: 253 total self.finding() call sites and 239 distinct literal check_id= values; adding ruleset-driven ids not written as literals (15 AUTH in abap_authorizations.py, 27 ARA risk_id entries in access_risk_analysis.py, 21 PARAM BASELINE entries in security_params.py) gives ~300 distinct check ids, so the README's '289+' is honest/conservative.",
-   "Knowledge base: `python -c json.load(data/finding_details.json)` reports 323 top-level entries; DataLoader FILE_MAP has 101 source mappings (grep of data_loader.py).",
-   "Sample data: `ls sample_data/` = 93 files (README describes '90 crafted demo exports').",
-   "Tests & CI: tests/test_scanner.py defines 15 parametrized test functions over the MODULES/EXPECTED_CHECKS lists; .github/workflows/tests.yml pins python-version matrix ['3.8','3.9','3.10','3.11','3.12'] plus a sap_scanner.py smoke run.",
+   "Module count: `grep 'class .*Auditor' modules/` returns 21 classes; minus BaseAuditor = 20 auditor modules, matching the MODULES registry and the --modules choices in sap_scanner.py.",
+   "Check count: 253 self.finding() call sites and 239 distinct literal check_id= values; the full union of literal ids + the 27-entry ARA ruleset (ARA-*) + the 22 dynamic PARAM-{name} baseline params + PARAM-000/MISSING resolves to 313 distinct check-ids (253 fire on the sample_data run), so the README's '289+' is honest/conservative.",
+   "Knowledge base: json.load(data/finding_details.json) reports 323 top-level entries; DataLoader FILE_MAP has 102 logical source mappings.",
+   "Sample data: git ls-files sample_data/ = 92 tracked files (a 93rd item on disk, sap_report.html, is a generated report, not an export); README badge/tree says '90 crafted demo exports'.",
+   "Tests & CI: tests/test_scanner.py defines 15 test functions (several parametrized over the 20-module MODULES/EXPECTED_CHECKS lists); .github/workflows/tests.yml pins python-version matrix ['3.8','3.9','3.10','3.11','3.12'] plus a sap_scanner.py smoke run.",
    "Zero-dependency claim confirmed by README/CLAUDE.md ('standard library only') and the absence of requirements.txt/pyproject.toml (only requirements-dev.txt with pytest present in git ls-files)."
   ]
  },
@@ -4842,12 +4805,12 @@
    "Environment-variable configuration for pipeline secrets"
   ],
   "evidence": [
-   "Version confirmed v1.4.0 via `grep __version__` in both oracle_ebs_scanner.py and oracle_ebs_offline_scanner.py (README says v1.2.0/125, CLAUDE.md says v1.0.0/68 — both stale; used true source counts).",
-   "Check total = 140: `grep -oE 'ORA-[A-Z]+-[0-9]{3}' | sort -u` yields 121 literal IDs including one phantom comment match for ORA-SOD; SoD is generated dynamically from a 20-entry SOD_CONFLICTS list (f\"ORA-SOD-{idx:03d}\"), so 120 literal + 20 = 140.",
-   "13 domains confirmed from the scan() groups list (lines 365-379) and 13 '# Check Group N' comments; new CCS (Custom Code Security) and DPP (Data Privacy & PII) groups verified by reading their check methods.",
-   "Per-domain unique counts: USER 15, PWD 6, PROF 10, ROLE 6, CONC 10, AUDIT 12, DB 18, PATCH 4, WF 4, APP 15, DPP 10, CCS 10, SoD 20.",
-   "25 CWE mappings from `grep -oE 'CWE-[0-9]+' oracle_ebs_scanner.py | sort -u | wc -l`.",
-   "Line counts via wc -l: oracle_ebs_scanner.py 4077, oracle_ebs_offline_scanner.py 3526, export_ebs_audit_data.sql 726; ~45 CSVs from distinct .csv references in the export SQL and offline scanner loaders."
+   "Version confirmed v1.4.0 via `grep __version__` in both oracle_ebs_scanner.py (line 36) and oracle_ebs_offline_scanner.py (line 26); README badge says 125/11-domains and CLAUDE.md says 68/10 — both stale, so true source counts were used.",
+   "Check total = 140: `grep -oE 'ORA-[A-Z]+-[0-9]{3}' | sort -u` yields 121 literal IDs including one phantom comment match for ORA-SOD; SoD is generated dynamically from a 20-entry SOD_CONFLICTS list (f\"ORA-SOD-{idx:03d}\"), so 120 literal + 20 = 140. Identical counts in live and offline scanners.",
+   "13 domains confirmed from the 13 '# Check Group N' comments (lines 393-3308), including Group 12 Data Privacy & PII and Group 13 Custom Code Security.",
+   "Per-domain unique counts verified: USER 15, PWD 6, PROF 10, ROLE 6, CONC 10, AUDIT 12, DB 18, PATCH 4, WF 4, APP 15, DPP 10, CCS 10, SoD 20.",
+   "25 CWE mappings from `grep -oE 'CWE-[0-9]+' | sort -u | wc -l` in both scanners; 13 critical audit tables from CRITICAL_AUDIT_TABLES list; Catppuccin Mocha theme confirmed via #1e1e2e/#cdd6f4 colors + README statement.",
+   "Line counts via wc -l: oracle_ebs_scanner.py 4077, oracle_ebs_offline_scanner.py 3526, export_ebs_audit_data.sql 726; CSVs = 46 distinct in export SQL, 45 in offline loaders (~45 accurate). All 9 project_structure paths exist in git ls-files; all 7 compliance frameworks referenced in README; env vars ORA_HOST/ORA_SERVICE/ORA_USER/ORA_PASSWORD and exit code sys.exit(1 if CRITICAL/HIGH else 0) confirmed in source."
   ]
  },
  "fortinet-scanner": {
@@ -4912,7 +4875,7 @@
    },
    {
     "name": "Finding model",
-    "description": "A __slots__ dataclass that on init auto-resolves each finding's compliance references and remediation command from the shared maps."
+    "description": "A __slots__-based class that on init auto-resolves each finding's compliance references and remediation command from the shared maps."
    },
    {
     "name": "_ReportMixin",
@@ -4920,7 +4883,7 @@
    },
    {
     "name": "FortinetScanner engine",
-    "description": "The core class (subclassing _ReportMixin) with 18 _check_* methods plus _check_cves and _check_mitre_attack_resilience, driving 260+ possible findings."
+    "description": "The core class (subclassing _ReportMixin) with 18 _check_* methods total — 16 configuration-domain audits plus _check_cves and _check_mitre_attack_resilience — driving 260+ possible findings."
    },
    {
     "name": "_api_get data seam",
@@ -5129,10 +5092,10 @@
   ],
   "evidence": [
    "CVE count grounded by grep -cE '\"id\": \"FORTIOS-CVE-' fortinet_scanner.py = 66; severity split grep of \"severity\" fields = 16 CRITICAL / 27 HIGH / 23 MEDIUM.",
-   "MITRE technique count via grep -oE 'MITRE-T[0-9]+' | sort -u = 31 distinct techniques; 18 audit domains confirmed by grep of 'def _check_' = 18 methods.",
-   "76 compliance mappings and 42 remediation commands counted from COMPLIANCE_MAP keys and the REMEDIATION_COMMANDS dict (lines 913-996) in fortinet_scanner.py.",
+   "MITRE technique count via grep -oE 'MITRE-T[0-9]+' | sort -u = 31 distinct techniques (code sets total_techniques=31 across 11 tactics); grep of 'def _check_' = 18 methods (16 configuration-domain audits + _check_cves + _check_mitre_attack_resilience).",
+   "76 COMPLIANCE_MAP keys (45 FORTIOS rule IDs + 31 MITRE technique keys) and 42 REMEDIATION_COMMANDS entries counted from fortinet_scanner.py; matches README's '76 rule-to-framework mappings' and '42 remediation commands'.",
    "Line counts via wc -l: fortinet_scanner.py = 5,587, fortinet_offline_scanner.py = 506 (6,093 total); VERSION = 4.0.0 (engine), 1.0.0 (offline).",
-   "Test count via grep -cE 'def test_' test_data/test_offline_parser.py = 23; ~60 distinct _api_get() endpoint calls counted from source; classes and train logic (_parse_ver/_ver_in_train/_ver_lt) verified by grep.",
+   "Test count via grep -cE 'def test_' test_data/test_offline_parser.py = 23; 60 distinct self._api_get(\"...\") endpoint strings counted from source; version-train logic (_parse_ver/_ver_in_train/_ver_lt) and six trains (6.2/6.4/7.0/7.2/7.4/7.6) verified; offline scan of sample_insecure.conf yields 116 findings (16C/46H/40M/14L).",
    "Note: the assignment tagline's '30 MITRE / 30 CVEs' is stale versus the repo — used the verified current counts (31 MITRE techniques, 66 CVEs) per the source, README, and CLAUDE.md."
   ]
  },
@@ -5409,7 +5372,7 @@
    "README.md module table (lines 45-59) and CLAUDE.md architecture block document per-module check counts; grep -c 'self.finding(' across the 10 hardening modules sums to 108 (25+11+9+9+8+10+9+7+10+10).",
    "grep -c '\"id\":' modules/cve_detection.py returns 40 CVE database entries; grep -c '\"kev\": True' and '\"exploited\": True' each return 16.",
    "Live run: python nss_scanner.py --data-dir ./sample_configs printed 'SCAN COMPLETE — 7 device(s), 246 finding(s), CRITICAL: 17 | HIGH: 78 | MEDIUM: 81 | LOW: 33'.",
-   "git ls-files confirms 13 files under modules/ (11 auditors + base + report_generator) and 7 sample device configs; MODULE_MAP in nss_scanner.py (lines 58-70) lists all 11 module keys.",
+   "git ls-files confirms 14 files under modules/ (11 auditors + base + report_generator + __init__.py) and 7 sample device configs; MODULE_MAP in nss_scanner.py (lines 58-70) lists all 11 module keys.",
    "SUPPORTED_PLATFORMS grep across modules/*.py confirms six detected device types (ios, iosxe, nxos, asa, ftd, wlc) and per-module platform guards; CLAUDE.md and README badges confirm Python 3.8+ stdlib-only and MIT license."
   ]
  },
@@ -5418,7 +5381,7 @@
   "summary": [
    "Palo Alto Network Security Scanner is an offline configuration auditor for Palo Alto Networks NGFW (PAN-OS) and Prisma SASE deployments. Instead of touching production firewalls over an API, it ingests the config exports teams already have — running-config XML from a PA-Series, VM-Series, CN-Series, or Panorama box, plus JSON/CSV exports from Strata Cloud Manager and Prisma Access — and grades them against the CIS Palo Alto Benchmarks, PAN-OS best practices, and IronSkillet baselines. Nothing leaves the analyst's machine and no device connectivity is required, which makes it safe to run in change-control windows, air-gapped assessment environments, and third-party audits.",
    "What sets it apart is dual coverage in one tool. Most PAN-OS hardening scripts stop at the on-prem firewall; this one carries the same policy-as-data discipline into the SASE world, with a dedicated module for ZTNA 2.0 enforcement, Secure Web Gateway, CASB, DLP, Prisma SD-WAN, and cloud-identity MFA. The result is a single scan that spans the classic security stack (App-ID policy hygiene, threat prevention, SSL decryption, GlobalProtect, HA) and the cloud-delivered edge.",
-   "The engine is deliberately boring in the best way: pure Python 3.8+ standard library, zero third-party dependencies, and a small BaseAuditor framework that every module extends. Each of the 68 checks emits a structured finding with severity, affected items, GUI remediation path, and a CIS reference, and the run produces an interactive HTML dashboard with a weighted risk score and severity/category breakdowns. A separate, clearly-fenced red-team module ships an authorized-use validator for the 2024 PAN-OS management-interface auth-bypass chain (CVE-2024-0012 / CVE-2024-9474).",
+   "The engine is deliberately boring in the best way: pure Python 3.8+ standard library, zero third-party dependencies, and a small BaseAuditor framework that every module extends. Each of the 68 checks emits a structured finding with severity, affected items, GUI remediation path, and a benchmark or best-practice reference, and the run produces an interactive HTML dashboard with a weighted risk score and severity/category breakdowns. A separate, clearly-fenced red-team module ships an authorized-use validator for the 2024 PAN-OS management-interface auth-bypass chain (CVE-2024-0012 / CVE-2024-9474).",
    "It is aimed at firewall engineers, cloud-security teams, and consultants who need a repeatable, evidence-producing review of Palo Alto estates — the kind of artifact that drops straight into a hardening ticket or an audit workpaper."
   ],
   "features": [
@@ -5444,7 +5407,7 @@
    },
    {
     "title": "CIS Benchmark alignment",
-    "description": "Checks map to CIS PAN-OS Benchmark sections 1.x-9.x plus PAN-OS Hardening Guide and IronSkillet references baked into every finding."
+    "description": "Checks map to CIS PAN-OS Benchmark sections 1.x-9.x, with PAN-OS Best Practices and Hardening Guide references cited in flagged findings; IronSkillet baselines inform check design at the project level."
    },
    {
     "title": "Interactive HTML dashboard",
@@ -5460,7 +5423,7 @@
    },
    {
     "title": "Actionable remediation",
-    "description": "Every finding carries the exact PAN-OS GUI navigation path and a benchmark citation so fixes can be applied without guesswork."
+    "description": "Each flagged finding carries an exact PAN-OS GUI navigation path and a benchmark citation so fixes can be applied without guesswork."
    },
    {
     "title": "Authorized red-team validator",
@@ -5529,19 +5492,23 @@
    },
    {
     "path": "redteam/cve_2024_0012_validator.py",
-    "description": "Authorized-use active validator for CVE-2024-0012 / CVE-2024-9474 (~661 LOC, stdlib urllib/ssl)."
+    "description": "Authorized-use active validator for CVE-2024-0012 / CVE-2024-9474 (661 LOC, stdlib urllib/ssl)."
    },
    {
     "path": "sample_configs/",
-    "description": "Bundled demo NGFW XML and Prisma/SASE JSON exports plus a sample HTML report for quick smoke runs."
+    "description": "Bundled demo NGFW XML and Prisma/SASE JSON exports plus a sample HTML report (sample_report.html) for quick smoke runs."
    },
    {
     "path": "docs/banner.svg",
     "description": "Project banner asset referenced by the README."
    },
    {
-    "path": "CONTRIBUTING.md / LICENSE",
-    "description": "Contribution guidance and MIT license."
+    "path": "CONTRIBUTING.md",
+    "description": "Contribution guidance."
+   },
+   {
+    "path": "LICENSE",
+    "description": "MIT license."
    }
   ],
   "security_controls": [
@@ -5627,7 +5594,7 @@
   "compliance": [
    {
     "name": "CIS Palo Alto / PAN-OS Benchmark (9/10/11)",
-    "desc": "Checks map to CIS PAN-OS Benchmark sections 1.x-9.x, cited in each finding's references."
+    "desc": "Checks map to CIS PAN-OS Benchmark sections 1.x-9.x, cited in finding references."
    },
    {
     "name": "PAN-OS Best Practices",
@@ -5681,12 +5648,12 @@
    }
   ],
   "evidence": [
-   "Counted distinct check IDs with grep over modules/ (self.finding(\"ID\"...)): 68 unique — DEV 10, SASE 9, POL 8, THREAT 8, DEC 6, GP 6, NET 6, HA 5, LOG 5, URL 5. README badge advertises 85+ and the module table sums to 69, so 68 is the honest recounted figure (66 check_ methods, some emitting XML+JSON variants of the same ID).",
+   "Counted distinct check IDs with grep over modules/ (first arg of self.finding(\"ID\"...)): 68 unique — DEV 10, SASE 9, POL 8, THREAT 8, DEC 6, GP 6, NET 6, HA 5, LOG 5, URL 5. README badge advertises 85+ and the module table sums to 69 (and lists device=11), so 68 is the honest recounted figure (66 check_ methods, some emitting multiple finding IDs).",
    "Zero-dependency claim verified: no requirements.txt/setup.py in git ls-files; base.py and modules import only Python stdlib (xml.etree, json, csv, re, argparse); redteam validator imports urllib.request + ssl.",
    "No test suite or CI: git ls-files shows no test files and no .github/ directory; validation relies on bundled sample_configs/.",
-   "Module and check breakdown read directly from README.md table and confirmed against run_all_checks() method lists in device_mgmt.py, threat_prevention.py, sase_security.py, and grep of check_ methods across all ten modules.",
-   "Red-team validator grounded in redteam/README.md and redteam/cve_2024_0012_validator.py header (CVE-2024-0012 CVSS 9.8, CVE-2024-9474 CVSS 6.9, ~661 LOC via wc -l).",
-   "Report features (weighted risk score crit*25+high*10+med*4+low*1 capped at 100, by_severity/by_category rollups, client-side filtering) read from modules/report_generator.py."
+   "CLI flags verified in pan_scanner.py argparse: --data-dir (required), --output, --severity, --modules, --config. Ten auditor classes registered in MODULE_MAP.",
+   "Red-team validator grounded in redteam/cve_2024_0012_validator.py: CVE-2024-0012 CVSS 9.8 (X-PAN-AUTHCHECK), CVE-2024-9474 CVSS 6.9, 661 LOC (wc -l), --confirm authorization gate (argparse), and sys.exit(1 if vuln_count > 0 else 0).",
+   "Report features (weighted risk score min(100, crit*25+high*10+med*4+low*1), by_severity/by_category rollups, client-side data-severity/data-category filtering) read from modules/report_generator.py. IronSkillet appears 0 times in modules/ and only 54 of 83 finding() calls carry references=, so per-finding IronSkillet/CIS 'every finding' claims were corrected."
   ]
  },
  "kspm-scanner": {
@@ -5747,7 +5714,7 @@
     "description": "Gracefully handles EKS/GKE/AKS where the API server is not a visible pod, downgrading control-plane checks to informational findings instead of failing."
    }
   ],
-  "architecture_summary": "A single-file Python scanner (kspm_scanner.py, ~5,600 LOC) built around a Finding dataclass and a KSPMScanner class that connects to the Kubernetes API, runs ~20 grouped `_check_*` methods, applies the v2.0.0 policy engine and profile/exception filters, then serializes results through five reporter methods. Data flows from live API collection to per-group rule evaluation to compliance-mapping enrichment to multi-format export.",
+  "architecture_summary": "A single-file Python scanner (kspm_scanner.py, ~5,600 LOC) built around a Finding class and a KSPMScanner class that connects to the Kubernetes API, runs ~20 grouped `_check_*` methods, applies the v2.0.0 policy engine and profile/exception filters, then serializes results through five reporter methods. Data flows from live API collection to per-group rule evaluation to compliance-mapping enrichment to multi-format export.",
   "architecture_layers": [
    {
     "name": "API connection & collection",
@@ -5847,7 +5814,7 @@
    },
    {
     "area": "Policy validation & custom guardrails",
-    "detail": "Kyverno policy-health checks (K8S-KYV-001–006), plus user-authored YAML DSL rules (K8S-CUSTOM) and OPA/Rego policies (K8S-REGO) evaluated at scan time."
+    "detail": "Kyverno policy-health checks (K8S-KYV-001–006), plus user-authored YAML DSL rules (K8S-CUSTOM) and OPA/Rego policies (K8S-OPA/REGO) evaluated at scan time."
    }
   ],
   "tech_stack": [
@@ -5891,27 +5858,27 @@
   "compliance": [
    {
     "name": "CIS Kubernetes Benchmark",
-    "desc": "Rules mapped to CIS sections (25+ mappings) for Kubernetes hardening best practices."
+    "desc": "Rules mapped to CIS sections (24 mappings) for Kubernetes hardening best practices."
    },
    {
     "name": "NSA/CISA Hardening Guide v1.2",
-    "desc": "70+ rules mapped to NSA sections 1–5 for US government container hardening guidance."
+    "desc": "50 rules mapped to NSA sections 1–5 for US government container hardening guidance."
    },
    {
     "name": "MITRE ATT&CK for Containers",
-    "desc": "45+ rules mapped to techniques such as T1190, T1609, T1611, and T1613."
+    "desc": "60+ rules mapped to techniques such as T1190, T1609, T1611, and T1613."
    },
    {
     "name": "SOC 2 Trust Services Criteria",
-    "desc": "65+ rules mapped to CC6/CC7/CC8/A1 service-organization controls."
+    "desc": "48 rules mapped to CC6/CC7/CC8/A1 service-organization controls."
    },
    {
     "name": "PCI-DSS v4.0",
-    "desc": "45+ rules mapped to payment-card industry requirements 1–11."
+    "desc": "37 rules mapped to payment-card industry requirements 1–11."
    },
    {
     "name": "NIST SP 800-190",
-    "desc": "45+ rules mapped to the application container security guide (sections 3.1–3.5)."
+    "desc": "36 rules mapped to the application container security guide (sections 3.1–3.5)."
    }
   ],
   "stats": [
@@ -5946,12 +5913,12 @@
   ],
   "evidence": [
    "Rule count: `grep -oE 'K8S-[A-Z]+-[0-9]+' kspm_scanner.py | sort -u | wc -l` returned 146 distinct rule IDs; README claims '~150+', so ~146 is the honest grounded figure.",
-   "Check groups: README's check-group table (README.md lines 37–57) enumerates 19 categories; confirmed by ~20 `_check_*` methods in kspm_scanner.py.",
-   "Test count: `grep -cE 'def test_' test_data/test_kspm_scanner.py` returned 82, all in a single unittest TestKSPMScanner class; run_test.py is a separate mock-cluster integration harness.",
-   "Compliance frameworks: six class-level maps found at kspm_scanner.py lines 272–557 (CIS_MAP, NSA_CISA_MAP, MITRE_MAP, SOC2_MAP, PCIDSS_MAP, NIST_800_190_MAP).",
-   "Version & size: `VERSION = \"2.0.0\"` at line 33; `wc -l` reports 5,564 lines in kspm_scanner.py.",
-   "Reporters/formats: methods save_json/save_html/save_sarif/save_pdf plus notify_slack/notify_teams confirmed via grep of `def` in kspm_scanner.py; five output formats stated in README line 29.",
-   "Dependencies/CI: `git ls-files` shows 8 tracked files with no requirements.txt or .github workflow, matching README's 'only kubernetes required, others optional' claim (no CI asserted)."
+   "Check groups: README's check-group table (README.md lines 37–61) enumerates exactly 19 numbered categories; kspm_scanner.py has 21 `def _check_*` methods, of which ~19–20 are grouped check methods (the rest are helpers like _check_pod_spec/_check_operator).",
+   "Test count: `grep -cE 'def test_' test_data/test_kspm_scanner.py` returned 82, all in a single unittest TestKSPMScanner class (defined at line 553); run_test.py is a separate mock-cluster integration harness.",
+   "Compliance frameworks: six class-level maps at kspm_scanner.py (CIS_MAP:272, NSA_CISA_MAP:304, MITRE_MAP:367, SOC2_MAP:444, PCIDSS_MAP:505, NIST_800_190_MAP:557). Per-map mapped-rule key counts re-counted by line range: CIS 24, NSA/CISA 50, MITRE 61, SOC2 48, PCI-DSS 37, NIST 800-190 36 — README badges (70+/65+/45+) were inflated and have been corrected to true counts.",
+   "Version & size: `VERSION = \"2.0.0\"` at line 33; `wc -l` reports 5,564 lines in kspm_scanner.py (\"~5,600 LOC\" is an approximation). The Finding type at line 220 is a plain class with __slots__ and a manual __init__ (not an @dataclass), so \"Finding class\" is used rather than \"dataclass\".",
+   "Reporters/formats: methods save_json (4460), save_html (4483), save_sarif (4692), save_pdf (5008), plus notify_slack (4887)/notify_teams (4950) confirmed; SARIF version string \"2.1.0\" and sarif-2.1.0 schema confirmed at lines 4756–4757; reportlab-with-stdlib-fallback confirmed in save_pdf. Exit code `sys.exit(1 if has_critical_high else 0)` at line 5560.",
+   "Dependencies/CI: `git ls-files` shows 8 tracked files (kspm_scanner.py, README.md, CLAUDE.md, test_data/test_kspm_scanner.py, test_data/run_test.py, banner.svg, LICENSE, .gitignore) with no requirements.txt or .github workflow, matching README's 'only kubernetes required, others optional' claim; PyYAML/reportlab/opa guarded by graceful-degradation (HAS_YAML flag, try/except imports). External tools trivy/grype/cosign/syft/opa/kyverno all referenced in kspm_scanner.py."
   ]
  },
  "vuln-mgmt-scanner": {
@@ -6082,7 +6049,7 @@
    },
    {
     "path": "tests/",
-    "description": "pytest suite (1,000+ tests) across 50+ files covering core, scanners, DAST, compliance, SARIF and seed integrity."
+    "description": "pytest suite (1,000+ tests) across 40+ files covering core, scanners, DAST, compliance, SARIF and seed integrity."
    },
    {
     "path": ".github/workflows/ci.yml",
@@ -6236,12 +6203,12 @@
    }
   ],
   "evidence": [
-   "README.md and CLAUDE.md read in full; tagline counts (820+ rules, 32,000+ CVEs, 6 CIS benchmarks, 23 platforms) confirmed against repo contents.",
-   "Named rule IDs counted via grep -rhoE per prefix: CISCO 74, PAN 92, DAST 82-83, WEB 32, LNX 29, WIN 23, MW 24, DB 14 (329 unique config/hardening/DAST rule IDs) plus ~800 embedded/seed CVE-detection rules -> aggregate ~820.",
-   "Seed CVEs: 510 cve_id entries across 21 JSON files (501 unique IDs, cross-platform dupes allowed) and 168 \"cisa_kev\": true flags counted via grep in vulnerability_management/cve_data/seed/.",
-   "Test functions: grep -rh 'def test_' tests/ = 1,044 (README badge cites 999; newer test_paloalto_scanner.py and test_cisco_scanner.py plus additional DAST files push the true count above the badge).",
-   "Nine active scanner subcommands verified in __main__.py dispatch (auto, windows, linux, cisco, paloalto, webserver, middleware, database, dast) plus four CVE/EPSS utility commands; six CIS benchmark JSONs verified via ls of vulnerability_management/benchmarks/.",
-   "Palo Alto scanner (paloalto_scanner.py) confirmed as a real 9th engine: docstring enumerates 20 PAN-OS CVEs + ~72 config checks; 92 PAN- rule IDs counted via grep."
+   "README.md and CLAUDE.md read in full; repo contents confirm 32,000+ NVD-sync CVEs, 6 CIS benchmarks, 21 seed files and 9 scan engines; note the README badges are stale (159 KEV / 999 tests and no Palo Alto) versus the true repo state used here.",
+   "Named rule IDs counted via grep -rhoE per prefix (scanner/module files only): CISCO 74, PAN 92, DAST 82, WEB 32, LNX 29, WIN 23, MW 24, DB 14 = 370 unique config/hardening/DAST rule IDs, which combined with the 510-entry seed bundle and per-module embedded CVE lists yields the ~820 aggregate.",
+   "Seed CVEs: 510 total cve_id entries across 21 JSON files (499 unique cve_id values; cross-platform dupes allowed) and 168 \"cisa_kev\": true flags counted via grep in vulnerability_management/cve_data/seed/.",
+   "Test functions: grep -rh 'def test_' tests/ = 1,044 across 42 test_*.py files (README badge cites 999; newer test_paloalto_scanner.py/test_cisco_scanner.py plus extra DAST files push the true count past the badge), reported as 1,000+.",
+   "Thirteen subcommands verified in __main__.py: nine scan engines (auto, windows, linux, cisco, paloalto, webserver, middleware, database, dast) registered via a scan_types loop plus explicit paloalto/dast parsers, and four CVE/EPSS utilities (cve-sync, cve-import, cve-stats, epss-sync); six CIS benchmark JSONs and 47 CPE strings verified via ls/grep.",
+   "Palo Alto scanner (paloalto_scanner.py) confirmed as a real 9th engine even though the README omits it: 20 PAN-CVE rule IDs (incl. CVE-2024-3400) + ~72 config checks = 92 PAN- rule IDs counted via grep; a dedicated test_paloalto_scanner.py exists."
   ]
  },
  "linux-hardening": {
@@ -6434,10 +6401,6 @@
    {
     "name": "CIS RHEL 9 Benchmark v2.0.0",
     "desc": "RHEL 9 script maps each remediation block to its CIS section, adding 1.3 AIDE, 1.7 fapolicyd, 3.5 nftables, and 1.9 automatic updates."
-   },
-   {
-    "name": "CIS Level 1 & Level 2 controls",
-    "desc": "Baseline covers common Level 1 hardening plus higher-assurance Level 2 measures (IPv6 disable, USBGuard, fapolicyd, FUTURE crypto policy)."
    }
   ],
   "integrations": [
@@ -6476,7 +6439,7 @@
    "auditd rule count via `grep -cE '^-[aw] '` on the CIS.rules heredocs: 51 in RHEL8, 58 in RHEL9 (109 total).",
    "sysctl parameters via `grep -cE '^(net|kernel|fs|user)\\.'`: 32 in RHEL8, 35 in RHEL9 (67 total); RHEL9 PKGS_INSTALL array lists 9 security packages (aide, fapolicyd, usbguard, dnf-automatic, nftables, audit, rsyslog, chrony, libpwquality).",
    "CIS benchmark versions read directly from script headers and README: RHEL 8 Benchmark v3.0.0 and RHEL 9 Benchmark v2.0.0.",
-   "Note: the repo implements CIS remediation plus an informational audit-reporting phase; it does NOT expose selectable L1/L2 profile flags or a standalone audit-only run mode."
+   "Note: the repo implements CIS remediation plus an informational audit-reporting phase; it does NOT expose selectable L1/L2 profile flags or a standalone audit-only run mode, and never references CIS Level 1/Level 2 profiles anywhere in the repo."
   ]
  },
  "windows-hardening": {
@@ -6549,7 +6512,7 @@
    },
    {
     "name": "Comparison Engine (Compare-Value)",
-    "description": "A generic evaluator implementing EQ/NE/GE/LE/GT/LT/RANGE/MATCH/IN/EMPTY/SUBSET operators to decide PASS/FAIL/WARN for each control independent of check type."
+    "description": "A generic evaluator implementing EQ/NE/GE/LE/GT/LT/RANGE/MATCH/IN operators (plus CONTAINS/NOTMATCH/NOTIN/NOTEXIST); the parallel User Rights evaluator (Test-UserRightControl) adds SUBSET/EMPTY/EXACT logic, together deciding PASS/FAIL/WARN for each control independent of check type."
    },
    {
     "name": "Profile & Role Resolver",
@@ -6571,7 +6534,7 @@
   "project_structure": [
    {
     "path": "CIS_Win11_Hardening.ps1",
-    "description": "Active hardening script (~1,858 lines) applying 170+ CIS Windows 11 Enterprise v4.0.0 settings across 16 Set-* section functions with backup, WhatIf, and L1/L2 profiles."
+    "description": "Active hardening script (~1,858 lines) applying 170+ CIS Windows 11 Enterprise v4.0.0 settings across 10 Set-* section functions with backup, WhatIf, and L1/L2 profiles."
    },
    {
     "path": "CIS_WinServer2016_Scanner.ps1",
@@ -6726,12 +6689,12 @@
    }
   ],
   "evidence": [
-   "Control counts verified by grep: `grep -oc 'CIS_ID=' CIS_WinServer{2016,2019,2022}_Scanner.ps1` returned exactly 318, 360, and 392, matching the README table; sum = 1,070, plus 170+ Win11 settings = 1,240+.",
+   "Control counts verified by grep: `grep -c 'CIS_ID=' CIS_WinServer{2016,2019,2022}_Scanner.ps1` returned exactly 318, 360, and 392, matching the README table; sum = 1,070, plus 170+ Win11 settings = 1,240+.",
    "Line counts from `wc -l *.ps1`: 1,858 (Win11) + 1,347 (2016) + 1,397 (2019) + 1,444 (2022) = 6,046 total.",
-   "Check-type distribution from `grep -oE 'CheckType=...' CIS_WinServer2022_Scanner.ps1 | sort | uniq -c`: Registry 240, UserRight 46, Service 39, Auditpol 33, Firewall 23, Secedit 11 - confirming 6 check types and 46 User Rights checks.",
-   "Severity distribution (2022) from grep: CRITICAL 17, HIGH 180, MEDIUM 149, LOW 46; operators (EQ/NE/GE/LE/RANGE/MATCH/IN/EMPTY/SUBSET) confirmed in Compare-Value (lines 296-329) and control definitions.",
-   "Architecture layers grounded in `grep -nE '^function' CIS_WinServer2022_Scanner.ps1` (Get-RegistryValue, Get-SeceditExport, Get-ServerRole, Compare-Value, Invoke-Controls, Export-JsonReport/HtmlReport) and the Win11 Set-* section functions plus final invocation list (lines 1834-1840).",
-   "Hardening categories, ASR counts, TLS/network-protocol settings, and L1=24 / L2=37 service disablement read directly from README.md coverage tables and confirmed against CIS_Win11_Hardening.ps1 (Set-WindowsDefenderASR, Set-TlsCryptography, Set-NetworkProtocol, Set-ServiceHardening)."
+   "Check-type distribution from `grep -oE 'CheckType=...' CIS_WinServer2022_Scanner.ps1 | sort | uniq -c`: Registry 240, UserRight 46, Service 39, Auditpol 33, Firewall 23, Secedit 11 - confirming 6 check types and 46 User Rights checks (sum = 392).",
+   "Severity distribution (2022) from grep: CRITICAL 17, HIGH 180, MEDIUM 149, LOW 46 (sum = 392); Compare-Value (lines 296-329) implements EQ/NE/GE/LE/GT/LT/RANGE/MATCH/IN plus CONTAINS/NOTMATCH/NOTIN/NOTEXIST, while the SUBSET/EMPTY/EXACT User Rights operators are handled in Test-UserRightControl (lines 445-459).",
+   "Architecture layers grounded in `grep -nE '^function' CIS_WinServer2022_Scanner.ps1` (Get-RegistryValue, Get-SeceditExport, Get-ServerRole, Compare-Value, Invoke-Controls, Export-JsonReport/HtmlReport) and the 10 Win11 Set-* section functions invoked in CIS order at the end of CIS_Win11_Hardening.ps1.",
+   "Hardening categories, ASR counts (13 rule GUIDs in Set-WindowsDefenderASR), TLS (24) / network-protocol (8) settings, and L1=24 / L2=37 service disablement read from README.md coverage tables and confirmed against CIS_Win11_Hardening.ps1 (Set-WindowsDefenderASR, Set-TlsCryptography, Set-NetworkProtocol, Set-ServiceHardening)."
   ]
  },
  "ot-security-scanner": {
@@ -6800,7 +6763,7 @@
    },
    {
     "name": "Protocol analyzers (protocols/)",
-    "description": "20 industrial protocol decoders plus an IT protocol detector (36+ protocols) and a DPI behavior tracker, all subclassing BaseProtocolAnalyzer/BaseL2Analyzer."
+    "description": "18 protocol-decoder modules covering 20 industrial protocols, plus an IT protocol detector (36+ protocols) and a DPI behavior tracker, all subclassing BaseProtocolAnalyzer/BaseL2Analyzer."
    },
    {
     "name": "Fingerprint pipeline (fingerprint/)",
@@ -6834,7 +6797,7 @@
    },
    {
     "path": "ot_scanner/scanner/protocols/",
-    "description": "22 analyzer files: 20 ICS protocol decoders plus IT detector and DPI behavior tracker."
+    "description": "22 files: 18 protocol-decoder modules (covering 20 ICS protocols) plus the IT detector, DPI behavior tracker, and base classes."
    },
    {
     "path": "ot_scanner/scanner/vuln/",
@@ -6872,7 +6835,7 @@
   "security_controls": [
    {
     "area": "OT vulnerability rules",
-    "detail": "29 behavioral rules: 7 DNP3 (no Secure Authentication, unauthenticated control, Direct Operate bypass, restart/file-transfer, multi-master, UDP transport), 5 IEC 60870-5-104, 6 IEC 61850 (GOOSE without IEC 62351-6, simulation-flag abuse, TTL/confRev drift, MMS without TLS), plus 11 cross-protocol/OPC-UA/MQTT and 5 IT/OT convergence rules."
+    "detail": "29 behavioral rules: 7 DNP3 (no Secure Authentication, unauthenticated control, Direct Operate bypass, restart/file-transfer, multi-master, UDP transport), 5 IEC 60870-5-104, 6 IEC 61850 (GOOSE without IEC 62351-6, simulation-flag abuse, TTL/confRev drift, MMS without TLS), plus 7 cross-protocol/OPC-UA/MQTT and 5 IT/OT convergence rules."
    },
    {
     "area": "ICS CVE intelligence",
@@ -7008,13 +6971,13 @@
    }
   ],
   "evidence": [
-   "Vuln rule count: grep of unique rule IDs (RTU-DNP3/RTU-104/RTU-61850/OT-GEN/OT-OPCUA/OT-MQTT/OT-ITOT/ZONE) in ot_scanner/scanner/vuln/ returned 29 unique.",
+   "Vuln rule count: 29 vuln_id= assignments across ot_scanner/scanner/vuln/*.py (dnp3=7, iec104=5, iec61850=5 emitting, general=12); 30 rule IDs are documented in total, because RTU-61850-005 (GOOSE ndsCom) is a stub that returns no findings. The 5 ZV-* zone-violation rules live separately in topology/engine.py.",
    "CVE count: grep -oE '\"CVE-[0-9]{4}-[0-9]+\"' on ot_scanner/scanner/cvedb/ics_cves.py returned 92 unique (README badge says 90; code truth is 92, matching CLAUDE.md and test_cve_matcher.py).",
-   "Malware signatures: grep -c '\"name\":' on ot_scanner/scanner/threat/signatures.py returned 10, matching the named families in CLAUDE.md.",
-   "OUI fingerprints: grep of OUI entries in ot_scanner/scanner/fingerprint/oui_db.py returned 144 (tagline's 130+ is conservative).",
+   "Malware signatures: grep -c '\"name\":' on ot_scanner/scanner/threat/signatures.py returned 10, matching the named families in CLAUDE.md (README badge's 9 is stale).",
+   "OUI fingerprints: grep of OUI entries in ot_scanner/scanner/fingerprint/oui_db.py returned 144, matching CLAUDE.md.",
    "Tests: grep -rhE '^\\s*def test_' tests/*.py returned 76 across 11 test files, matching README/CLAUDE totals.",
-   "Protocol count: 22 .py files in scanner/protocols/ (20 industrial decoders + it_detect + behavior + base + __init__); 20 ICS protocols per README supported-protocols table (17 IP + 3 L2).",
-   "Tech stack grounded in ot_scanner/requirements.txt (scapy>=2.5.0, dpkt>=1.9.8, colorama>=0.4.6) and .github/workflows/ci.yml Python 3.8/3.10/3.12 matrix."
+   "Protocol count: 22 .py files in scanner/protocols/ (18 industrial protocol decoders + it_detect + behavior + base + __init__); these cover 20 ICS protocols per the README supported-protocols table (17 IP + 3 L2), since goose.py handles GOOSE+SV and profinet.py handles RT+DCP.",
+   "Compliance controls: 35 total in scanner/compliance/engine.py (NERC CIP 15, IEC 62443 12, NIST 800-82 8), matching README. Tech stack grounded in ot_scanner/requirements.txt (scapy>=2.5.0, dpkt>=1.9.8, colorama>=0.4.6) and .github/workflows/ci.yml Python 3.8/3.10/3.12 matrix."
   ]
  },
  "detection-engineering": {
@@ -7032,7 +6995,7 @@
    },
    {
     "title": "Precise MITRE ATT&CK mapping",
-    "description": "Every rule is tagged to specific technique and sub-technique IDs (270 enterprise techniques plus 27 ATT&CK-for-ICS techniques) for coverage tracking and reporting."
+    "description": "Every rule is tagged to specific technique and sub-technique IDs (243 enterprise techniques plus 27 ATT&CK-for-ICS techniques) for coverage tracking and reporting."
    },
    {
     "title": "Investigation queries per rule file",
@@ -7144,16 +7107,16 @@
     "description": "3 files, 20 rules — Modbus/DNP3/S7comm/OPC UA anomalies plus TRITON, Industroyer and PIPEDREAM malware detection (ATT&CK for ICS)."
    },
    {
-    "path": "splunk_rules/supply_chain/, sap/, network_security/",
-    "description": "Shai-Hulud npm/GitHub worm (9 rules), SAP NetWeaver CVE-2025-31324 (7 rules), and general network threat detection (6 rules)."
+    "path": "splunk_rules/network_security/",
+    "description": "Network-security detections, alongside sap/ and other threat-category rule folders under splunk_rules/"
    },
    {
-    "path": "README.md / CLAUDE.md",
-    "description": "Extensive per-pack documentation: rule tables, prerequisites, data sources, quick-deploy ordering, plus the contributor guide and rule-schema reference."
+    "path": "README.md",
+    "description": "Project overview, rule catalogue, and usage guide"
    },
    {
-    "path": "docs/banner.svg, LICENSE",
-    "description": "Project banner asset and the MIT license."
+    "path": "docs/",
+    "description": "Documentation and banner assets (GPL-3.0 licensed)"
    }
   ],
   "security_controls": [
@@ -7239,7 +7202,7 @@
   "compliance": [
    {
     "name": "MITRE ATT&CK (Enterprise)",
-    "desc": "Every rule maps to specific technique/sub-technique IDs; 270 unique enterprise techniques are referenced across the library."
+    "desc": "Every rule maps to specific technique/sub-technique IDs; 243 unique enterprise techniques are referenced across the library (270 unique technique IDs in total, including ICS)."
    },
    {
     "name": "MITRE ATT&CK for ICS",
@@ -7265,7 +7228,7 @@
    },
    {
     "label": "MITRE ATT&CK techniques",
-    "value": "270 (+27 ICS)"
+    "value": "243 Enterprise + 27 ICS (270 total)"
    },
    {
     "label": "CVEs covered",
@@ -7290,9 +7253,9 @@
    "Rule count 468 verified by counting top-level YAML keys: `grep -rhE '^rule_[0-9]+[a-z0-9_]*:' splunk_rules/ | wc -l` = 468; per-directory breakdown summed to 468 and DCSync spot-checked at exactly 5 rules, matching the README's '5 complementary rules' claim (no double-counting).",
    "The README badge (222+) and CLAUDE.md prose (171) / total (216+) are stale — CLAUDE.md's own per-category table sums to ~442, and 4 newer 2026 CVE files (bluehammer, netlogon, defender_symlink, defender_dos = 25 rules) pushed recent_attacks from the documented 38 to a counted 63.",
    "61 rule files across 12 category directories from `git ls-files 'splunk_rules/*.yml' | wc -l` and per-dir `uniq -c`.",
-   "270 unique enterprise ATT&CK techniques via `grep -rhoE 'T[0-9]{4}(\\.[0-9]{3})?'| sort -u | wc -l`; 27 unique ICS techniques via `grep -rhoE 'T0[0-9]{3}'`; 64 unique CVEs via `grep -rhoiE 'CVE-[0-9]{4}-[0-9]{4,7}'`.",
+   "270 unique ATT&CK technique IDs total via `grep -rhoE 'T[0-9]{4}(\\.[0-9]{3})?' | sort -u | wc -l` — of which 243 are Enterprise (T1xxx, after excluding T0) and 27 are ICS (T0xxx via `grep -rhoE 'T0[0-9]{3}'`); 64 unique CVEs via `grep -rhoiE 'CVE-[0-9]{4}-[0-9]{4,7}'`.",
    "~46,700 lines of YAML from `cat splunk_rules/*/*.yml | wc -l` = 46,682; license confirmed MIT from the LICENSE file (README badge says GPL-3.0, but LICENSE and CLAUDE.md both state MIT).",
-   "Rule schema (name, mitre, severity, confidence, search, throttle, notable, recommended_actions) confirmed by reading splunk_rules/credential_access/dcsync_attack_detection.yml and the CLAUDE.md 'Rule Structure' section; 216 notable blocks and 199 recommended_actions blocks counted via grep."
+   "Rule schema (name, mitre, severity, confidence, search, throttle, notable, recommended_actions) confirmed by reading splunk_rules/credential_access/dcsync_attack_detection.yml and the CLAUDE.md 'Rule Structure' section; 216 notable blocks and 197 recommended_actions blocks counted via grep."
   ]
  },
  "crowdstrike-redteam": {
@@ -7537,10 +7500,10 @@
   "evidence": [
    "README badges claim 59 tests / 18 categories / 6 platforms; verified `grep -c \"def check_test_\"` on t1562_001_audit.py returned exactly 59 check methods.",
    "18 categories confirmed by grep of the category header block (A-R) in t1562_001_audit.py = 18.",
-   "6 platforms confirmed: finding platform strings show Windows(32), Linux(12), macOS(2), ESXi(2), AWS(1) via grep, plus the O365 category (test 26) documented in README.",
+   "6 platforms confirmed: running the tool on sample_data produced findings carrying platform strings Windows(26), Linux(11), macOS(3), AWS(1), ESXi(1) = 42, plus the O365 category (test 26 / Category I), which needs an O365 export not shipped in sample_data and is documented in README as the 6th platform.",
    "Ran `python t1562_001_audit.py --data-dir ./sample_data`: output '42 finding(s) — CRITICAL: 16 | HIGH: 20 | MEDIUM: 5 | LOW: 1', loading 19/26 config files.",
-   "Zero-dependency claim verified: only stdlib imports present (json, datetime, argparse, sys, pathlib, typing); `ls` confirmed no tests/, no .github/ CI, and no CLAUDE.md exist.",
-   "Module size ~969 lines confirmed via `wc -l t1562_001_audit.py` (969); sample_data holds 19 config files plus one sample report."
+   "Zero-dependency claim verified: only stdlib imports present (json, datetime, argparse, sys, pathlib, typing); `git ls-files` confirmed no tests/, no .github/ CI, and no CLAUDE.md exist.",
+   "Module size ~969 lines confirmed via `wc -l t1562_001_audit.py` (969); sample_data holds 19 config files plus one sample redteam_report.json output."
   ]
  },
  "crowdstrike-falcon": {
@@ -7798,7 +7761,7 @@
    "Zero dependencies confirmed by absence of requirements.txt in git ls-files and imports limited to Python stdlib (argparse, json, pathlib, datetime, collections, html, typing).",
    "19 config file types counted from FILE_MAP in modules/base.py; 13 sample JSON exports + sample_report.html confirmed via git ls-files of sample_data/.",
    "Exclusion constants counted directly in ExclusionAuditor: 17 DANGEROUS_PATHS, 14 DANGEROUS_EXTENSIONS, 14 DANGEROUS_PROCESSES; MITRE CRITICAL_TECHNIQUES = 10 entries.",
-   "No tests or CI present - confirmed by git ls-files showing no test files, no tests/ dir, and no .github/workflows."
+   "No tests or CI present - confirmed by git ls-files showing no test files, no tests/ dir, and no .github/workflows. LOLBAS/GTFOBins referenced in README references section (lolbas-project.github.io, gtfobins.github.io)."
   ]
  },
  "easm-scanner": {
@@ -7852,7 +7815,7 @@
    },
    {
     "title": "REST API, Dashboard & Multi-Channel Reporting",
-    "description": "Ships a 15-endpoint FastAPI server, a dark-themed SPA dashboard, and export to Slack/Teams/Email, Splunk/Elasticsearch/Syslog, STIX 2.1 and Jira."
+    "description": "Ships a 13-endpoint FastAPI server, a dark-themed SPA dashboard, and export to Slack/Teams/Email, Splunk/Elasticsearch/Syslog, STIX 2.1 and Jira."
    },
    {
     "title": "Diff-Based Scheduling & Risk Trends",
@@ -7901,11 +7864,11 @@
    },
    {
     "path": "modules/",
-    "description": "33 self-contained pipeline modules across discovery, enrichment, vuln assessment, intelligence and reporting/integration."
+    "description": "32 self-contained pipeline modules across discovery, enrichment, vuln assessment, intelligence and reporting/integration."
    },
    {
     "path": "api/",
-    "description": "server.py (15-endpoint FastAPI REST API) and dashboard.py (dashboard data renderer with offline injection)."
+    "description": "server.py (13-endpoint FastAPI REST API) and dashboard.py (dashboard data renderer with offline injection)."
    },
    {
     "path": "templates/dashboard.html",
@@ -8057,7 +8020,7 @@
    },
    {
     "label": "Security rules",
-    "value": "50+ (50 distinct rule IDs)"
+    "value": "45 (45 distinct rule IDs)"
    },
    {
     "label": "CVE entries",
@@ -8065,7 +8028,7 @@
    },
    {
     "label": "Pipeline modules",
-    "value": "33"
+    "value": "32"
    },
    {
     "label": "Tests (CI 3.10-3.13)",
@@ -8073,7 +8036,7 @@
    }
   ],
   "integrations": [
-   "REST API — 15 FastAPI endpoints + Swagger/OpenAPI docs",
+   "REST API — 13 FastAPI endpoints + Swagger/OpenAPI docs",
    "Alerting — Email (SMTP/TLS), Slack (Block Kit), Microsoft Teams (MessageCard), generic webhook, console",
    "SIEM export — Splunk HEC (batched), Elasticsearch (bulk API), Syslog CEF (UDP/TCP), CSV, JSON Lines",
    "STIX 2.1 bundle export for TIP/SIEM/SOAR (MISP, OpenCTI, Sentinel)",
@@ -8084,11 +8047,13 @@
   ],
   "evidence": [
    "Read README.md in full and CLAUDE.md — pipeline (14 steps), rule reference, risk-scoring formula, safety caps and integrations all cross-checked between the two.",
-   "Test count grounded via `grep -rcE 'def test_' tests/` summed to 93 — matches README (`pytest tests/ -q # 93 tests`) and CLAUDE.md.",
-   "CVE count grounded via `grep -oE 'CVE-[0-9]{4}-[0-9]+' modules/vuln_detector.py | sort -u | wc -l` = 26 (README states '25+ CVE entries').",
-   "Rule-count grounded via `grep -rhoE 'EASM-[A-Z]+-[0-9]+' modules/ easm_scanner.py | sort -u | wc -l` = 50 distinct rule IDs (README badge '50+ rules').",
-   "Module count from `ls modules/*.py | wc -l` = 33; orchestrator size from `wc -l easm_scanner.py` = 2,279 lines.",
-   "Project structure verified against `git ls-files` output (models/, modules/, api/, templates/dashboard.html, config/settings.yaml, wordlists/, tests/, .github/workflows/tests.yml all present)."
+   "Test count grounded via `grep -rcE 'def test_' tests/*.py` summed to 93 — matches README (`pytest tests/ -q # 93 tests`) and CLAUDE.md.",
+   "CVE count grounded via `grep -oE 'CVE-[0-9]{4}-[0-9]+' modules/vuln_detector.py | sort -u | wc -l` = 26, covering exactly 10 products (README states '25+ CVE entries').",
+   "Rule-count RE-COUNTED via `grep -rhoE 'EASM-[A-Z]+-[0-9]+' --include='*.py' modules/ easm_scanner.py | sort -u | wc -l` = 45 distinct rule IDs — corrected down from the README badge's inflated '50+'.",
+   "API endpoints RE-COUNTED via `grep -cE '@app\\.' api/server.py` = 13 (health, scan, scan/status, scan/history, summary, assets, findings, risk-scores, intelligence, graph, export/{fmt}, alerts/test, /) — corrected down from README's '15 endpoints' claim.",
+   "Module count = 32 functional pipeline modules (`ls modules/*.py` = 33 including the package marker __init__.py); corrected from '33'. Orchestrator size from `wc -l easm_scanner.py` = 2,279 lines.",
+   "Provider (25), sensitive-path (39), credential-pair (36), intel-pivot (5), threat-feed (6) and auto-escalation-rule (5) counts each re-counted in source and confirmed accurate.",
+   "Project structure verified against `git ls-files` — models/, modules/, api/, templates/dashboard.html, config/settings.yaml, wordlists/subdomains-top1000.txt, tests/, .github/workflows/tests.yml, requirements.txt, CLAUDE.md, run_demo.py all present. Compliance frameworks (ATT&CK technique IDs, Sigma, STIX 2.1 spec_version='2.1', CISA KEV, EPSS, CWE) all confirmed referenced in code."
   ]
  },
  "crq-engine": {
@@ -8310,11 +8275,11 @@
    }
   ],
   "evidence": [
-   "Read crq_engine.py in full (1,521 lines via `wc -l`); confirmed FAIREngine/CRQEngine classes, PERTParams/SimulationResult/ControlAnalysis/Finding dataclasses, and formulas (vulnerability clamp, LEF, control boost cap 40 / ~15 per control, 30% reduction cap, log-scale risk score).",
-   "Counted 7 threat communities via `grep -c '\"tc_base\"'` and 9 INDUSTRY_MULTIPLIERS entries (8 named sectors + default) via grep of the constant block.",
-   "Verified sample_scenarios.json contains 8 scenario IDs, 8 asset IDs, and 12 control IDs via `grep -o | sort -u | wc -l`; organization is Acme Financial Corp at $500M revenue.",
-   "Confirmed zero dependencies from imports (stdlib only) and README 'Zero Dependencies'; confirmed no test/CI files present via `git ls-files | grep -iE 'test|ci|workflow|yml'` returning NONE.",
-   "Grounded percentiles (5,10,25,50,75,90,95), DEFAULT_SIMULATIONS=10,000, RISK_THRESHOLDS, and CLI flags/exit codes directly from constants and argparse in crq_engine.py, cross-checked against README.md and CLAUDE.md."
+   "Read crq_engine.py in full (1,521 lines via `wc -l`); confirmed FAIREngine/CRQEngine classes, PERTParams/SimulationResult/ControlAnalysis/Finding dataclasses, and formulas (vulnerability clamp line 191/196, LEF = TEF x vulnerability line 207, control boost ~15 per control lines 372/551 and total cap 40 line 375, 30% reduction cap line 558, log-scale risk score).",
+   "Counted 7 threat communities via `grep -c '\"tc_base\"'` (nation_state/organized_crime/hacktivist/insider_malicious/insider_accidental/script_kiddie/competitor) and 9 INDUSTRY_MULTIPLIERS entries (8 named sectors + default) with every multiplier value matched to the constant block (financial_services 1.3 ... education 0.85).",
+   "Verified sample_scenarios.json contains 8 asset IDs, 12 control IDs, and 8 scenario IDs via sectioned `grep -c '\"id\"'`; organization is Acme Financial Corp at revenue 500000000 ($500M).",
+   "Confirmed zero dependencies (imports argparse/io/json/math/os/random/sys/time/dataclasses/typing — all stdlib) and no test/CI files present via `git ls-files` (9 tracked files: crq_engine.py, sample_scenarios.json, README.md, CLAUDE.md, crq_report.json, crq_report.html, banner.svg, LICENSE, .gitignore) — all 8 project_structure paths exist; LICENSE is MIT.",
+   "Grounded percentiles [5,10,25,50,75,90,95], DEFAULT_SIMULATIONS=10_000, RISK_THRESHOLDS (CRITICAL 5.0 / HIGH 2.0 / MEDIUM 0.5), 20 exceedance thresholds (line 393/396), 5x5 heatmap matrix (lines 1244-1248), Python 3.10+ / PEP 604 `int | None` (lines 163/446), and exit codes 0/1/2 (main returns 2 on input error, 1 if CRITICAL/HIGH, else 0) directly from source, cross-checked against README.md and CLAUDE.md."
   ],
   "integrations": [
    "JSON scenario input (organization, assets, controls, scenarios with min/likely/max three-point estimates)",
@@ -8327,7 +8292,7 @@
  "windows-red-teaming": {
   "id": "windows-red-teaming",
   "summary": [
-   "Windows Red Teaming is an open-source, MITRE ATT&CK-aligned assessment framework for authorized red team engagements against Windows 10, 11, Server 2019, and Server 2022. Every check maps to an ATT&CK technique, and the tool pairs two complementary engines under one CLI: 50 hand-written Python audit modules that perform deep, read-only security-posture checks, and a 226-test library of Atomic Red Team-style YAML tests that execute real adversary behavior with input arguments, dependencies, and automatic cleanup. Together they span all 13 ATT&CK tactics from Reconnaissance through Impact.",
+   "Windows Red Teaming is an open-source, MITRE ATT&CK-aligned assessment framework for authorized red team engagements against Windows 10, 11, Server 2019, and Server 2022. Every check maps to an ATT&CK technique, and the tool pairs two complementary engines under one CLI: 50 hand-written Python audit modules that perform deep, read-only security-posture checks, and a 226-test library of Atomic Red Team-style YAML tests that execute real adversary behavior with input arguments, dependencies, and automatic cleanup. Together they span 12 ATT&CK tactics from Reconnaissance through Impact.",
    "Its defining trait is safe-by-default, dual-mode execution. Analysts can run a fully passive `check` scan that is production-safe, preview exactly what would run with `--dry-run` (zero target contact), or opt in to active `--simulate` mode where Python modules and YAML atomics execute technique behavior and then automatically revert it. An OS-guard auto-skips modules that don't apply to the target, an authorization banner is confirmed before every scan, and every action is written to a timestamped evidence chain for full attribution.",
    "The tool is aimed at red teamers, purple teamers, and detection engineers who need repeatable, attributable technique execution mapped to a framework rather than ad-hoc scripts. It exports ATT&CK Navigator layers to visualize coverage, generates HTML/JSON/CSV reports, and maps findings to CIS Benchmark v8 and NIST 800-53 Rev 5 controls so results land equally well with a SOC or a compliance auditor.",
    "Notably, it ships modules and atomic tests for four February 2026 Patch Tuesday CVEs (RDP EoP, DWM SYSTEM privesc, MSHTML and SmartScreen security bypasses), and its auto-discovery design means dropping a new Python module into modules/<tactic>/ or a YAML file into atomics/<technique>/ extends coverage with no code changes to the engine."
@@ -8546,7 +8511,7 @@
   "compliance": [
    {
     "name": "MITRE ATT&CK",
-    "desc": "Every module and atomic test maps to an ATT&CK technique across all 13 enterprise tactics, with Navigator v4.5 layer export."
+    "desc": "Every module and atomic test maps to an ATT&CK technique across 12 enterprise tactics, with Navigator v4.5 layer export."
    },
    {
     "name": "CIS Benchmark v8",
@@ -8576,7 +8541,7 @@
    },
    {
     "label": "ATT&CK tactics",
-    "value": "13"
+    "value": "12"
    },
    {
     "label": "Unit tests",
@@ -8596,6 +8561,7 @@
    "Atomic test count = 226: cross-checked two ways — `grep -rE 'auto_generated_guid:' atomics | wc -l` = 226 and `grep -rE '^\\s+- name:' atomics | wc -l` = 226.",
    "Technique YAML files = 66: `git ls-files 'atomics/**/*.yaml' | wc -l` = 66.",
    "Test function count = 213: `grep -rhE '^\\s*def test_' tests | wc -l` = 213 (README badge of 194 is stale; CLAUDE.md also states 213).",
+   "Tactic coverage = 12 (not 13): distinct `TACTIC` values across modules = 12 and across atomics = 11 (union 12); `modules/initial_access/` holds only `__init__.py` (empty placeholder), so the README badge 'tactics-13' overcounts.",
    "CI matrix and jobs read from .github/workflows/ci.yml: Python 3.10-3.12 on ubuntu-latest and windows-latest, plus ruff, bandit, and build jobs.",
    "Dependencies and CVE modules confirmed from requirements.txt and modules/ (T1210_rdp_eop.py, T1068_dwm_privesc.py, T1218_mshtml_bypass.py, T1553_smartscreen_bypass.py) and CLAUDE.md CVE mapping (CVE-2026-21533/21519/21513/21510)."
   ]
@@ -8746,7 +8712,7 @@
    },
    {
     "area": "Discrete security checks",
-    "detail": "485 dedicated _check_* routines emit 1,043 distinct findings, each carrying a title, severity, evidence excerpt, and remediation string."
+    "detail": "488 dedicated _check_* routines emit 1,043 distinct findings, each carrying a title, severity, evidence excerpt, and remediation string."
    },
    {
     "area": "RHEL hardening controls",
@@ -8868,7 +8834,7 @@
    },
    {
     "label": "Discrete checks",
-    "value": "485"
+    "value": "488"
    },
    {
     "label": "Unit tests",
@@ -8881,11 +8847,11 @@
   ],
   "evidence": [
    "Module count grounded by downloading the repo tarball (codeload main branch) and counting: `find modules -name 'T*.py'` = 180 technique modules, `find modules -name 'CS*.py'` = 10 container modules, total 190 non-init module files.",
-   "Check/finding counts grounded via grep on the tarball: `grep -rho 'add_finding' modules` = 1,043 finding-emitting checks; `grep -rEho 'def _check...' modules` = 485 discrete check routines. The tagline's '297 checks / 52 modules' is stale versus these current counts.",
-   "Test counts grounded by `grep -rho 'def test_' tests` = 570 test functions across `find tests -name 'test_*.py'` = 24 files (README's '30+ test files' is the file-count figure; actual is 24).",
+   "Check/finding counts grounded via grep on the tarball: `grep -rho 'add_finding' modules` = 1,043 finding-emitting checks; `grep -rho 'def _check...' modules` = 488 discrete check routines (confirmed identically by `grep -rEc 'def +_check'` and a Python line-scan). The README consistently states 190 modules with no stale check/module tagline.",
+   "Test counts grounded by `grep -rho 'def test_' tests` = 570 test functions across `find tests -name 'test_*.py'` = 24 files (README's '30+ test files' is an over-stated file-count figure; actual is 24).",
    "12 ATT&CK tactics confirmed by listing tactic directories under modules/ (collection, command_and_control, credential_access, defense_evasion, discovery, execution, exfiltration, impact, initial_access, lateral_movement, persistence, privilege_escalation) plus container_security.",
    "Tech stack and CI grounded by reading requirements.txt (paramiko, mitreattack-python, click, pyyaml, jinja2, rich, structlog, cryptography, python-nmap, psutil) and .github/workflows/ci.yml (ruff, pytest+coverage, mypy on Python 3.10/3.11/3.12).",
-   "Five compliance frameworks confirmed by grepping core/compliance.py: CIS Controls v8, NIST SP 800-53, CIS RHEL 9, DISA STIG RHEL 8, DISA STIG RHEL 9."
+   "Five compliance frameworks confirmed by grepping core/compliance.py: CIS Controls v8, NIST SP 800-53 (Rev. 5), CIS RHEL 9, DISA STIG RHEL 8, DISA STIG RHEL 9."
   ]
  },
  "ad-attack-scenarios": {
@@ -8898,7 +8864,7 @@
   ],
   "features": [
    {
-    "title": "165+ checks across 15 attack categories",
+    "title": "80 checks across 15 attack categories",
     "description": "Audits the full AD attack surface — Kerberos, AD CS, privileged accounts, delegation, trusts, replication and more — from a single command."
    },
    {
@@ -9116,7 +9082,7 @@
    },
    {
     "label": "Discrete checks",
-    "value": "80+ (README lists 85; badge 165+)"
+    "value": "80 (README lists 85; badge 165+)"
    },
    {
     "label": "Unit tests",
@@ -9140,12 +9106,14 @@
    "PowerShell remediation commands emitted per finding"
   ],
   "evidence": [
-   "Category and per-module check counts confirmed against README.md's category table (sums to 85) and a grep of `def _check_` across checks/ which returned 80 methods; the README badge advertises '165+', so stats present the grounded 80+/85 figures rather than the badge.",
-   "15 check categories verified via the ALL_CHECKERS registry in checks/__init__.py and the 15 modules in the checks/ directory listing.",
-   "28 unit tests confirmed by grepping `def test_` in tests/test_scanner.py (28 matches), matching the README claim.",
-   "AD CS ESC coverage grounded by grep in checks/certificate_services.py, which shows ADCS-001=ESC1, ADCS-002=ESC2, ADCS-006=ESC6, and an ESC8 HTTP-enrollment/NTLM-relay check.",
-   "Tech stack taken directly from requirements.txt (ldap3, pywinrm, pyyaml, jinja2) and ad_security_scanner.py imports; scanner version v1.0.0 read from the BANNER string.",
-   "No MITRE ATT&CK technique IDs, detection rules, or response playbooks exist in the repo (grep for MITRE/ATT&CK/T1### returned nothing), and only a single CIS reference appears in password_policy.py — so the page deliberately avoids claiming those capabilities and frames the tool as a read-only assessment scanner with PowerShell remediation."
+   "Repo verified as github.com/Krishcalin/Active-Directory-Security-Assessment (API 200); the task's 'Active-Directory-Attack-Scenarios' name returns 301 = renamed to this repo, so the clone URL and tool framing already point to the correct, live repository.",
+   "True check count is 80: grep of `def _check_` across all 15 modules in checks/ returned exactly 80 methods (audit_logging 4, authentication_security 7, certificate_services 5, dns_security 4, domain_config 6, group_policy 5, kerberos_security 8, lateral_movement 4, ldap_security 4, object_permissions 3, password_policy 11, privileged_accounts 8, replication_security 3, service_accounts 5, trust_relationships 3). The README category table sums to 85 and the shields badge advertises '165+' — both are inflated, so the page uses the grounded 80.",
+   "15 check categories confirmed via ALL_CHECKERS in checks/__init__.py (15 *Checker classes) and the 15 modules in the checks/ tree listing.",
+   "All 12 project_structure paths exist in the GitHub tree (ad_security_scanner.py, checks/, utils/ldap_client.py|winrm_client.py|report_generator.py|severity.py, config/default_profile.yaml, tests/test_scanner.py, tests/test_data/mock_responses.json, requirements.txt, assets/banner.svg, README.md).",
+   "28 unit tests confirmed by grepping `def test_` in tests/test_scanner.py (28 matches); scanner version v1.0.0 read from the BANNER string in ad_security_scanner.py; LICENSE first line is 'MIT License'.",
+   "Tech stack taken directly from requirements.txt (ldap3>=2.9.1, pywinrm>=0.4.3, pyyaml>=6.0.1, jinja2>=3.1.3); CLI flags in usage examples (--server, --domain, --user, --password, --html, --json, --ssl, --no-winrm, --checks) all confirmed present in the argparse definitions.",
+   "AD CS ESC coverage grounded by the README table and certificate_services.py: ESC1 (SAN+client auth), ESC2 (Any Purpose), ESC6 (EDITF flag), ESC8 (HTTP enrollment/NTLM relay).",
+   "Only CIS (14+ password length) and the AD CS ESC1–ESC8 taxonomy are referenced in the repo; no MITRE ATT&CK IDs, NIST, or detection/response playbooks exist (grep returned nothing), so no compliance frameworks were invented."
   ]
  },
  "autonomous-pentest": {
@@ -9233,7 +9201,7 @@
    },
    {
     "name": "CLI interface",
-    "description": "Interactive chat loop with 22 slash commands and colored ANSI terminal output; exit code 1 on Critical/High findings for CI/CD gating."
+    "description": "Interactive chat loop with 22 slash commands and colored ANSI terminal output; the only non-zero exit is code 2 on connection failure."
    }
   ],
   "project_structure": [
@@ -9343,7 +9311,7 @@
    },
    {
     "label": "Deployment",
-    "value": "Runs locally on or over SSH to a Kali/Parrot attack box; exit code 1 on Critical/High for CI gating"
+    "value": "Runs locally on or over SSH to a Kali/Parrot attack box; interactive CLI (exits 2 on connection failure)"
    },
    {
     "label": "License",
@@ -9408,17 +9376,17 @@
    "hydra for multi-protocol credential spraying",
    "8 Phalanx Cyber scanners (SAST Java/Python/MERN/PHP, OWASP LLM, API Security, AWS Cloud, Nuclei) auto-cloned from GitHub",
    "JSON + HTML report export",
-   "JSON session save/load for resumable engagements",
-   "CI/CD gating via exit code 1 on Critical/High findings"
+   "JSON session save/load for resumable engagements"
   ],
   "evidence": [
-   "Agent tools = 31: `grep -c '^def handle_' pentest_copilot.py` returns 31, matching 31 unique `\"name\":` schema entries in AGENT_TOOLS_SCHEMA.",
+   "Agent tools = 31: `grep -c '^def handle_' pentest_copilot.py` returns 31, matching 31 top-level `\"name\":` schema entries in AGENT_TOOLS_SCHEMA (lines 2495-3262).",
    "Line count ~5,330: `wc -l pentest_copilot.py` returns 5330; __version__ = '2.5.0' at line 49.",
-   "Supporting systems and classes: `grep -cE '^class ' pentest_copilot.py` returns 25 total classes; 17 are the stateful supporting systems (CredentialVault through TaskTree) documented in CLAUDE.md.",
-   "Tool registry = 58 across 7 categories: counted `^\\s+(\"` tuples in the TOOL_REGISTRY block (lines 124-197) = 58; categories include Post-Exploitation (README states '60+').",
-   "Credential spray = 15 service modules: enumerated the SERVICE_MODULES dict (lines 1674+) which lists ssh/ftp/http/https/smb/rdp/mysql/mssql/postgres/telnet/vnc/smtp/pop3/imap/ldap (README prose says 14).",
-   "Compliance = 14 categories: counted top-level keys in COMPLIANCE_MAP (lines 1174-1266), each mapping OWASP/PTES/NIST/CWE.",
-   "Payloads = 7 languages and Phalanx = 8 scanners: verified generate_payloads() keys (bash/python/nc/nc_mkfifo/php/perl/powershell) and the PHALANX_SCANNERS dict (8 keys); 13 DANGEROUS_PATTERNS regexes counted at lines 106-119; tests/test_task_tree.py has 6 test_ functions."
+   "Supporting systems and classes: `grep -cE '^class ' pentest_copilot.py` returns 25 total classes; 17 are the stateful supporting systems (CredentialVault through FindingCorrelator, classes 4-20), i.e. 25 minus Finding, the 2 executors, 2 providers, 2 _TextBlock/_ToolUseBlock stubs, and PentestAgent — matching the 17 documented in CLAUDE.md.",
+   "Tool registry = 58 across 7 categories: enumerated the TOOL_REGISTRY block (lines 124-197) = 10+10+10+8+7+6+7 = 58 tuples (README badge overstates '60+').",
+   "Credential spray = 15 service modules: enumerated SERVICE_MODULES (lines 1674+) ssh/ftp/http/https/smb/rdp/mysql/mssql/postgres/telnet/vnc/smtp/pop3/imap/ldap (README prose says 14).",
+   "Compliance = 14 categories: 14 top-level keys in COMPLIANCE_MAP (lines 1174-1266), each mapping OWASP/PTES/NIST/CWE; MAX_ITERATIONS=25 (line 81), MAX_OUTPUT_CHARS=15000 (line 82), confidence 0.50/0.80/0.95 (lines 2358-2362), KILL_CHAIN_STAGES=11 (lines 1786-1798), EXPLOIT_MODIFIERS=8 (lines 2158-2166), VulnValidator STAGES=6 (lines 2043-2050), priorities P1-IMMEDIATE..P4-LOW (line 4100).",
+   "Payloads = 7 languages, Phalanx = 8 scanners, safety = 13 patterns, tests = 6: generate_payloads() keys bash/python/nc/nc_mkfifo/php/perl/powershell (line 941); PHALANX_SCANNERS dict = 8 keys (line 997, git-cloned at line 3864); DANGEROUS_PATTERNS = 13 regexes (lines 106-119); tests/test_task_tree.py has 6 test_ functions.",
+   "No CI exit-code gating in code: the only `sys.exit` is `sys.exit(2)` on connection failure (line 5321); run_cli() is an interactive loop that exits 0 via /quit and never returns exit code 1 on Critical/High findings, so that capability (claimed only in CLAUDE.md line 274) was removed from the CLI layer, Deployment row, and integrations list."
   ]
  },
  "oracle-saas-scanner": {
@@ -9487,7 +9455,7 @@
    },
    {
     "name": "API access layer",
-    "description": "_idcs_get/_idcs_single handle SCIM startIndex/count pagination while _fusion_get/_fusion_single handle offset/limit pagination, both with 403/404/429 handling."
+    "description": "_idcs_get/_idcs_get_single handle SCIM startIndex/count pagination while _fusion_get/_fusion_get_single handle offset/limit pagination, both with 403/404/429 handling."
    },
    {
     "name": "Check engine",
@@ -9665,10 +9633,11 @@
   ],
   "evidence": [
    "Counted 55 unique rule IDs via grep -oE 'OSAAS-(IAM|CFG|NET|LOG)-[0-9]+' | sort -u | wc -l, split 22 IAM / 13 CFG / 10 NET / 10 LOG.",
-   "COMPLIANCE_MAP verified at 55 entries via grep of '\"OSAAS-...\":' keys (oracle_saas_scanner.py lines 126-186), each with cis_oracle_saas / nist_800_53 / iso_27001 / soc2 fields.",
+   "COMPLIANCE_MAP verified at 55 entries via grep of '\"OSAAS-...\":' keys (oracle_saas_scanner.py lines 126-185), each with cis_oracle_saas / nist_800_53 / iso_27001 / soc2 fields.",
    "21 check methods confirmed by grep -nE 'def _check_' (lines 567-2393); scanner length 2,872 lines via wc -l.",
    "Sole dependency requests>=2.28.0 confirmed from requirements.txt; VERSION = '1.0.0' at line 73.",
-   "Operating-mode split (32 IDCS-only vs 55 full), dual auth, and output formats grounded in README.md and CLAUDE.md architecture/endpoint tables. No test suite or CI workflow present in git ls-files, so no test-count claim is made."
+   "API access method names verified: _idcs_get/_idcs_get_single and _fusion_get/_fusion_get_single (lines 400/462/489/555); no _idcs_single or _fusion_single exist.",
+   "Operating-mode split (32 IDCS-only vs 55 full per README.md line 259), dual auth (_ensure_token refresh, Basic fallback), 429 Retry-After, HTML Oracle-red #C74634 branding + client-side filters, and exit codes (1 on CRITICAL/HIGH line 2868, argparse 2) all grounded in code. No test suite or CI workflow present in git ls-files, so no test-count claim is made."
   ]
  },
  "snowflake-scanner": {
@@ -9984,7 +9953,7 @@
    },
    {
     "name": "Data loader (modules/base.py)",
-    "description": "DataLoader resolves ~25 config keys via a FILE_MAP with alias filenames, parses CSV/JSON (BOM-tolerant, header-normalized) into an in-memory dict consumed by all auditors."
+    "description": "DataLoader resolves 25 config keys via a FILE_MAP with alias filenames, parses CSV/JSON (BOM-tolerant, header-normalized) into an in-memory dict consumed by all auditors."
    },
    {
     "name": "BaseAuditor contract",
@@ -10190,10 +10159,10 @@
   ],
   "evidence": [
    "Counted 53 distinct check IDs via grep of finding() calls across modules/ (IAM-001..008, AUTH-001..008, API-001..007, PROC-001..007, DATA-001..006, SUPP-001..004, AUDIT-001..006, NET-001..003, NOTIF-001..002, DRIFT-001..002); README badge states '47+ checks' so 53 is the honest current count.",
-   "10 modules confirmed from MODULE_MAP in ariba_scanner.py and the README module table; check-method counts verified with grep 'def check_' (identity_access=8-equivalent, core_modules=16 methods, extended_modules=8 methods).",
+   "10 modules confirmed from MODULE_MAP in ariba_scanner.py (iam/auth/api/procurement/data/supplier/audit/network/notification/drift) and the README module table; grep 'def check_' gives identity_access=8, core_modules=23, extended_modules=16 (47 method definitions) which together emit the 53 distinct check IDs.",
    "Zero dependencies and Python 3.8+ confirmed from README badges and imports (argparse/json/csv/datetime/pathlib/html only) in ariba_scanner.py, base.py, and report_generator.py — no requirements file present.",
-   "23 sample config files confirmed via `ls sample_data/ | grep -E '.(json|csv)$' | wc -l` (excludes sample_report.html), matching the README's '23 demo config files'.",
-   "Compliance frameworks grounded via grep across modules/ and README.md returning SOX/Section 404, GDPR, ISO 27001, SOC 2, CIS Controls, NIST SP 800-53 and 800-52.",
+   "23 sample config files confirmed via `ls sample_data/ | grep -E '.(json|csv)$' | wc -l` (excludes sample_report.html), and generate_sample_data.py writes exactly 23 distinct .json/.csv outputs, matching the README's '23 demo config files'.",
+   "Compliance frameworks grounded via grep across modules/ and README.md returning SOX/Section 404/Sarbanes, GDPR, ISO 27001, SOC 2, CIS Controls, and NIST SP 800-53 and 800-52.",
    "No test suite or CI found: `git ls-files` matching test/ci/yml returned only sample data, and there is no tests/ directory or workflow file."
   ]
  },
@@ -10478,18 +10447,18 @@
   ],
   "evidence": [
    "Counted 96 unique check IDs via `grep -rhoE '\"OCI-[A-Z]+-[0-9]+\"' modules/ | sort -u | wc -l` (= 96); per-prefix unique counts confirm IAM 20, NET 12, COMP 8, STOR 8, DB 6, LOG 12, CG 5, OKE 8, KMS 5, WAF 4, BAST 4, IAC 3, CIS 1 (sum = 96), matching the CLAUDE.md module inventory table.",
-   "Verified 13 modules from MODULE_MAP in oci_scanner.py (lines 36-50) and the corresponding auditor classes across modules/cspm_core.py, cspm_ciem.py, and cwpp_iac.py.",
-   "Confirmed zero external dependencies from README badges and imports (argparse/json/sys/datetime/pathlib/html only); Python 3.8+ stated in README and CLAUDE.md.",
-   "Confirmed no test suite or CI: `ls tests` and `ls .github` both returned nothing, and git ls-files shows no test or workflow files.",
-   "Sample data count of ~41 from `ls sample_data/*.json | wc -l` (= 41); codebase size ~3,375 LOC via `wc -l oci_scanner.py modules/*.py`.",
-   "CIS OCI Foundations Benchmark v3.1.0 (~95% coverage) and CNAPP pillar definitions taken from README Overview/badges and CLAUDE.md project overview; CIS section references embedded in the finding() cis_benchmark field and README mapping tables."
+   "Verified 13 modules from MODULE_MAP in oci_scanner.py (lines 36-50) and the corresponding auditor classes across modules/cspm_core.py (Iam/Network/Compute/Storage), cspm_ciem.py (Database/Logging/CloudGuard), and cwpp_iac.py (Oke/Vault/Waf/Bastion/Iac/Cis).",
+   "Confirmed zero external dependencies: only stdlib imports present across oci_scanner.py and modules/*.py (argparse, json, re, html, datetime, pathlib, typing); Python 3.8+ stated in README and CLAUDE.md.",
+   "Confirmed no test suite or CI: git ls-files shows no tests/ directory and no .github/ workflows; JSON fallback verified at oci_scanner.py (except ImportError: ReportGenerator=None -> json.dump to .json).",
+   "Sample data count of 41 from `ls sample_data/*.json | wc -l` (= 41); codebase size 3,375 LOC via `wc -l oci_scanner.py modules/*.py`. LICENSE is MIT; _unwrap() strips the OCI CLI {'data': [...]} envelope (modules/base.py).",
+   "All six compliance frameworks are referenced in README.md (CIS OCI v3.1.0, CIS Kubernetes Benchmark, NIST SP 800-53 Rev 5, NIST CSF 2.0, SOC 2, ISO/IEC 27001:2022); CIS badge/overview state v3.1.0 (~95% coverage) though the README mapping-section header still reads v2.0."
   ]
  },
  "zscaler-scanner": {
   "id": "zscaler-scanner",
   "summary": [
    "Enterprises betting on Zscaler's Zero Trust Exchange collapse their perimeter into a cloud SASE fabric — but a single permissive URL rule, an SSL-inspection bypass, or an over-broad ZPA access policy quietly reopens the door attackers walk through. The Zscaler Security Scanner is an agentless, offline posture-assessment tool that ingests exported ZIA, ZPA, and DSPM configuration and flags the policy gaps, weak defaults, and least-privilege violations that drift into production over time.",
-   "The scanner runs 63 discrete checks across 12 audit modules spanning three platforms: ZIA secure web gateway (URL filtering, SSL/TLS inspection, cloud firewall, threat prevention/sandbox), ZPA Zero Trust access (access-policy least privilege, application segmentation, App Connector health), and the surrounding control plane (DLP, Cloud App Control, DSPM, admin/MFA hardening, IdP/SAML, and audit-log forwarding). Each finding is ranked CRITICAL to LOW and ships with remediation guidance, then rolled up into a self-contained HTML dashboard.",
+   "The scanner runs 62 discrete checks across 12 audit modules spanning three platforms: ZIA secure web gateway (URL filtering, SSL/TLS inspection, cloud firewall, threat prevention/sandbox), ZPA Zero Trust access (access-policy least privilege, application segmentation, App Connector health), and the surrounding control plane (DLP, Cloud App Control, DSPM, admin/MFA hardening, IdP/SAML, and audit-log forwarding). Each finding is ranked CRITICAL to LOW and ships with remediation guidance, then rolled up into a self-contained HTML dashboard.",
    "Because it works purely on JSON exports and has zero external dependencies (Python 3.8+ standard library only), it needs no live API credentials or network path to the tenant — making it safe to run in change-review, audit, and air-gapped assessment workflows. Security engineers, cloud/network architects, and auditors can point it at a config snapshot and get an evidence-backed picture of how far a deployment has drifted from a Zero Trust baseline.",
    "It is designed for teams operating Zscaler at scale who need repeatable, reviewable posture assessments rather than one-off console spot-checks — the modular design lets you scan a single control area (say, ZPA access policy or SSL inspection) or the entire estate in one pass."
   ],
@@ -10577,7 +10546,7 @@
    },
    {
     "path": "modules/zia_zpa_modules.py",
-    "description": "DLP, Cloud App Control, and ZPA access-policy / app-security auditors (20 checks)."
+    "description": "DLP, Cloud App Control, and ZPA access-policy / app-security auditors (19 checks)."
    },
    {
     "path": "modules/platform_dspm.py",
@@ -10597,11 +10566,11 @@
    },
    {
     "path": "docs/",
-    "description": "Documentation assets including the project banner."
+    "description": "Documentation assets including the project banner (banner.svg)."
    },
    {
     "path": "README.md",
-    "description": "Project documentation (note: currently stale — mirrors a sibling scanner and predates the Zscaler modules)."
+    "description": "Project documentation (note: currently stale — mirrors a sibling CrowdStrike Falcon scanner and predates the Zscaler modules)."
    },
    {
     "path": "CONTRIBUTING.md",
@@ -10630,8 +10599,8 @@
     "detail": "Verifies Cloud Sandbox is configured and enabled, malicious-URL blocking is on (CRITICAL), advanced threat protection exists, and vulnerable-browser and file-type controls are active."
    },
    {
-    "area": "DLP & Data Protection (5 checks)",
-    "detail": "Identifies missing DLP policy, monitor-only (non-blocking) rules, absent standard dictionaries, no Exact Data Match, and disabled ICAP integration."
+    "area": "DLP & Data Protection (4 checks)",
+    "detail": "Identifies missing DLP policy, monitor-only (non-blocking) rules, absent standard dictionaries, and no Exact Data Match."
    },
    {
     "area": "Cloud App Control & Shadow IT (4 checks)",
@@ -10706,17 +10675,10 @@
     "desc": "Validates audit logging, NSS streaming, and a 365-day retention threshold consistent with common logging-and-monitoring control requirements."
    }
   ],
-  "integrations": [
-   "Input: exported ZIA/ZPA/DSPM JSON configuration (console export or API)",
-   "Output: self-contained HTML dashboard report",
-   "Output: structured JSON findings (fallback / machine-readable)",
-   "Zscaler NSS (Nanolog Streaming Service) log-forwarding checks",
-   "Optional JSON baseline config for drift comparison (--config)"
-  ],
   "stats": [
    {
     "label": "Security checks",
-    "value": "63"
+    "value": "62"
    },
    {
     "label": "Audit modules",
@@ -10736,19 +10698,19 @@
    }
   ],
   "evidence": [
-   "Check count of 63 derived by enumerating each module file via raw GitHub fetch: modules/zia_security.py = 22 (URL 6, SSL 5, Firewall 5, Threat 6); modules/zia_zpa_modules.py = 20 (DLP 5, Cloud App Control 4, ZPA-POL 6, ZPA-APP 5); modules/platform_dspm.py = 21 (Admin 5, Auth 4, DSPM 6, Audit 6).",
-   "12 auditor classes confirmed: UrlFiltering/SslInspection/CloudFirewall/ThreatPrevention (zia_security.py), DlpDataProtection/CloudAppControl/ZpaAccessPolicy/ZpaAppSecurity (zia_zpa_modules.py), AdminSecurity/AuthIdp/Dspm/AuditCompliance (platform_dspm.py).",
-   "Module registry and CLI flags read from zscaler_scanner.py: --modules zia-url, zia-ssl, zia-fw, zia-threat, zia-dlp, zia-app, zpa-policy, zpa-app, admin, auth, dspm, audit, all; plus --data-dir, --severity, --output, --config.",
-   "Zero dependencies, HTML-with-JSON-fallback reporting, and severity constants (SEVERITY_CRITICAL/HIGH/MEDIUM/LOW) confirmed from modules/base.py (BaseAuditor/Finding, DataLoader) and zscaler_scanner.py (ReportGenerator import with JSON fallback).",
-   "Data inputs verified against sample_data/ listing (36+ JSON files incl. url_filtering_rules.json, ssl_inspection_policy.json, firewall_rules.json, sandbox_policy.json, dlp_policy.json, cloud_app_control.json, zpa_access_policy.json, zpa_app_segments.json, zpa_app_connectors.json, dspm_config.json, auth_config.json, idp_config.json, audit_config.json).",
-   "Grounding caveat: repository README.md is stale (mirrors a sibling CrowdStrike Falcon scanner and predates the Zscaler code); no tests/ directory, requirements.txt, or CI workflow present, and no explicit CIS/NIST/ISO citations found in code — 'Zero Trust Exchange' is referenced in the scanner banner. Page content is therefore grounded in the actual zscaler_scanner.py and the three Zscaler module files, not the README."
+   "Check count of 62 derived by enumerating each module file via raw GitHub fetch: modules/zia_security.py = 22 (URL 6, SSL 5, Firewall 5, Threat 6); modules/zia_zpa_modules.py = 19 (DLP 4, Cloud App Control 4, ZPA-POL 6, ZPA-APP 5); modules/platform_dspm.py = 21 (Admin 5, Auth 4, DSPM 6, Audit 6). Note: DlpDataProtectionAuditor's check_icap_integration is a pass-only stub that emits no finding, so ICAP is not counted as a check.",
+   "12 auditor classes confirmed in MODULE_MAP: UrlFilteringAuditor/SslInspectionAuditor/CloudFirewallAuditor/ThreatPreventionAuditor (zia_security.py), DlpDataProtectionAuditor/CloudAppControlAuditor/ZpaAccessPolicyAuditor/ZpaAppSecurityAuditor (zia_zpa_modules.py), AdminSecurityAuditor/AuthIdpAuditor/DspmAuditor/AuditComplianceAuditor (platform_dspm.py).",
+   "Module registry and CLI flags read from zscaler_scanner.py MODULE_MAP: --modules zia-url, zia-ssl, zia-fw, zia-threat, zia-dlp, zia-app, zpa-policy, zpa-app, admin, auth, dspm, audit, all; plus --data-dir, --severity, --output, --config.",
+   "Zero dependencies, HTML-with-JSON-fallback reporting, and severity constants (SEVERITY_CRITICAL/HIGH/MEDIUM/LOW) confirmed from modules/base.py (BaseAuditor/Finding, DataLoader) and zscaler_scanner.py (ReportGenerator with JSON fallback).",
+   "Data inputs verified against the repo git tree: sample_data/ contains 35 JSON files (plus sample_report.html), including url_filtering_rules.json, ssl_inspection_policy.json, firewall_rules.json, sandbox_policy.json, dlp_policy.json, cloud_app_control.json, zpa_access_policy.json, zpa_app_segments.json, zpa_app_connectors.json, dspm_config.json, auth_config.json, idp_config.json, and audit_config.json.",
+   "Grounding caveat: repository README.md is stale (mirrors a sibling CrowdStrike Falcon scanner and predates the Zscaler code); the repo also retains leftover CrowdStrike artifacts (cs_scanner.py, policy_validation.py, advanced_validation.py, CS-specific sample_data JSON). No tests/ directory, requirements.txt, or CI workflow present, and no explicit CIS/NIST/ISO citations found in code — 'Zero Trust Exchange' is referenced in the scanner banner. Page content is therefore grounded in the actual zscaler_scanner.py and the three Zscaler module files, not the README."
   ]
  },
  "responsible-ai": {
   "id": "responsible-ai",
   "summary": [
    "Responsible AI Framework is an early-stage, open-source Python project whose stated mission is to protect any AI application or AI agent with safety guardrails and governance controls. As enterprises rush LLM-powered apps and autonomous agents into production, they inherit a new class of risk — prompt injection, unsafe or biased outputs, data leakage, and agents that take actions no one reviewed. This project stakes out a vendor-neutral, code-first place to put the guardrails and governance controls that keep those systems trustworthy.",
-   "At its current stage the repository is a foundational scaffold: it ships the project charter (README), an MIT license, and a Python project baseline under a single initial commit — the mission and licensing are defined, and the implementation surface is being built out from here. That transparency matters for a portfolio: this is the seed of a responsible-AI control layer, captured at day zero rather than dressed up as a finished product.",
+   "At its current stage the repository is a foundational scaffold: it ships the project charter (README), an MIT license, and a stock .gitignore under a single initial commit — the mission and licensing are defined, and the implementation surface is being built out from here. That transparency matters for a portfolio: this is the seed of a responsible-AI control layer, captured at day zero rather than dressed up as a finished product.",
    "The intended audience is AI/ML engineers, platform and MLOps teams, and AppSec/GRC practitioners who need a reusable, framework-agnostic way to wrap safety and accountability around models and agentic workflows — instead of re-implementing ad-hoc filters per application. Being Python-first and MIT-licensed, it is positioned to drop into existing model-serving and agent stacks and to grow into the guardrail-plus-governance backbone described in its charter."
   ],
   "features": [
@@ -10781,7 +10743,7 @@
     "description": "Structured as a clean project baseline intended to grow into a modular library of composable responsible-AI checks and policies."
    }
   ],
-  "architecture_summary": "The repository currently provides the project foundation — a one-line charter README, an MIT license, and a Python project baseline captured in an initial commit; no runtime source has been committed yet. The intended reference architecture, per the charter, layers reusable safety guardrails and governance controls around AI applications and agents: an input/output guardrail layer that inspects prompts and responses, a policy/governance layer that decides what is permitted, and integration adapters that let those controls wrap existing Python-based model and agent stacks.",
+  "architecture_summary": "The repository currently provides the project foundation — a one-line charter README, an MIT license, and a stock .gitignore captured in an initial commit; no runtime source has been committed yet. The intended reference architecture, per the charter, layers reusable safety guardrails and governance controls around AI applications and agents: an input/output guardrail layer that inspects prompts and responses, a policy/governance layer that decides what is permitted, and integration adapters that let those controls wrap existing Python-based model and agent stacks.",
   "architecture_layers": [
    {
     "name": "Guardrail Layer (intended)",
@@ -10797,7 +10759,7 @@
    },
    {
     "name": "Project Foundation (current)",
-    "description": "What exists today — README charter, MIT LICENSE, and .gitignore establishing the Python project baseline under an initial commit."
+    "description": "What exists today — README charter, MIT LICENSE, and a stock .gitignore (a Dynamics 365 Business Central 'AL' template, not Python-specific) committed under a single initial commit."
    }
   ],
   "project_structure": [
@@ -10811,7 +10773,7 @@
    },
    {
     "path": ".gitignore",
-    "description": "Version-control ignore rules seeding the repository baseline (currently a stock template)."
+    "description": "Version-control ignore rules seeding the repository baseline — a stock Dynamics 365 Business Central 'AL' project template, not tailored to Python."
    },
    {
     "path": ".git/",
@@ -10891,7 +10853,8 @@
    "git ls-files returns exactly 3 tracked files: README.md, LICENSE, .gitignore — confirming the repo is a scaffold with no source modules.",
    "find . -type f -not -path './.git/*' shows only .gitignore, LICENSE, and README.md — zero Python (.py) source files currently exist.",
    "README.md is a single mission line: 'This is a python based Responsible AI Framework which can be used to protect any AI Application and AI Agents' — the sole grounding for language and purpose.",
-   "git log --oneline shows one commit ('Initial commit'); LICENSE is MIT with Copyright 2026, grounding the license and project-stage stats.",
+   "git log --oneline shows one commit (77c3549 'Initial commit'); LICENSE is MIT with 'Copyright (c) 2026 KRISH', grounding the license and project-stage stats.",
+   "The .gitignore is a stock Dynamics 365 Business Central 'AL' template (contains '### AL ###', '.alpackages/', '*.app', 'rad.json'), not a Python-specific gitignore — so prior claims of a 'Python project baseline' file were corrected.",
    "No CLAUDE.md, tests, CI config, or compliance references were found in the repository, so compliance is reported as empty rather than fabricated."
   ]
  },
@@ -11042,7 +11005,7 @@
   "evidence": [
    "README.md, read in full (121 bytes, 2 lines): declares 'an open-source python-based architecture that uses Agentic AI workflow' — the only description of scope/capabilities in the repo.",
    "`git ls-files` returns exactly 3 tracked files: README.md, LICENSE, .gitignore; `find . -not -path './.git/*' -type f` confirms no source code, tests, or config beyond these.",
-   "`git log --oneline --all` shows a single commit ('Initial commit') on main with no other branches or stashes — confirming initial/scaffolding stage.",
+   "`git log --oneline --all` shows a single commit ('Initial commit', 5b96b42) on main with no other branches or stashes — confirming initial/scaffolding stage.",
    "LICENSE first lines show 'MIT License / Copyright (c) 2026 KRISH'; .gitignore is a default AL/Dynamics 365 Business Central template, not Python-specific — indicating auto-generated scaffolding.",
    "No numeric capability claims (rules, checks, tests, coverage) exist in the repo, so none are asserted here; all capability/architecture fields are explicitly framed as declared/designed intent grounded in the README tagline and CTEM methodology."
   ],
@@ -11234,7 +11197,7 @@
     "description": "The project is explicitly positioned as an open-source Python architecture under a permissive MIT license, inviting community contribution."
    }
   ],
-  "architecture_summary": "No application architecture is implemented in the repository yet; the README declares the intended design as 'a python based architecture with Agentic AI workflow.' The layers below describe that proposed data flow — vendor intake, agentic AI assessment, and continuous monitoring — and are documented as roadmap, not as code present in the repo.",
+  "architecture_summary": "No application architecture is implemented in the repository yet; the README declares the intended design as 'an open-source python based architecture with Agentic AI workflow.' The layers below describe that proposed data flow — vendor intake, agentic AI assessment, and continuous monitoring — and are documented as roadmap, not as code present in the repo.",
   "architecture_layers": [
    {
     "name": "Vendor intake & questionnaire ingestion (proposed)",
@@ -11374,7 +11337,7 @@
    },
    {
     "title": "Known-CVE firmware matching",
-    "description": "Compares the appliance firmware against a curated database of 12 Barracuda/embedded-component CVEs (including CVE-2023-2868 and Log4Shell exposure) with CVSS scores and upgrade guidance."
+    "description": "Compares the appliance firmware against a curated database of 12 Barracuda/embedded-component CVEs (including CVE-2023-2868 and a Log4Shell/Log4j exposure entry) with CVSS scores and upgrade guidance."
    },
    {
     "title": "Interactive self-contained HTML report",
@@ -11413,7 +11376,7 @@
    },
    {
     "name": "Check modules (checks/ — 16 Checker classes)",
-    "description": "Each class (WafPoliciesChecker, SslTlsChecker, CveChecker, etc.) implements run_all() over ~134 private _check_ methods, appending findings with id, severity, actual/expected, and remediation."
+    "description": "Each class (WafPoliciesChecker, SslTlsChecker, CveChecker, etc.) implements run_all() over 134 private _check_ methods, appending findings with id, severity, actual/expected, and remediation."
    },
    {
     "name": "Config normalization (utils/config_helper.py)",
@@ -11501,7 +11464,7 @@
    },
    {
     "area": "Known-CVE Firmware Assessment (12-CVE database)",
-    "detail": "Matches appliance firmware against curated Barracuda and embedded-component CVEs — including the actively-exploited CVE-2023-2868, Spreadsheet::ParseExcel RCEs, mod_proxy SSRF, and Log4Shell exposure — with CVSS scores and fixed-version guidance."
+    "detail": "Matches appliance firmware against curated Barracuda and embedded-component CVEs — including the actively-exploited CVE-2023-2868, Spreadsheet::ParseExcel RCEs, mod_proxy SSRF, and a Log4Shell/Log4j exposure entry — with CVSS scores and fixed-version guidance."
    },
    {
     "area": "DDoS & Flood Protection (9 checks)",
@@ -11538,12 +11501,12 @@
     "value": "requests + urllib3 (session, retries, SSL toggle) against Barracuda REST API v3.2"
    },
    {
-    "label": "Config & templating",
-    "value": "PyYAML (scan profiles, compliance maps), Jinja2"
+    "label": "Config parsing",
+    "value": "PyYAML for scan profiles and compliance maps (Jinja2 is declared in requirements.txt but not used by the code)"
    },
    {
     "label": "Reporting",
-    "value": "Self-contained dark-theme HTML (inline CSS/JS, posture ring gauge) + structured JSON"
+    "value": "Self-contained dark-theme HTML built with native Python f-strings (inline CSS/JS, posture ring gauge) + structured JSON"
    },
    {
     "label": "Testing",
@@ -11610,14 +11573,14 @@
    }
   ],
   "evidence": [
-   "Distinct finding-check count of 169 verified by extracting unique \"id\": values from checks/ (grep -rhoE '\"id\":\\s*\"[^\"]+\"' | sort -u | wc -l = 169). Note: the README badge says '180+' and the category table sums to 182, but the honest distinct-ID count is 169, which is used as the headline.",
+   "Distinct finding-check count of 169 verified by extracting unique \"id\": values from checks/ (grep -rhoE '\"id\":\\s*\"[^\"]+\"' | sort -u | wc -l = 169). Per-module distinct-id distribution: waf_policies=25, ssl_tls=15, authentication=12, services=12, access_control=11, content_rules=11, adaptive_profiling=10, license_capacity=10, logging_monitoring=10, network=10, backup_recovery=9, ddos_protection=9, api_security=8, bot_protection=8, firmware_updates=5, cve_checks=4 — sums to 169.",
    "16 categories confirmed by the ALL_CHECKERS registry in checks/__init__.py (16 Checker classes) and 16 modules in checks/.",
-   "134 underlying _check_ methods counted via grep -c '^\\s+def _check_' across checks/*.py; per-module distribution captured (waf_policies=13, ssl_tls=11, authentication=12, ...).",
-   "12 known CVEs confirmed by grep -c '\"cve\":' checks/cve_checks.py = 12 (KNOWN_CVES list including CVE-2023-2868, CVE-2023-7101/7102, CVE-2021-40438, Log4Shell).",
-   "48 unit tests confirmed by grep -c 'def test_' tests/test_scanner.py = 48; test file is 443 lines using unittest with mock_responses.json.",
-   "4 compliance frameworks and 130 mapping entries read directly from config/compliance_maps.yaml (cis_barracuda 1.0, owasp_top10 2021, pci_dss 4.0, nist_csf 2.0).",
-   "Posture formula and grades (100 - CRIT×15 + HIGH×5 + MED×2 + LOW×0.5; A-F) read from utils/severity.py; exit codes 0/1/2 read from barracuda_waf_scanner.py main().",
-   "Dependencies (requests, pyyaml, jinja2, urllib3) and Python 3.9+ read from requirements.txt and README; REST API v3.2 / port 8443 / token auth read from utils/api_client.py."
+   "134 underlying _check_ methods counted via grep -c '^\\s+def _check_' across checks/*.py (waf_policies=13, ssl_tls=11, authentication=12, ...); note these are method counts, distinct from the 169 distinct finding ids since several methods emit multiple/branching findings.",
+   "12 known CVEs confirmed by grep -c '\"cve\":' checks/cve_checks.py = 12 KNOWN_CVES entries (CVE-2023-2868, CVE-2023-7101/7102 Spreadsheet::ParseExcel, CVE-2021-40438 mod_proxy SSRF, plus a 'Log4Shell / Log4j Exposure' entry carrying id CVE-2022-26134 in the repo).",
+   "48 unit tests confirmed by grep -c 'def test_' tests/test_scanner.py = 48; test file is 443 lines using unittest with tests/test_data/mock_responses.json.",
+   "4 compliance frameworks and 130 finding-ID mapping entries read directly from config/compliance_maps.yaml (cis_barracuda 1.0, owasp_top10 2021, pci_dss 4.0, nist_csf 2.0; 4 framework definitions + 130 mappings).",
+   "Posture formula and grades (100 - (CRIT×15 + HIGH×5 + MED×2 + LOW×0.5); A-F) read from utils/severity.py; exit codes sys.exit(2)=CRITICAL, sys.exit(1)=HIGH, sys.exit(0)=clean read from barracuda_waf_scanner.py.",
+   "Dependencies (requests>=2.31, pyyaml>=6.0.1, jinja2>=3.1.3, urllib3>=2.1) from requirements.txt and Python 3.9+ from README/CLAUDE.md; REST API base https://{host}:8443/restapi/v3.2 with Basic <token> auth read from utils/api_client.py (BarracudaWafClient). Note: jinja2 is a declared dependency but grep -rni jinja across all .py files returns zero hits — the HTML report is generated with native Python f-strings in utils/report_generator.py."
   ]
  },
  "logocean-siem": {
@@ -11906,18 +11869,18 @@
    }
   ],
   "evidence": [
-   "Parser count: `ls app/parsers/*.py | grep -v __init__` returns 30 files; zeek_ics is an enrichment helper (README app/parsers annotation and CLAUDE.md both state '29 total' registered parsers).",
-   "Rule counts: `ls rules/*.yml` = 100 files; `grep -rl 'correlation:' rules/*.yml` = 10, and files without it = 90 — exactly matching the README's '90 detection + 10 correlation rules' claim.",
+   "Parser count: `ls app/parsers/*.py | grep -v __init__` returns 30 files; zeek_ics is an enrichment helper, and app/parsers/__init__.py registers exactly 29 parsers in PARSERS (verified by reading the dict).",
+   "Rule counts: `ls rules/*.yml` = 100 files; `grep -rl 'correlation:' rules/*.yml` = 10, and files without it = 90 — and scripts/coverage_report.py prints 'Rules: 100 (90 event + 10 correlation)'.",
    "Test count: `grep -rh 'def test_' tests/` = 303 test functions across 32 test files (`ls tests/*.py`).",
    "Samples/playbooks: `ls samples/` = 35 fixture files; `ls playbooks/` = block_bruteforce_source.yml + log_high_severity.yml (2 playbooks).",
-   "Tech stack: requirements.txt lists fastapi, uvicorn[standard], jinja2, python-multipart, psycopg[binary,pool], python-dateutil, pyyaml (anthropic optional/commented); .github/workflows/tests.yml matrix = Python 3.11/3.12/3.13 + Postgres integration job.",
-   "Coverage numbers: CLAUDE.md's scripts/coverage_report.py summary line states 'ATT&CK Enterprise ~82 techniques, ICS 11, ATLAS 0/31; high-fidelity 36'; README confirms 3-year retention floor (RETENTION_YEARS default 3)."
+   "Tech stack: requirements.txt lists fastapi, uvicorn[standard], jinja2, python-multipart, psycopg[binary,pool], python-dateutil, pyyaml (anthropic optional/commented); .github/workflows/tests.yml unit matrix = Python 3.11/3.12/3.13 + an integration job on a postgres:16 service container; docker-compose uses postgres:16; syslog default port 5514 (UDP+TCP) in app/config.py.",
+   "Coverage numbers: running `PYTHONPATH=. python scripts/coverage_report.py` outputs 'ATT&CK Enterprise techniques covered: 82', 'ICS: 11', 'ATLAS 0/31', 'high=36'; RETENTION_YEARS default is 3 in app/config.py."
   ]
  },
  "itgrc-portal-iso27001": {
   "id": "itgrc-portal-iso27001",
   "summary": [
-   "IT-GRC Portal is a self-hosted, open-source Governance, Risk & Compliance platform built specifically to run an ISO/IEC 27001:2022 ISMS end to end. Instead of a spreadsheet graveyard of controls and evidence, it ships all 93 Annex A controls and all 30 mandatory management-system clauses (4-10) pre-seeded on first boot, then gives every module a real workflow: owners, review dates, conformity status, tasks, approvals, and audit-tracked sign-off. Clone it, `docker compose up`, wire it to your corporate IdP over SAML/OIDC, and you have a working ISMS the same afternoon.",
+   "IT-GRC Portal is a self-hosted, open-source Governance, Risk & Compliance platform built specifically to run an ISO/IEC 27001:2022 ISMS end to end. Instead of a spreadsheet graveyard of controls and evidence, it ships all 93 Annex A controls and all 30 mandatory management-system clauses (4-10) pre-seeded on first boot, then gives every module a real workflow: owners, review dates, conformity status, tasks, approvals, and audit-tracked sign-off. Clone it, `docker compose up`, and you have a working ISMS the same afternoon - local JWT accounts work out of the box, with SAML/OIDC left as optional, blank-by-default config placeholders for wiring a corporate IdP later.",
    "What sets it apart from a single-standard tool is the Unified Control Framework. Five catalogs live side by side - ISO 27001:2022 (93), ISO/IEC 27019:2024 energy-sector ENR controls (12), NIST CSF 2.0 (22 categories), SOC 2 Trust Services Criteria (13), and ISA/IEC 62443-2-1:2024 OT program elements (8) - joined by a control-to-control crosswalk (96 seeded mappings) and a cross-framework coverage matrix. That includes a rarely-seen IT-ISMS to OT-security bridge (66 ISO/27019 to IEC 62443 mappings), making this one of the few open GRC tools that speaks both the IT and the industrial/energy compliance dialects: test once, comply many.",
    "The portal covers the full ISMS lifecycle: a 5x5 risk register with inherent-vs-residual scoring and a heat map, Statement of Applicability, CMMI-style maturity self-assessments and vendor questionnaires, the Clause 7.5 documented-information register (17 mandatory records), interested parties (4.2), IS objectives and KPI/KRI/KCI metrics with auto-derived RAG status (6.2/9.1), a supplier/third-party register (5.19-5.23), incident management (5.24-5.28), awareness & training (7.2/7.3), evidence, audits and findings, and policies with attestation. A daily posture snapshot feeds compliance, conformity, document-readiness and training-completion trend charts with no scheduler required.",
    "It is aimed at CISOs, GRC managers, internal auditors, and control/risk owners who want to prepare for and maintain certification without paying for a proprietary SaaS GRC suite - while keeping their ISMS data inside their own perimeter. The stack is production-shaped (FastAPI async backend, React 18 SPA, PostgreSQL 16, Alembic migrations, RBAC with six roles) and CI-verified, but it is honest about its scope: it organizes and evidences your ISMS, it does not replace an accredited external audit."
@@ -11980,11 +11943,11 @@
    },
    {
     "name": "FastAPI route layer (backend/app/api)",
-    "description": "24 route modules, one per domain (controls, clauses, risks, soa, assessments, tasks, analytics, suppliers, incidents, training, reports, reminders, ...), all mounted under /api/v1 with Swagger/ReDoc docs."
+    "description": "22 route modules, one per domain (controls, clauses, risks, soa, assessments, tasks, analytics, suppliers, incidents, training, reports, reminders, ...), plus a shared deps.py, all mounted under /api/v1 with Swagger/ReDoc docs."
    },
    {
     "name": "Domain & schema layer (models + schemas)",
-    "description": "22 SQLAlchemy 2.0 async ORM models with UUID PKs and timezone-aware timestamps, paired with Pydantic v2 Create/Update/Read schemas; derived logic like compute_rag, task_is_overdue, and aggregate_score lives on the models."
+    "description": "SQLAlchemy 2.0 async ORM models - 30 model classes across 21 modules - with UUID PKs and timezone-aware timestamps, paired with Pydantic v2 Create/Update/Read schemas; derived logic like compute_rag, task_is_overdue, and aggregate_score lives on the models."
    },
    {
     "name": "Seed engine (seed/iso27001.py)",
@@ -12000,17 +11963,17 @@
    },
    {
     "name": "Auth & RBAC layer",
-    "description": "JWT (python-jose) with bcrypt-hashed passwords (passlib), SAML/OIDC-ready IdP hooks, and six default roles enforced through shared FastAPI dependencies (get_current_user, require_superuser)."
+    "description": "JWT (python-jose) with bcrypt-hashed passwords (passlib) as the working auth path, optional SAML/OIDC config placeholders for a future IdP integration (blank settings + an auth_provider column; no SSO login flow implemented yet), and six default roles enforced through shared FastAPI dependencies (get_current_user, require_superuser)."
    }
   ],
   "project_structure": [
    {
     "path": "backend/app/api/",
-    "description": "24 FastAPI route modules - one per ISMS domain plus analytics, reports, reminders, and shared deps.py."
+    "description": "22 FastAPI route modules (one per ISMS domain plus analytics, reports, reminders) alongside a shared deps.py; 24 files total in the directory."
    },
    {
     "path": "backend/app/models/",
-    "description": "22 SQLAlchemy async ORM models (Control, ClauseRequirement, Risk, Assessment, Task, PostureSnapshot, ...) with UUID PKs."
+    "description": "21 modules defining 30 SQLAlchemy async ORM model classes (Control, ClauseRequirement, Risk, Assessment, Task, PostureSnapshot, ...) with UUID PKs."
    },
    {
     "path": "backend/app/schemas/",
@@ -12050,7 +12013,7 @@
    },
    {
     "path": ".env.example",
-    "description": "Environment template for SECRET_KEY, database URL, first superuser, and SAML/OIDC IdP settings."
+    "description": "Environment template for SECRET_KEY, database URL, first superuser, and optional SAML/OIDC IdP settings."
    }
   ],
   "security_controls": [
@@ -12092,7 +12055,7 @@
    },
    {
     "area": "Access control & audit trail",
-    "detail": "Six RBAC roles (CISO, GRC Manager, Risk Owner, Control Owner, Auditor, Viewer), bcrypt+JWT auth with SAML/OIDC readiness, approval sign-off with decider/timestamp, and activity logging on all writes."
+    "detail": "Six RBAC roles (CISO, GRC Manager, Risk Owner, Control Owner, Auditor, Viewer), bcrypt+JWT auth with optional SAML/OIDC config readiness, approval sign-off with decider/timestamp, and activity logging on all writes."
    }
   ],
   "tech_stack": [
@@ -12114,7 +12077,7 @@
    },
    {
     "label": "Auth",
-    "value": "JWT (python-jose) + bcrypt (passlib); SAML/OIDC ready"
+    "value": "JWT (python-jose) + bcrypt (passlib); SAML/OIDC config-ready (SSO flow not yet implemented)"
    },
    {
     "label": "Key dependencies",
@@ -12166,7 +12129,7 @@
   "integrations": [
    "CSV exports for SoA, risks, and controls (stdlib csv, JWT-authenticated blob downloads)",
    "Printable board-pack HTML endpoint for print-to-PDF executive reporting",
-   "Enterprise IdP via SAML (SAML_METADATA_URL) and OIDC (discovery URL + client credentials)",
+   "Enterprise IdP readiness - SAML/OIDC config settings (SAML_METADATA_URL, OIDC discovery URL + client credentials) and an auth_provider field are scaffolded, but the SSO login flow is not yet implemented (local JWT auth is the working path)",
    "OpenAPI/Swagger UI and ReDoc auto-generated API documentation",
    "Evidence file upload/download with metadata stored in the database",
    "Docker Compose deployment; GitHub Actions CI on every push and pull request"
@@ -12195,11 +12158,11 @@
   ],
   "evidence": [
    "Control/clause/document/role counts confirmed by backend/tests/test_seed_integrity.py assertions: ANNEX_A_CONTROLS==93, ISO27019_CONTROLS==12, NIST_CSF_CONTROLS==22, SOC2_CONTROLS==13, IEC62443_CONTROLS==8, ISMS_CLAUSES==30, MANDATORY_DOCUMENTS==17, DEFAULT_ROLES==6.",
-   "Crosswalk total of 96 mappings counted via sed range over the CONTROL_MAPPINGS list in backend/app/seed/iso27001.py (grep of tuple lines); 66 ISO-to-62443 figure stated in README/CLAUDE.md and consistent with the IEC-mapping integrity test.",
-   "Test count of 29 derived from `grep -c 'def test_'` across the five files in backend/tests/ (4+4+4+13+4); 3 CI jobs confirmed by named jobs in .github/workflows/ci.yml (backend, migrations, frontend).",
-   "Module counts verified with git ls-files: 24 files in backend/app/api, 22 in backend/app/models, 34 pages in frontend/src/pages; total 149 tracked files.",
-   "Tech stack and versions read from backend/requirements.txt (fastapi==0.115.6, sqlalchemy 2.0.36, asyncpg, alembic, python-jose, passlib[bcrypt]) and frontend/package.json (react 18.3, vite, recharts, axios, react-router-dom).",
-   "Export/reporting endpoints (soa.csv, risks.csv, controls.csv, board-pack.html) confirmed by grep of @router decorators in backend/app/api/reports.py."
+   "Crosswalk total of 96 mappings counted by parsing the CONTROL_MAPPINGS list in backend/app/seed/iso27001.py; of those, 66 target an IEC 62443 SPE (55 from Annex A sources, 11 from ISO 27019 ENR), matching README/CLAUDE.md and the IEC-mapping integrity test.",
+   "Test count of 29 derived from grep -c 'def test_' across the five files in backend/tests/ (4+4+4+13+4); 3 CI jobs confirmed by named jobs in .github/workflows/ci.yml (backend, migrations, frontend).",
+   "Module counts verified with git ls-files and grep: backend/app/api holds 24 files = 22 APIRouter route modules + deps.py + __init__.py; backend/app/models holds 22 files = 21 model modules (+__init__) defining 30 `class X(Base)` ORM classes; 34 pages in frontend/src/pages; total 149 tracked files.",
+   "Tech stack and versions read from backend/requirements.txt (fastapi==0.115.6, sqlalchemy 2.0.36, asyncpg, alembic, python-jose, passlib[bcrypt]) and frontend/package.json (react 18.3.1, vite 6, recharts 2.15, axios 1.7.9, react-router-dom 6.28).",
+   "SAML/OIDC is scaffolding only: backend/app/config.py and .env.example define blank SAML_METADATA_URL/OIDC_* settings ('optional - leave blank for local auth'), models/user.py has an auth_provider column, and backend/app/api/auth.py exposes only local login/register/me/users routes - no SSO endpoint. Export/reporting endpoints (soa.csv, risks.csv, controls.csv, board-pack.html) confirmed by @router decorators in backend/app/api/reports.py."
   ]
  },
  "redchain-orchestrator": {
@@ -12208,7 +12171,7 @@
    "Most autonomous red-team agents put one LLM in a tool-use loop and hope it stays on task across a multi-day engagement. RedChain takes the opposite stance: it runs an offensive security engagement as a deterministic state machine of Kill Chain phases, where each phase is driven by a purpose-built specialist agent, produces a schema-validated artifact, and cannot advance until a hard-coded gate confirms that artifact is complete. The orchestrator — not the model — owns every phase transition.",
    "Built on the Anthropic SDK, RedChain trades the freewheeling autonomy of loop-based agents for reproducibility, auditability, and structured deliverables. Every engagement lives in a self-contained directory: a manifest, a SQLite state store recording phase status and gate decisions, one markdown artifact per phase, and a full JSONL prompt/response transcript for every agent run. Engagements checkpoint to disk and resume exactly where a gate paused them, which is what makes multi-day, multi-analyst campaigns tractable.",
    "The comparison the README draws is precise — autonomous loops track phases but never enforce them, decide their own next step, and leave you a conversation log; RedChain enforces phases in code, keeps transitions deterministic, and leaves you an artifact-per-phase plus a per-gate transcript audit trail. It is the right tool when a red team needs signed-off scope, defensible evidence, and a report they can hand to a SOC — not when they want a model to freelance against a live target.",
-   "This is an honest Alpha (v0.1.0): three of the nine Kill Chain phases — scope, recon, and report — are wired end-to-end behind the webapp preset, with the remaining six (weaponize, delivery, exploit, installation, C2, objectives) scaffolded as registry stubs. Critically, the MVP plans and validates rather than weaponizes: agents synthesize scope briefs and recon dossiers and explicitly refuse to actively scan or exploit, making it safe to demonstrate while the offensive phases mature."
+   "This is an honest Alpha (v0.1.0): three of the nine Kill Chain phases — scope, recon, and report — are wired end-to-end behind the webapp preset, with the remaining six (weaponize, delivery, exploit, installation, C2, objectives) documented as planned but not yet implemented (no phase modules or PHASE_REGISTRY entries yet). Critically, the MVP plans and validates rather than weaponizes: agents synthesize scope briefs and recon dossiers and explicitly refuse to actively scan or exploit, making it safe to demonstrate while the offensive phases mature."
   ],
   "features": [
    {
@@ -12268,7 +12231,7 @@
    },
    {
     "name": "phases/ (Kill Chain stages)",
-    "description": "One module per phase (scope, recon, report wired; six stubbed) defining the artifact model, agent dispatch, and prompt; PHASE_REGISTRY maps preset names to (Phase, Gate) pairs."
+    "description": "One module per phase (scope, recon, report wired; the remaining six not yet implemented) defining the artifact model, agent dispatch, and prompt; PHASE_REGISTRY maps preset names to (Phase, Gate) pairs."
    },
    {
     "name": "gates/ (artifact validators)",
@@ -12429,10 +12392,6 @@
    {
     "name": "CWE",
     "desc": "Vulnerability reference patterns map to specific CWE identifiers (CWE-89, CWE-79, CWE-639, CWE-918, CWE-601) with validation and remediation guidance."
-   },
-   {
-    "name": "OWASP Top 10 (aligned)",
-    "desc": "Bundled web patterns cover OWASP-aligned classes: injection (SQLi/XSS), broken access control (IDOR), and SSRF."
    }
   ],
   "integrations": [
@@ -12466,14 +12425,15 @@
    }
   ],
   "evidence": [
-   "Kill Chain phase set (9) read from README.md flow diagram (scope->recon->weaponize->delivery->exploit->installation->c2->objectives->report); 3 wired confirmed by PHASE_REGISTRY in src/redchain/phases/__init__.py (scope/recon/report) and README Status section (Alpha v0.1.0).",
+   "Kill Chain phase set (9) read from README.md flow diagram (scope->recon->weaponize->delivery->exploit->installation->c2->objectives->report); 3 wired confirmed by PHASE_REGISTRY in src/redchain/phases/__init__.py (scope/recon/report only — no weaponize/delivery/etc. modules or entries exist) and README Status section (Alpha v0.1.0).",
    "Agent count from src/redchain/agents/__init__.py AGENT_REGISTRY (planner, network_analyst); report phase reuses Planner via agent_override='report_writer' in src/redchain/phases/report.py.",
    "Gate count and logic from src/redchain/gates/ (scope_gate.py, recon_gate.py, report_gate.py) — required sections and non-empty checks read directly from each validate().",
    "5 CWE-tagged patterns counted in src/redchain/vulnref/patterns.json (sqli-classic/CWE-89, xss-reflected/CWE-79, auth-bypass-idor/CWE-639, ssrf-classic/CWE-918, open-redirect/CWE-601).",
    "12 unit tests via grep of 'def test_' across tests/ (test_gates.py=7, test_orchestrator_dryrun.py=1, test_state.py=4).",
    "Tech stack and default model from pyproject.toml dependencies and src/redchain/runtime/agent_session.py (DEFAULT_MODEL='claude-sonnet-4-6', cache_control ephemeral on system prompt).",
    "No CI: confirmed no .github directory exists in the repo (ls .github returned none); README documents pytest/ruff/mypy as local dev commands only.",
-   "52 tracked files total via git ls-files count."
+   "52 tracked files total via git ls-files count.",
+   "OWASP is not referenced anywhere in the repo (case-insensitive grep across all files returned zero hits); only Cyber Kill Chain ('kill-chain' keyword + 'Kill Chain' in code/docs) and CWE (patterns.json ids) are genuinely referenced frameworks."
   ]
  },
  "exploit-poc": {
@@ -12519,7 +12479,7 @@
    },
    {
     "title": "MITRE ATT&CK-mapped Sigma",
-    "description": "All ten Sigma rules carry attack.* tags spanning eight techniques (T1546, T1068, T1190, T1505.003, T1059.001/003, T1003.001, T1218.011) for coverage tracking."
+    "description": "Sigma rules carry attack.* tags spanning eight techniques (T1546, T1068, T1190, T1505.003, T1059.001/003, T1003.001, T1218.011) for coverage tracking; the primary rule in each pack is tagged (6 of the 10 rules)."
    },
    {
     "title": "Authoritative references per pack",
@@ -12588,7 +12548,7 @@
    },
    {
     "path": ".gitignore",
-    "description": "Ignore rules (README notes it needs extending to exclude native build output for compiled payloads)."
+    "description": "Ignore rules that already exclude native build output (*.dll/*.exe/*.obj/*.lib/*.pdb), Python caches, third-party tooling (ysoserial), and secrets/live-target data."
    }
   ],
   "security_controls": [
@@ -12622,7 +12582,7 @@
    },
    {
     "area": "Multi-format detection coverage",
-    "detail": "10 Sigma rules (attack.* tagged across 8 ATT&CK techniques), 3 YARA rules, 3 Suricata IDS SIDs, 2 Sysmon configs, and 4 KQL hunting query sets for Defender XDR / Sentinel."
+    "detail": "10 Sigma rules whose attack.* tags span 8 ATT&CK techniques, 3 YARA rules, 3 Suricata IDS SIDs, 2 Sysmon configs, and 4 KQL hunting query sets for Defender XDR / Sentinel."
    }
   ],
   "tech_stack": [
@@ -12685,15 +12645,6 @@
     "desc": "The T1003.001 pack references LOLBAS (comsvcs) and Atomic Red Team for technique cross-validation."
    }
   ],
-  "integrations": [
-   "Microsoft Sentinel & Defender XDR (KQL hunting queries)",
-   "Sigma -> any Sigma-compatible SIEM backend",
-   "Sysmon (EID 1/7/10/11/12/13) telemetry",
-   "Suricata / Snort IDS (heuristic rules alongside Talos official SIDs)",
-   "YARA file/webshell scanning",
-   "ysoserial.net gadget generation (WSUS)",
-   "Windows Event Log (4688) & IIS/HTTPERR/WSUS server logs for IR"
-  ],
   "stats": [
    {
     "label": "PoC packs",
@@ -12718,11 +12669,11 @@
   ],
   "evidence": [
    "Pack count: git ls-files shows 5 top-level *-PoC/ directories (CVE-2025-21293, CVE-2025-59287, CVE-2025-31324, T1003.001-LSASS-comsvcs, CVE-2026-47291); confirmed against README catalog table.",
-   "Sigma rule count = 10: grep '^title:' across --include=*.yml returned 10 titles, 2 per pack in 5 sigma.yml files.",
-   "YARA=3 rules (grep '^rule ' in sap_webshell.yara), Suricata=3 (grep -c 'sid:' in cve-2026-47291.suricata.rules), KQL=4 hunting.kql files (git ls-files | grep -c hunting.kql), detection files=13 (git ls-files | grep -c detection/).",
+   "Sigma rule count = 10: grep '^title:' across --include=*.sigma.yml returned 10 titles, 2 per pack in 5 sigma.yml files. Only 6 of the 10 rules carry attack.* tags (the primary rule per pack; the paired companion rule is untagged in the 4 CVE packs, both tagged in the LSASS pack).",
+   "YARA=3 rules (grep '^rule ' in sap_webshell.yara), Suricata=3 (grep -c 'sid:' in cve-2026-47291.suricata.rules), KQL=4 hunting.kql files, Sysmon=2 configs, detection files=13 (git ls-files | grep -c detection/).",
    "ATT&CK techniques=8: distinct attack.tNNNN tags from grep across sigma files (t1546, t1068, t1190, t1505.003, t1059.001, t1059.003, t1003.001, t1218.011).",
-   "Benign-by-default verified in source: perfctr_payload.c defines SPAWN_SHELL 0 and ADD_ADMIN 0 (lines 50-54); CVE-2026-47291 checker docstring states 'THIS IS NOT AN EXPLOIT' and sends no oversized request (check_cve_2026_47291.py lines 12-16).",
-   "CVSS/KEV/patch facts and dependencies (requests, pycryptodome, ysoserial.net) grounded in each pack README's vulnerability table and requirements.txt; no CI/test files exist in git ls-files."
+   "Benign-by-default verified in source: perfctr_payload.c defines SPAWN_SHELL 0 (line 50) and ADD_ADMIN 0 (line 54); CVE-2026-47291 checker docstring states 'THIS IS NOT AN EXPLOIT' and sends no oversized request (check_cve_2026_47291.py lines 12-16).",
+   "CVSS/KEV/patch facts (8.8/9.8/9.8/9.8 base, temporal 8.5; SAP Notes 3594142/3604119; WSUS KB5070881 etc.) and dependencies (requests, pycryptodome, ysoserial.net) grounded in each pack README and requirements.txt; no CI/test files exist in git ls-files. .gitignore already excludes native build output and secrets (the 'needs extending' note in CLAUDE.md is stale)."
   ]
  },
  "ai-runtime-guardrail": {
@@ -12899,7 +12850,7 @@
    },
    {
     "area": "Adversarial regression gate",
-    "detail": "A labeled corpus spanning nine attack techniques (direct override, DAN roleplay, developer mode, encoded/zero-width smuggling, safety bypass, system-prompt exfil, fake system) enforces recall and false-positive-rate thresholds in CI."
+    "detail": "A labeled corpus spanning nine attack techniques (direct override, DAN roleplay, developer mode, unrestricted roleplay, encoded/zero-width smuggling, safety bypass, system-prompt exfil, fake system) enforces recall and false-positive-rate thresholds in CI."
    }
   ],
   "tech_stack": [
@@ -12994,9 +12945,9 @@
    }
   ],
   "evidence": [
-   "Test count 36 verified by grep -rhoE 'def test_' across tests/ (5+5+9+7+5+5 per file: test_pipeline, test_proxy, test_phase3, test_phase4, test_benchmark, test_phase6); matches README and CLAUDE.md.",
+   "Test count 36 verified by grep -rc 'def test_' across tests/ (test_pipeline 5, test_proxy 5, test_phase3 5, test_phase4 9, test_benchmark 5, test_phase6 7 = 36); matches README and CLAUDE.md.",
    "Injection signatures counted at 13 via grep -c 'name:' rules/injection_patterns.yaml; DLP patterns counted at 11 via grep -c 'name:' rules/dlp_patterns.yaml; combined 24 detection patterns. Output leak detector has 4 phrasing patterns (read from detectors/output/system_prompt_leak.py).",
-   "Corpus size 15 attacks + 15 benign = 30 confirmed by grep -c . on corpus/attacks.jsonl and corpus/benign.jsonl; nine distinct techniques enumerated via grep on the 'technique' field.",
+   "Corpus size 15 attacks + 15 benign = 30 confirmed by grep -c . on corpus/attacks.jsonl and corpus/benign.jsonl; nine distinct techniques enumerated via grep on the 'technique' field (dan_roleplay, developer_mode, direct_override, encoded_injection, fake_system, roleplay_unrestricted, safety_bypass, system_prompt_exfil, zero_width_smuggle).",
    "Compliance frameworks (OWASP LLM 2025, NIST AI RMF, MITRE ATLAS) read directly from _CATEGORY_CONTROLS in core/compliance.py; provider adapters anthropic and openai confirmed via core/providers/registry.py.",
    "Tech stack and versions read from requirements.txt (fastapi, uvicorn, httpx, pyyaml, click, rich, structlog, jinja2, anthropic, pytest); CI matrix Python 3.10/3.11/3.12 read from .github/workflows/ci.yml. LLM-judge model claude-haiku-4-5 (escalation claude-sonnet-4-6) read from detectors/llm_judge/classifier.py."
   ]
@@ -13405,8 +13356,8 @@
     "description": "Maps each rule to CWE-798/321/522, OWASP 2021, PCI DSS v4.0, and NIST 800-53 controls."
    },
    {
-    "path": "core/baseline.py, allowlist.py, pragma.py, gitignore.py",
-    "description": "The triage/suppression layer: baseline merge, allowlist, inline pragmas, and gitignore-aware filtering."
+    "path": "core/baseline.py",
+    "description": "The triage/suppression layer (with allowlist.py, pragma.py, gitignore.py): baseline merge, allowlist, inline pragmas, and gitignore-aware filtering."
    },
    {
     "path": "detectors/signature.py",
@@ -13564,7 +13515,7 @@
   "evidence": [
    "Rule count: grep -c '^\\s*- id:' rules/secret_patterns.yaml returned 28; verifier: tags counted 11 in the same file.",
    "Test count: grep -rh 'def test_' tests/ | wc -l returned 51 (compliance 4 + git_history 9 + reporter 6 + scanner 22 + verify 10), matching the README badge.",
-   "Live-verify providers: grep of core/verify.py shows 6 verifier classes (GitHubVerifier, OpenAIVerifier, SendGridVerifier, GitLabVerifier, AnthropicVerifier, StripeVerifier).",
+   "Live-verify providers: default_verifiers() in core/verify.py registers 6 classes (GitHubVerifier, GitLabVerifier, OpenAIVerifier, AnthropicVerifier, StripeVerifier, SendGridVerifier).",
    "Tech stack: requirements.txt and pyproject.toml list pyyaml/click/rich/structlog + pytest/pytest-cov; requires-python >=3.10; version 0.1.0.",
    "CI matrix and self-scan gate confirmed in .github/workflows/ci.yml (python-version [3.10, 3.11, 3.12]; secrets-scan scan --gitignore --baseline .secrets-baseline.json --fail-on high).",
    "Compliance mappings read directly from core/compliance.py: CWE-798/321/522, OWASP A07/A02:2021, PCI DSS 8.6.2/6.2.4, NIST IA-5/SC-12.",
