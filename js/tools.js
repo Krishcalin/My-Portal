@@ -887,7 +887,7 @@ const TOOLS = [
     stats: { checks: 96, modules: 13, pillars: 5 },
     version: "1.0.0",
     language: "Python",
-    github: "https://github.com/Krishcalin/OCI-CNAPP-Security-Scanner",
+    github: "https://github.com/Krishcalin/OCP-CNAPP-Security-Scanner",
     sampleReport: "reports/oci-cnapp-report.html",
     status: "public",
     icon: "cloud",
