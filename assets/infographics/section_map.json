@@ -24,5 +24,19 @@
     "compliance": [
       "sap-s4hana-scanner-standards.png"
     ]
+  },
+  "ot-security-scanner": {
+    "hero": [
+      "ot-security-scanner-threats.png"
+    ],
+    "architecture": [
+      "ot-security-scanner-pipeline.png"
+    ],
+    "features": [
+      "ot-security-scanner-modules.png"
+    ],
+    "compliance": [
+      "ot-security-scanner-purdue.png"
+    ]
   }
 }
