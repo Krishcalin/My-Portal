@@ -127,5 +127,20 @@
       "ai-runtime-guardrail-architecture.png",
       "ai-runtime-guardrail-pipeline.png"
     ]
+  },
+  "itgrc-portal-iso27001": {
+    "hero": [
+      "itgrc-portal-iso27001-hero.png"
+    ],
+    "features": [
+      "itgrc-portal-iso27001-capabilities.png"
+    ],
+    "controls": [
+      "itgrc-portal-iso27001-reference.png"
+    ],
+    "architecture": [
+      "itgrc-portal-iso27001-architecture.png",
+      "itgrc-portal-iso27001-pipeline.png"
+    ]
   }
 }
