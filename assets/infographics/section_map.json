@@ -82,5 +82,20 @@
       "windows-red-teaming-architecture.png",
       "windows-red-teaming-pipeline.png"
     ]
+  },
+  "sbom-security": {
+    "hero": [
+      "sbom-security-hero.png"
+    ],
+    "features": [
+      "sbom-security-capabilities.png"
+    ],
+    "controls": [
+      "sbom-security-reference.png"
+    ],
+    "architecture": [
+      "sbom-security-architecture.png",
+      "sbom-security-pipeline.png"
+    ]
   }
 }
