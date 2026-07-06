@@ -1,659 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About &mdash; Phalanx Cyber</title>
-  <meta name="description" content="About Krishnendu De, creator of Phalanx Cyber: 24+ years in cybersecurity engineering, IIT Kharagpur alumnus, builder of 30 open-source security tools.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <style>
-    .lang-btn{padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:700;letter-spacing:0.03em;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .2s}
-    .lang-btn:hover{border-color:var(--border-hover);color:var(--text)}
-    .lang-btn.active{background:var(--gradient);color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(0,212,255,0.2)}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About the Founder — PhalanxCyber</title>
+<meta name="description" content="Krishnendu De, Founder & CTO of PhalanxCyber — an accomplished cybersecurity leader with 25+ years of experience and the sole architect of 54 open-source security repositories.">
+<script>(function(){try{var t=localStorage.getItem('pcx-theme');if(t){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav class="nav" id="nav">
-    <div class="nav__inner container">
-      <a href="index.html" class="nav__logo" style="gap:12px">
-        <svg class="nav__logo-icon" viewBox="0 0 36 36" fill="none" style="width:34px;height:34px"><defs><linearGradient id="sg6" x1="4" y1="2" x2="32" y2="34"><stop stop-color="#00D4FF"/><stop offset="1" stop-color="#7B61FF"/></linearGradient><linearGradient id="sg6f" x1="4" y1="2" x2="32" y2="34"><stop stop-color="#00D4FF" stop-opacity="0.12"/><stop offset="1" stop-color="#7B61FF" stop-opacity="0.12"/></linearGradient></defs><path d="M18 2L4 9v9c0 8.5 5.6 16.4 14 18 8.4-1.6 14-9.5 14-18V9L18 2z" fill="url(#sg6f)" stroke="url(#sg6)" stroke-width="1.5"/><path d="M18 7L9 12v6c0 5.8 3.8 11.2 9 12.3 5.2-1.1 9-6.5 9-12.3v-6L18 7z" fill="none" stroke="url(#sg6)" stroke-width="0.8" opacity="0.5"/><line x1="12" y1="15" x2="24" y2="15" stroke="url(#sg6)" stroke-width="1.8" stroke-linecap="round"/><line x1="13" y1="19" x2="23" y2="19" stroke="url(#sg6)" stroke-width="1.8" stroke-linecap="round"/><line x1="14" y1="23" x2="22" y2="23" stroke="url(#sg6)" stroke-width="1.8" stroke-linecap="round"/><circle cx="11" cy="15" r="1.3" fill="#00D4FF"/><circle cx="25" cy="15" r="1.3" fill="#7B61FF"/><circle cx="12" cy="19" r="1.3" fill="#00D4FF" opacity="0.7"/><circle cx="24" cy="19" r="1.3" fill="#7B61FF" opacity="0.7"/><circle cx="13" cy="23" r="1.3" fill="#00D4FF" opacity="0.5"/><circle cx="23" cy="23" r="1.3" fill="#7B61FF" opacity="0.5"/></svg>
-        <div style="display:flex;flex-direction:column;line-height:1.1"><span style="font-size:1.6rem;font-weight:800;letter-spacing:-0.02em">Phalanx<span class="nav__logo-accent">Cyber</span></span><span style="font-size:0.7rem;font-weight:500;color:var(--text-muted);letter-spacing:0.04em;margin-top:3px">Open-Source Security Tools</span></div>
-      </a>
-      <ul class="nav__links" id="navLinks">
-        <li><a href="strategy.html">Strategy</a></li>
-        <li><a href="index.html#catalogue">Tools</a></li>
-        <li><a href="risk-quantification.html">Risk Quantification</a></li>
-        <li><a href="about.html" style="color:var(--text)">About</a></li>
-        <li><a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a></li>
+<nav class="nav"><div class="container-wide nav__inner">
+  <a class="brand" href="index.html"><img class="brand__img" src="logo/phalanxcyber-logo.png" alt="PhalanxCyber — Open-Source Security Tools"></a>
+  <div class="nav__links">
+    <a href="index.html#tools">Tools</a>
+    <a href="strategy.html">Strategy</a>
+    <a href="risk-quantification.html">Risk</a>
+    <a href="about.html">Founder Bio</a>
+  </div>
+  <div class="nav__actions">
+    <button class="theme-toggle" onclick="pcxToggle()" aria-label="Toggle light/dark theme">
+      <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+    <a class="btn btn--primary btn--sm" href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></nav>
+
+<!-- HERO -->
+<header class="hero"><div class="container-wide" style="text-align:center">
+  <div style="text-align:center"><span class="eyebrow">About the Founder</span></div>
+  <h1 style="margin:16px auto 0;max-width:900px">Built by a Practitioner. <span class="gradient-text">Not a Product Company.</span></h1>
+  <p class="hero__sub" style="margin:22px auto 0;max-width:720px">PhalanxCyber is a new model for security innovation — an entire platform engineered by a single cybersecurity strategist with 25+ years of hands-on experience. A deliberate demonstration of what becomes possible when decades of practitioner expertise converge with AI-augmented development.</p>
+</div></header>
+
+<!-- FOUNDER -->
+<section class="section section--tight"><div class="container-wide">
+  <div class="founder">
+    <div>
+      <div class="founder__photo"><img src="https://github.com/Krishcalin.png" alt="Krishnendu De"></div>
+      <div class="founder__social">
+        <a class="btn btn--secondary btn--sm" href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.119 20.452H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/></svg>
+          LinkedIn</a>
+        <a class="btn btn--secondary btn--sm" href="https://github.com/Krishcalin" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub</a>
+      </div>
+    </div>
+    <div>
+      <h2 class="founder__name">Krishnendu De</h2>
+      <div class="founder__role">Founder &amp; CTO · PhalanxCyber<span class="founder__role-note">An Open Source Not-for-Profit Initiative</span></div>
+      <div class="founder__meta">IIT Kharagpur · 25+ Years in Cybersecurity · Kolkata, India</div>
+      <div class="founder__bio">
+        <p>Krishnendu De, the Founder and CTO of PhalanxCyber, is an accomplished cybersecurity leader with over <strong>25 years of experience</strong> across security engineering, threat intelligence, product development, and enterprise security strategy. He is the sole architect and creator behind the <strong>Phalanx Cyber</strong> platform — a comprehensive portfolio of <strong>54 open-source security repositories</strong> on GitHub, spanning every layer of the enterprise stack: Application Security, Cloud Infrastructure, SaaS platforms, ERP Security, Threat Intelligence and Hunting, Network and Security Appliances, and the security of OT/ICS environments and equipment like PLCs, RTUs and FRTUs.</p>
+        <p>His career spans senior roles across <strong>India, the United Kingdom, the Netherlands, and international markets</strong> — building and leading security programs for complex, regulated enterprises. Krishnendu brings a rare intersection of deep technical capability, cyber product vision, and fluent boardroom risk communication — equally at home writing a SAST scanner from first principles, designing a zero-trust architecture, or presenting a risk-quantified business case to a board of directors.</p>
+        <p>He holds a master's degree from the <strong>Indian Institute of Technology, Kharagpur</strong> — one of Asia's most selective engineering institutions — along with the <strong>Offensive Security Certified Professional (OSCP)</strong> and <strong>Offensive Security Experienced Penetration Tester (OSEP)</strong> from OffSec, and <strong>CISSP</strong> from ISC2, anchoring his practitioner-first approach in validated adversarial expertise.</p>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- THREE LENSES -->
+<section class="section" style="background:var(--bg-subtle);border-block:1px solid var(--border)"><div class="container-wide">
+  <div class="section-head"><span class="eyebrow">Expertise</span><h2>The <span class="gradient-text">Three Lenses</span></h2><p>What makes Krishnendu's approach distinctive is the ability to operate across three domains rarely combined in a single practitioner: deep engineering, product thinking, and business strategy.</p></div>
+  <div class="lens-grid">
+    <div class="lens">
+      <h3>Engineering Depth</h3>
+      <p>Not a security manager who delegates to engineers — a hands-on builder who writes production security tools from scratch. Every scanner in the platform is personally architected and coded, across Python, Bash, PowerShell and JavaScript, and protocols from SSH/SNMP to OData/REST to the PAN-OS XML API.</p>
+      <ul>
+        <li>54 open-source security repositories on GitHub</li>
+        <li>120,000+ lines of production security tooling</li>
+        <li>Scanners for 23+ platforms and technologies</li>
+        <li>Custom SAST engines, API scanners, CIS auditors</li>
       </ul>
-      <div class="nav__actions">
-        <div style="display:flex;gap:4px;margin-right:8px">
-          <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
-          <button class="lang-btn" data-lang="nl" onclick="setLang('nl')">NL</button>
-        </div>
-        <a href="https://github.com/Krishcalin" class="btn btn--ghost" target="_blank" rel="noopener" style="gap:6px">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          GitHub
-        </a>
-        <a href="#contact" class="btn btn--primary">Contact</a>
-      </div>
-      <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
     </div>
-  </nav>
-
-  <!-- PAGE HERO -->
-  <section class="page-hero">
-    <div class="page-hero__glow"></div>
-    <div class="container" style="position:relative">
-      <span class="section-tag" data-i18n="about.hero.tag">About the Creator</span>
-      <h1 class="section-title" style="font-size:clamp(2rem,4.5vw,3.2rem)" data-i18n="about.hero.title">Built by a Practitioner.<br><span class="gradient-text">Not a Product Company.</span></h1>
-      <p class="section-desc" style="max-width:700px;margin:0 auto" data-i18n="about.hero.desc">Phalanx Cyber represents a new model for security innovation &mdash; the entire platform is engineered by only one cybersecurity strategist with over 25 years of hands-on experience spanning security engineering, product leadership, and enterprise security operations. It is a deliberate demonstration of what becomes possible when decades of practitioner expertise converge with AI-augmented development.</p>
+    <div class="lens">
+      <h3>Product Thinking</h3>
+      <p>Every scanner is designed as a complete product, not a proof-of-concept — consistent CLIs, structured JSON/HTML reporting, severity-based CI/CD exit codes, dark-themed interactive dashboards, and thorough documentation. A product-management mindset applied to security tooling.</p>
+      <ul>
+        <li>Unified Finding schema across all tools</li>
+        <li>3-phase architecture: Collect, Analyze, Report</li>
+        <li>Multi-format output: JSON, HTML, CSV, SARIF</li>
+        <li>CI/CD native with exit-code conventions</li>
+      </ul>
     </div>
-  </section>
-
-  <!-- ============ FOUNDER PROFILE ============ -->
-  <section class="about-section" id="founder">
-    <div class="container">
-      <div class="founder-profile">
-        <div class="founder-profile__left">
-          <!-- Profile photo -->
-          <div class="founder-avatar" style="padding:0;overflow:hidden">
-            <img src="https://github.com/Krishcalin.png" alt="Krishnendu De" style="width:100%;height:100%;object-fit:cover;border-radius:50%">
-          </div>
-          <div class="founder-social">
-            <a href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener" class="btn btn--ghost" style="padding:10px 20px;font-size:0.85rem">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-              LinkedIn
-            </a>
-            <a href="https://github.com/Krishcalin" target="_blank" rel="noopener" class="btn btn--ghost" style="padding:10px 20px;font-size:0.85rem">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-              GitHub
-            </a>
-          </div>
-        </div>
-        <div class="founder-profile__right">
-          <h2 style="font-size:2rem;font-weight:800;margin-bottom:4px">Krishnendu De</h2>
-          <p style="color:var(--accent-1);font-size:1.05rem;font-weight:600;margin-bottom:6px">Cybersecurity Leader &amp; Engineering Architect</p>
-          <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:24px">IIT Kharagpur &middot; 25+ Years in Cybersecurity &middot; Kolkata, India</p>
-
-          <p style="color:var(--text-secondary);font-size:1rem;line-height:1.8;margin-bottom:20px">
-            Krishnendu De is a cybersecurity leader with over <strong style="color:var(--text)">25 years of experience</strong> across security engineering, threat intelligence, product development, and enterprise security strategy. He is the sole architect and creator behind the <strong style="color:var(--text)">Phalanx Cyber</strong> platform &mdash; a comprehensive portfolio of <strong style="color:var(--text)">44 open-source security repositories</strong> on GitHub, spanning every layer of the enterprise stack: Application code, Cloud infrastructure, SaaS platforms, ERP Security, Network and Security Appliances, and security of OT/ICS environments and equipment like PLCs, RTUs and FRTUs.
-          </p>
-          <p style="color:var(--text-secondary);font-size:1rem;line-height:1.8;margin-bottom:20px">
-            His career spans senior roles across <strong style="color:var(--text)">India, the United Kingdom, the Netherlands, and international markets</strong> &mdash; building and leading security programs for complex, regulated enterprises. Krishnendu brings a rare intersection of deep technical capability, cyber product vision, and fluent risk communication within the boardroom. At the same time he is equally competent in writing a SAST scanner from first principles, designing a zero-trust architecture, or presenting a risk-quantified business case to a board of directors.
-          </p>
-          <p style="color:var(--text-secondary);font-size:1rem;line-height:1.8">
-            Krishnendu holds a master's degree from the <strong style="color:var(--text)">Indian Institute of Technology, Kharagpur</strong> &mdash; one of Asia's most selective engineering institutions &mdash; and the <strong style="color:var(--text)">Offensive Security Certified Professional (OSCP)</strong> certification from OffSec, <strong style="color:var(--text)">CISSP</strong> from ISC2, anchoring his practitioner-first approach in validated adversarial expertise.
-          </p>
-        </div>
-      </div>
+    <div class="lens">
+      <h3>Business Strategy</h3>
+      <p>Security tools without business context are noise generators. Every finding maps to business risk, a compliance framework, and remediation cost — so the platform produces board-ready output, not just technical scan results, letting CISOs communicate risk in the language of the business.</p>
+      <ul>
+        <li>20+ compliance frameworks mapped (CIS, NIST, ISO, PCI)</li>
+        <li>Open-source security strategy and implementation</li>
+        <li>Risk-based prioritization with CVSS, EPSS, CISA KEV</li>
+        <li>Executive-ready reporting and posture scoring</li>
+      </ul>
     </div>
-  </section>
+  </div>
+</div></section>
 
-  <!-- ============ CAREER JOURNEY ============ -->
-  <section class="exec-section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag" data-i18n="about.career.tag">Career Journey</span>
-        <h2 class="section-title" data-i18n="about.career.title">24 Years of <span class="gradient-text">Building &amp; Defending</span></h2>
-        <p class="section-desc" data-i18n="about.career.desc">A career defined by the convergence of engineering depth, security expertise, and strategic business thinking &mdash; across industries, geographies, and technology eras.</p>
-      </div>
+<!-- PORTFOLIO STATS -->
+<section class="section"><div class="container-wide">
+  <div class="section-head"><span class="eyebrow">Open-Source Portfolio</span><h2><span class="gradient-text">54 Repositories.</span> One Vision.</h2><p>Every repository on GitHub is personally built — from architecture design to the last line of code — together forming one of the most comprehensive open-source enterprise security platforms available today.</p></div>
+  <div class="stat-row">
+    <div class="stat"><div class="stat__num" data-count="54">0</div><div class="stat__label">GitHub Repositories</div></div>
+    <div class="stat"><div class="stat__num" data-count="5800" data-suffix="+">0</div><div class="stat__label">Security Rules</div></div>
+    <div class="stat"><div class="stat__num" data-count="32000" data-suffix="+">0</div><div class="stat__label">CVE Database</div></div>
+    <div class="stat"><div class="stat__num" data-count="23" data-suffix="+">0</div><div class="stat__label">Platforms Covered</div></div>
+    <div class="stat"><div class="stat__num" data-count="20" data-suffix="+">0</div><div class="stat__label">Compliance Frameworks</div></div>
+    <div class="stat"><div class="stat__num" data-count="21" data-suffix="K+">0</div><div class="stat__label">LinkedIn Followers</div></div>
+  </div>
+  <div style="text-align:center;margin-top:36px"><a class="btn btn--primary" href="index.html#tools">Browse all 54 tools</a></div>
+</div></section>
 
-      <div class="timeline">
-      </div>
+<!-- THOUGHT LEADERSHIP -->
+<section class="section" style="background:var(--bg-subtle);border-block:1px solid var(--border)"><div class="container-wide">
+  <div class="section-head"><span class="eyebrow">Thought Leadership</span><h2>Published <span class="gradient-text">Research &amp; Writing</span></h2><p>Krishnendu regularly publishes technical research and strategic analysis on LinkedIn — red teaming, threat intelligence, AI in security, and enterprise defense.</p></div>
+  <div class="feature-grid">
+    <article class="card article-card"><span class="pill pill--accent">Research</span><h3>OT Vulnerability Management: A Risk-Based Approach</h3><p>A framework for prioritizing remediation in operational-technology environments where patching is constrained by uptime and safety.</p></article>
+    <article class="card article-card"><span class="pill pill--accent">Case Study</span><h3>Live Red Teaming Assignment: Real-World Engagement</h3><p>Documented methodology and findings from a production red-team engagement — attack chain from initial access through lateral movement to domain dominance.</p></article>
+    <article class="card article-card"><span class="pill pill--accent">Threat Intel</span><h3>Cobalt Strike &amp; BlackSuit Ransomware: Technical Analysis</h3><p>Deep-dive into a ransomware operation: C2 infrastructure, initial-access vectors, and defensive detection strategies for SOC teams.</p></article>
+    <article class="card article-card"><span class="pill pill--accent">AI + Security</span><h3>Agentic AI-Based Red Teaming: Pentest Copilot</h3><p>How agentic AI systems can augment penetration testing — automating reconnaissance, vulnerability discovery, and exploit-chain construction.</p></article>
+    <article class="card article-card"><span class="pill pill--accent">Cloud</span><h3>Penetration Testing in Kubernetes Clusters</h3><p>A methodology for attacking Kubernetes — RBAC exploitation, container escapes, service-account abuse, and secrets exfiltration.</p></article>
+    <article class="card article-card"><span class="pill pill--accent">Identity</span><h3>ESC8 Attack: Exploiting ADCS for Domain Dominance</h3><p>AD Certificate Services exploitation — how misconfigured certificate templates enable privilege escalation to domain administrator.</p></article>
+  </div>
+  <div style="text-align:center;margin-top:40px"><a class="btn btn--secondary" href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener">Read all articles on LinkedIn →</a></div>
+</div></section>
+
+<!-- CREDENTIALS -->
+<section class="section"><div class="container-wide">
+  <div class="section-head"><span class="eyebrow">Credentials</span><h2>Education &amp; <span class="gradient-text">Certifications</span></h2></div>
+  <div class="cred-grid">
+    <div class="card cred"><span class="cred__who">Education</span><h3>Indian Institute of Technology, Kharagpur</h3><p>India's first and most prestigious IIT (est. 1951), consistently ranked among Asia's top engineering institutions. A rigorous foundation for first-principles thinking in security architecture, algorithm design, and systems engineering.</p></div>
+    <div class="card cred"><span class="cred__who">ISC2 · Since 2008</span><h3>CISSP — Certified Information Systems Security Professional</h3><p>The world's premier cybersecurity certification, held since 2008, validating mastery across all eight security domains. An ISC2 member for over 17 years.</p></div>
+    <div class="card cred"><span class="cred__who">Offensive Security</span><h3>OSCP — Offensive Security Certified Professional</h3><p>The industry's gold-standard penetration-testing certification from OffSec — hands-on exploitation under exam conditions. The offensive skillset that informs how every detection rule is written.</p></div>
+    <div class="card cred"><span class="cred__who">Offensive Security · Advanced</span><h3>OSEP — Offensive Security Experienced Penetration Tester</h3><p>OffSec's advanced evasion and exploit-development certification — crafting custom payloads, bypassing antivirus and enterprise defenses, and chaining sophisticated techniques against hardened environments. The offensive depth behind PhalanxCyber's detection engineering.</p></div>
+    <div class="card cred"><span class="cred__who">Cloud</span><h3>AWS Certified Solutions Architect</h3><p>Validates expertise in designing distributed systems on AWS — grounding the cloud scanners' detection logic in hands-on architectural knowledge of why a misconfiguration creates real risk.</p></div>
+    <div class="card cred"><span class="cred__who">Expertise</span><h3>25+ Years of Practitioner Experience</h3><p>The most important credential isn't a certificate — it's two-and-a-half decades of defending real enterprises: penetration testing, SOC operations, incident response, security architecture, red teaming, and board-level risk communication.</p></div>
+  </div>
+
+  <h3 style="text-align:center;margin:44px 0 22px;color:var(--text-muted);font-size:var(--step-0);font-weight:700;letter-spacing:.03em">Additional Certifications &amp; Credentials</h3>
+  <div class="cert-badges">
+    <div class="cert-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 15l-2 5 2-1.5 2 1.5-2-5z"/><circle cx="12" cy="9" r="6"/><path d="M9 9l2 2 4-4"/></svg><div><strong>Microsoft Identity &amp; Access Administrator</strong><span>Entra ID, Conditional Access, PIM, App Registrations</span></div></div>
+    <div class="cert-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 15l-2 5 2-1.5 2 1.5-2-5z"/><circle cx="12" cy="9" r="6"/><path d="M9 9l2 2 4-4"/></svg><div><strong>Google Cloud Platform (GCP) Certified</strong><span>Cloud architecture, security, and infrastructure on GCP</span></div></div>
+    <div class="cert-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 15l-2 5 2-1.5 2 1.5-2-5z"/><circle cx="12" cy="9" r="6"/><path d="M9 9l2 2 4-4"/></svg><div><strong>Certified Kubernetes Administrator (CKA)</strong><span>Cluster operations, networking, security, and workloads</span></div></div>
+    <div class="cert-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 15l-2 5 2-1.5 2 1.5-2-5z"/><circle cx="12" cy="9" r="6"/><path d="M9 9l2 2 4-4"/></svg><div><strong>Splunk Certified</strong><span>SIEM administration, SPL development, detection engineering</span></div></div>
+    <div class="cert-badge"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 15l-2 5 2-1.5 2 1.5-2-5z"/><circle cx="12" cy="9" r="6"/><path d="M9 9l2 2 4-4"/></svg><div><strong>CyberArk Certified</strong><span>Privileged Access Management, vault architecture, secrets</span></div></div>
+  </div>
+</div></section>
+
+<!-- CONTACT -->
+<section class="section" style="background:var(--bg-subtle);border-top:1px solid var(--border)"><div class="container-wide">
+  <div class="section-head" style="text-align:center;margin-inline:auto"><div style="text-align:center"><span class="eyebrow">Contact</span></div><h2>Start the <span class="gradient-text">Conversation</span></h2><p style="margin-inline:auto">If you'd like to connect, drop me an email and I'll try to respond. We can always set up a meeting to discuss further.</p></div>
+  <div style="text-align:center">
+    <a class="btn btn--primary btn--lg" href="mailto:krishnendu.de@hotmail.com">Write me an email</a>
+    <div style="display:flex;justify-content:center;gap:14px;margin-top:28px;flex-wrap:wrap">
+      <a class="btn btn--ghost btn--sm" href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn--ghost btn--sm" href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn btn--ghost btn--sm" href="mailto:krishnendu.de@hotmail.com">Email</a>
     </div>
-  </section>
+  </div>
+</div></section>
 
-  <!-- ============ EXPERTISE DOMAINS ============ -->
-  <section class="about-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag" data-i18n="about.expertise.tag">Expertise</span>
-        <h2 class="section-title" data-i18n="about.expertise.title">The <span class="gradient-text">Three Lenses</span></h2>
-        <p class="section-desc" data-i18n="about.expertise.desc">What makes Krishnendu's approach distinctive is the ability to operate across three domains that are rarely combined in a single practitioner: deep engineering, product thinking, and business strategy.</p>
-      </div>
+<footer class="footer"><div class="container-wide">
+  <div class="footer__bottom" style="border:none;margin:0;padding:0">
+    <span>&copy; 2026 <strong>PhalanxCyber</strong> — Open-source cybersecurity platform.</span>
+    <span><a href="index.html">All tools</a> · <a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a></span>
+  </div>
+  <p class="footer__disclaimer">All tools are provided for lawful, authorized security testing and educational use only. Offensive/red-team tooling is benign-by-default and intended for environments you own or are authorized to test.</p>
+</div></footer>
 
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
-        <div class="exec-card" style="border-top:3px solid var(--accent-1)">
-          <h3 style="font-size:1.15rem">Engineering Depth</h3>
-          <p>Not a security manager who delegates to engineers &mdash; a hands-on builder who writes production security tools from scratch. Every scanner in the Phalanx Cyber platform is personally architected and coded. Expertise spans Python, Bash, PowerShell, JavaScript, and deep knowledge of protocols from SSH/SNMP to OData/REST to PAN-OS XML API.</p>
-          <ul class="exec-card__points" style="margin-top:16px">
-            <li>30 open-source security repositories on GitHub</li>
-            <li>50,000+ lines of production security tooling</li>
-            <li>Scanners for 23+ platforms and technologies</li>
-            <li>Custom SAST engines, API scanners, CIS auditors</li>
-          </ul>
-        </div>
-
-        <div class="exec-card" style="border-top:3px solid var(--accent-2)">
-          <h3 style="font-size:1.15rem">Product Thinking</h3>
-          <p>Every scanner is designed as a complete product, not a proof-of-concept. Consistent CLI interfaces, structured JSON/HTML reporting, severity-based exit codes for CI/CD, dark-themed interactive dashboards, and comprehensive documentation. The user experience reflects a product management mindset applied to security tooling.</p>
-          <ul class="exec-card__points" style="margin-top:16px">
-            <li>Unified Finding schema across all 30 tools</li>
-            <li>3-phase architecture: Collect, Analyze, Report</li>
-            <li>Multi-format output: JSON, HTML, CSV, SARIF</li>
-            <li>CI/CD native with exit code conventions</li>
-          </ul>
-        </div>
-
-        <div class="exec-card" style="border-top:3px solid var(--accent-3)">
-          <h3 style="font-size:1.15rem">Business Strategy</h3>
-          <p>Security tools without business context are noise generators. Krishnendu's approach maps every security finding to business risk, compliance frameworks, and remediation cost. The Phalanx Cyber platform is designed to produce board-ready output, not just technical scan results, enabling CISOs to communicate risk in the language of the business.</p>
-          <ul class="exec-card__points" style="margin-top:16px">
-            <li>8 compliance frameworks mapped (CIS, NIST, ISO, PCI)</li>
-            <li>Open-source security strategy and implementation</li>
-            <li>Risk-based prioritization with CVSS, EPSS, CISA KEV</li>
-            <li>Executive-ready reporting and posture scoring</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ THOUGHT LEADERSHIP ============ -->
-  <section class="exec-section" style="background:linear-gradient(180deg, var(--bg) 0%, var(--bg-surface) 50%, var(--bg) 100%);">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag" data-i18n="about.thought.tag">Thought Leadership</span>
-        <h2 class="section-title" data-i18n="about.thought.title">Published <span class="gradient-text">Research &amp; Writing</span></h2>
-        <p class="section-desc" data-i18n="about.thought.desc">Krishnendu regularly publishes technical research and strategic analysis on LinkedIn, covering red teaming, threat intelligence, AI in security, and enterprise defense strategies.</p>
-      </div>
-
-      <div class="ai-grid">
-        <div class="ai-card">
-          <div class="ai-card__number" style="font-size:1.2rem">Research</div>
-          <h4>OT Vulnerability Management: A Risk-Based Approach</h4>
-          <p>A framework for prioritizing vulnerability remediation in operational technology environments where patching is constrained by uptime requirements and safety considerations.</p>
-        </div>
-        <div class="ai-card">
-          <div class="ai-card__number" style="font-size:1.2rem">Case Study</div>
-          <h4>Live Red Teaming Assignment: Real-World Engagement</h4>
-          <p>Documented methodology and findings from a production red team engagement, demonstrating attack chain construction from initial access through lateral movement to domain dominance.</p>
-        </div>
-        <div class="ai-card">
-          <div class="ai-card__number" style="font-size:1.2rem">Threat Intel</div>
-          <h4>Cobalt Strike and BlackSuit Ransomware: Technical Analysis</h4>
-          <p>Deep-dive technical case study of a ransomware operation, including C2 infrastructure analysis, initial access vectors, and defensive detection strategies for SOC teams.</p>
-        </div>
-        <div class="ai-card">
-          <div class="ai-card__number" style="font-size:1.2rem">AI + Security</div>
-          <h4>Agentic AI-Based Red Teaming: Pentest Copilot</h4>
-          <p>Exploration of how agentic AI systems can augment penetration testing workflows, automating reconnaissance, vulnerability discovery, and exploit chain construction.</p>
-        </div>
-        <div class="ai-card">
-          <div class="ai-card__number" style="font-size:1.2rem">Cloud</div>
-          <h4>Penetration Testing in Kubernetes Clusters</h4>
-          <p>Comprehensive methodology for attacking Kubernetes environments, covering RBAC exploitation, container escapes, service account abuse, and secrets exfiltration techniques.</p>
-        </div>
-        <div class="ai-card">
-          <div class="ai-card__number" style="font-size:1.2rem">Identity</div>
-          <h4>ESC8 Attack: Exploiting ADCS for Domain Dominance</h4>
-          <p>Technical analysis of Active Directory Certificate Services exploitation, demonstrating how misconfigured certificate templates enable privilege escalation to domain administrator.</p>
-        </div>
-      </div>
-
-      <div style="text-align:center;margin-top:48px">
-        <a href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener" class="btn btn--primary">
-          Read All Articles on LinkedIn
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ OPEN SOURCE PORTFOLIO ============ -->
-  <section class="about-section" style="background:var(--bg-surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag" data-i18n="about.portfolio.tag">Open-Source Portfolio</span>
-        <h2 class="section-title" data-i18n="about.portfolio.title"><span class="gradient-text">44 Repositories.</span> One Vision.</h2>
-        <p class="section-desc" data-i18n="about.portfolio.desc">Every repository on GitHub is personally built by Krishnendu &mdash; from architecture design to the last line of code. Together, they form the most comprehensive open-source enterprise security platform available today.</p>
-      </div>
-
-      <div class="about-section__grid">
-        <div class="about-card">
-          <div class="about-card__number">44</div>
-          <h4>GitHub Repositories</h4>
-          <p>Spanning SAST, DAST, CSPM, SSPM, KSPM, CIS hardening, detection engineering, and attack surface management</p>
-        </div>
-        <div class="about-card">
-          <div class="about-card__number">4,500+</div>
-          <h4>Security Controls</h4>
-          <p>Detection rules, compliance checks, and vulnerability signatures across all platforms and 15+ compliance frameworks</p>
-        </div>
-        <div class="about-card">
-          <div class="about-card__number">32,000+</div>
-          <h4>CVE Database</h4>
-          <p>NVD-synced vulnerability intelligence with EPSS scoring and CISA KEV enrichment</p>
-        </div>
-        <div class="about-card">
-          <div class="about-card__number">23+</div>
-          <h4>Platforms Covered</h4>
-          <p>AWS, Azure, GCP, M365, SAP, ServiceNow, Kubernetes, Cisco, Palo Alto, Windows, Linux, and more</p>
-        </div>
-        <div class="about-card">
-          <div class="about-card__number">8</div>
-          <h4>Compliance Frameworks</h4>
-          <p>CIS, NIST 800-53, ISO 27001, PCI DSS v4.0, OWASP, MITRE ATT&CK, IEC 62443, SOC 2</p>
-        </div>
-        <div class="about-card">
-          <div class="about-card__number">21K+</div>
-          <h4>LinkedIn Followers</h4>
-          <p>A growing community of security professionals following Krishnendu's research and open-source work</p>
-        </div>
-      </div>
-
-      <!-- Repository Network Constellation Diagram -->
-      <div class="diagram-container--wide" style="max-width:900px;margin:48px auto">
-        <svg viewBox="0 0 900 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="rg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#7B61FF"/></linearGradient>
-            <filter id="rgl"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          </defs>
-
-          <!-- Background constellation lines (subtle connections between clusters) -->
-          <line x1="150" y1="150" x2="350" y2="100" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
-          <line x1="350" y1="100" x2="550" y2="140" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
-          <line x1="550" y1="140" x2="750" y2="120" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
-          <line x1="150" y1="350" x2="350" y2="380" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
-          <line x1="350" y1="380" x2="550" y2="360" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
-          <line x1="550" y1="360" x2="750" y2="370" stroke="url(#rg1)" stroke-width="0.3" opacity="0.15"/>
-          <line x1="150" y1="150" x2="150" y2="350" stroke="url(#rg1)" stroke-width="0.3" opacity="0.1"/>
-          <line x1="750" y1="120" x2="750" y2="370" stroke="url(#rg1)" stroke-width="0.3" opacity="0.1"/>
-
-          <!-- Cluster 1: Application Security (top-left) -->
-          <circle cx="150" cy="150" r="45" fill="#111827" stroke="#10B981" stroke-width="1.5" filter="url(#rgl)"/>
-          <text x="150" y="145" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="9" font-weight="700">AppSec</text>
-          <text x="150" y="160" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">5 repos</text>
-          <!-- Satellite repos -->
-          <circle cx="90" cy="100" r="16" fill="#0A0E1A" stroke="#10B981" stroke-width="0.8" opacity="0.7"/>
-          <text x="90" y="103" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="5">SAST</text>
-          <line x1="105" y1="108" x2="130" y2="130" stroke="#10B981" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="80" cy="170" r="16" fill="#0A0E1A" stroke="#10B981" stroke-width="0.8" opacity="0.7"/>
-          <text x="80" y="173" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="5">DAST</text>
-          <line x1="96" y1="165" x2="120" y2="158" stroke="#10B981" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="120" cy="210" r="16" fill="#0A0E1A" stroke="#10B981" stroke-width="0.8" opacity="0.7"/>
-          <text x="120" y="213" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="5">API</text>
-          <line x1="130" y1="198" x2="142" y2="182" stroke="#10B981" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="200" cy="100" r="16" fill="#0A0E1A" stroke="#10B981" stroke-width="0.8" opacity="0.7"/>
-          <text x="200" y="103" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="5">AI-SPM</text>
-          <line x1="190" y1="112" x2="170" y2="130" stroke="#10B981" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="210" cy="190" r="16" fill="#0A0E1A" stroke="#10B981" stroke-width="0.8" opacity="0.7"/>
-          <text x="210" y="193" text-anchor="middle" fill="#10B981" font-family="Inter,sans-serif" font-size="5">RAI</text>
-          <line x1="198" y1="182" x2="175" y2="170" stroke="#10B981" stroke-width="0.5" opacity="0.4"/>
-
-          <!-- Cluster 2: Cloud Security (top-center) -->
-          <circle cx="350" cy="100" r="45" fill="#111827" stroke="#00D4FF" stroke-width="1.5" filter="url(#rgl)"/>
-          <text x="350" y="95" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="9" font-weight="700">Cloud</text>
-          <text x="350" y="110" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">5 repos</text>
-          <circle cx="300" cy="50" r="16" fill="#0A0E1A" stroke="#00D4FF" stroke-width="0.8" opacity="0.7"/>
-          <text x="300" y="53" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="5">AWS</text>
-          <line x1="314" y1="58" x2="330" y2="75" stroke="#00D4FF" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="400" cy="45" r="16" fill="#0A0E1A" stroke="#00D4FF" stroke-width="0.8" opacity="0.7"/>
-          <text x="400" y="48" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="5">Azure</text>
-          <line x1="390" y1="57" x2="370" y2="75" stroke="#00D4FF" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="310" cy="155" r="16" fill="#0A0E1A" stroke="#00D4FF" stroke-width="0.8" opacity="0.7"/>
-          <text x="310" y="158" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="5">GCP</text>
-          <line x1="322" y1="146" x2="335" y2="130" stroke="#00D4FF" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="400" cy="155" r="16" fill="#0A0E1A" stroke="#00D4FF" stroke-width="0.8" opacity="0.7"/>
-          <text x="400" y="158" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="5">CDR</text>
-          <line x1="388" y1="145" x2="370" y2="128" stroke="#00D4FF" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="280" cy="105" r="16" fill="#0A0E1A" stroke="#00D4FF" stroke-width="0.8" opacity="0.7"/>
-          <text x="280" y="108" text-anchor="middle" fill="#00D4FF" font-family="Inter,sans-serif" font-size="5">K8s</text>
-          <line x1="295" y1="102" x2="310" y2="100" stroke="#00D4FF" stroke-width="0.5" opacity="0.4"/>
-
-          <!-- Cluster 3: SaaS Security (top-right) -->
-          <circle cx="550" cy="140" r="40" fill="#111827" stroke="#7B61FF" stroke-width="1.5" filter="url(#rgl)"/>
-          <text x="550" y="135" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="9" font-weight="700">SaaS</text>
-          <text x="550" y="150" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">5 repos</text>
-          <circle cx="510" cy="85" r="16" fill="#0A0E1A" stroke="#7B61FF" stroke-width="0.8" opacity="0.7"/>
-          <text x="510" y="88" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="5">M365</text>
-          <line x1="520" y1="96" x2="535" y2="115" stroke="#7B61FF" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="600" cy="90" r="16" fill="#0A0E1A" stroke="#7B61FF" stroke-width="0.8" opacity="0.7"/>
-          <text x="600" y="93" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="5">SNOW</text>
-          <line x1="588" y1="100" x2="570" y2="118" stroke="#7B61FF" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="500" cy="180" r="16" fill="#0A0E1A" stroke="#7B61FF" stroke-width="0.8" opacity="0.7"/>
-          <text x="500" y="183" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="5">SAP SF</text>
-          <line x1="514" y1="172" x2="530" y2="160" stroke="#7B61FF" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="610" cy="175" r="16" fill="#0A0E1A" stroke="#7B61FF" stroke-width="0.8" opacity="0.7"/>
-          <text x="610" y="178" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="5">Tableau</text>
-          <line x1="598" y1="166" x2="575" y2="158" stroke="#7B61FF" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="560" cy="195" r="14" fill="#0A0E1A" stroke="#7B61FF" stroke-width="0.8" opacity="0.6"/>
-          <text x="560" y="198" text-anchor="middle" fill="#7B61FF" font-family="Inter,sans-serif" font-size="5">Ariba</text>
-          <line x1="555" y1="182" x2="552" y2="170" stroke="#7B61FF" stroke-width="0.5" opacity="0.3"/>
-
-          <!-- Cluster 4: Infrastructure (far right) -->
-          <circle cx="750" cy="120" r="45" fill="#111827" stroke="#F59E0B" stroke-width="1.5" filter="url(#rgl)"/>
-          <text x="750" y="115" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="9" font-weight="700">Infra</text>
-          <text x="750" y="130" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">7 repos</text>
-          <circle cx="700" cy="60" r="16" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.7"/>
-          <text x="700" y="63" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">Cisco</text>
-          <line x1="712" y1="70" x2="730" y2="92" stroke="#F59E0B" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="810" cy="70" r="16" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.7"/>
-          <text x="810" y="73" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">PAN-OS</text>
-          <line x1="798" y1="80" x2="775" y2="98" stroke="#F59E0B" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="830" cy="140" r="16" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.7"/>
-          <text x="830" y="143" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">Linux</text>
-          <line x1="815" y1="138" x2="795" y2="130" stroke="#F59E0B" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="810" cy="185" r="16" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.7"/>
-          <text x="810" y="188" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">Win</text>
-          <line x1="798" y1="176" x2="778" y2="152" stroke="#F59E0B" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="700" cy="175" r="16" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.7"/>
-          <text x="700" y="178" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">OT/ICS</text>
-          <line x1="712" y1="166" x2="730" y2="150" stroke="#F59E0B" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="740" cy="190" r="14" fill="#0A0E1A" stroke="#F59E0B" stroke-width="0.8" opacity="0.6"/>
-          <text x="740" y="193" text-anchor="middle" fill="#F59E0B" font-family="Inter,sans-serif" font-size="5">SAP</text>
-          <line x1="742" y1="177" x2="748" y2="165" stroke="#F59E0B" stroke-width="0.5" opacity="0.3"/>
-
-          <!-- Cluster 5: Threat Detection (bottom-left) -->
-          <circle cx="150" cy="350" r="40" fill="#111827" stroke="#EF4444" stroke-width="1.5" filter="url(#rgl)"/>
-          <text x="150" y="345" text-anchor="middle" fill="#EF4444" font-family="Inter,sans-serif" font-size="9" font-weight="700">Threat</text>
-          <text x="150" y="360" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">4 repos</text>
-          <circle cx="90" cy="310" r="16" fill="#0A0E1A" stroke="#EF4444" stroke-width="0.8" opacity="0.7"/>
-          <text x="90" y="313" text-anchor="middle" fill="#EF4444" font-family="Inter,sans-serif" font-size="5">DetEng</text>
-          <line x1="104" y1="318" x2="125" y2="332" stroke="#EF4444" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="200" cy="310" r="16" fill="#0A0E1A" stroke="#EF4444" stroke-width="0.8" opacity="0.7"/>
-          <text x="200" y="313" text-anchor="middle" fill="#EF4444" font-family="Inter,sans-serif" font-size="5">RedTm</text>
-          <line x1="190" y1="322" x2="172" y2="335" stroke="#EF4444" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="100" cy="400" r="16" fill="#0A0E1A" stroke="#EF4444" stroke-width="0.8" opacity="0.7"/>
-          <text x="100" y="403" text-anchor="middle" fill="#EF4444" font-family="Inter,sans-serif" font-size="5">EDR</text>
-          <line x1="114" y1="394" x2="132" y2="375" stroke="#EF4444" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="200" cy="400" r="16" fill="#0A0E1A" stroke="#EF4444" stroke-width="0.8" opacity="0.7"/>
-          <text x="200" y="403" text-anchor="middle" fill="#EF4444" font-family="Inter,sans-serif" font-size="5">AD Atk</text>
-          <line x1="188" y1="390" x2="168" y2="372" stroke="#EF4444" stroke-width="0.5" opacity="0.4"/>
-
-          <!-- Cluster 6: Risk & Attack Surface (bottom-center) -->
-          <circle cx="400" cy="380" r="42" fill="#111827" stroke="#06B6D4" stroke-width="1.5" filter="url(#rgl)"/>
-          <text x="400" y="375" text-anchor="middle" fill="#06B6D4" font-family="Inter,sans-serif" font-size="9" font-weight="700">Risk &amp; ASM</text>
-          <text x="400" y="390" text-anchor="middle" fill="#9CA3AF" font-family="Inter,sans-serif" font-size="8">4 repos</text>
-          <circle cx="340" cy="430" r="16" fill="#0A0E1A" stroke="#06B6D4" stroke-width="0.8" opacity="0.7"/>
-          <text x="340" y="433" text-anchor="middle" fill="#06B6D4" font-family="Inter,sans-serif" font-size="5">EASM</text>
-          <line x1="353" y1="420" x2="378" y2="405" stroke="#06B6D4" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="460" cy="430" r="16" fill="#0A0E1A" stroke="#06B6D4" stroke-width="0.8" opacity="0.7"/>
-          <text x="460" y="433" text-anchor="middle" fill="#06B6D4" font-family="Inter,sans-serif" font-size="5">VulnMgmt</text>
-          <line x1="447" y1="420" x2="422" y2="405" stroke="#06B6D4" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="350" cy="330" r="16" fill="#0A0E1A" stroke="#06B6D4" stroke-width="0.8" opacity="0.7"/>
-          <text x="350" y="333" text-anchor="middle" fill="#06B6D4" font-family="Inter,sans-serif" font-size="5">CRQ</text>
-          <line x1="362" y1="340" x2="380" y2="358" stroke="#06B6D4" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="445" cy="340" r="16" fill="#0A0E1A" stroke="#06B6D4" stroke-width="0.8" opacity="0.7"/>
-          <text x="445" y="343" text-anchor="middle" fill="#06B6D4" font-family="Inter,sans-serif" font-size="5">Portal</text>
-          <line x1="435" y1="350" x2="418" y2="365" stroke="#06B6D4" stroke-width="0.5" opacity="0.4"/>
-
-          <!-- Animated orbital particles -->
-          <circle r="2" fill="#00D4FF" opacity="0.6">
-            <animateMotion dur="15s" repeatCount="indefinite" path="M150,150 Q350,50 550,140 Q750,230 750,370 Q550,450 350,380 Q150,310 150,150"/>
-            <animate attributeName="opacity" values="0;0.8;0.8;0" dur="15s" repeatCount="indefinite"/>
-          </circle>
-          <circle r="2" fill="#7B61FF" opacity="0.6">
-            <animateMotion dur="18s" repeatCount="indefinite" path="M750,120 Q550,50 350,100 Q150,200 150,350 Q350,450 550,360 Q750,250 750,120" begin="3s"/>
-            <animate attributeName="opacity" values="0;0.8;0.8;0" dur="18s" repeatCount="indefinite" begin="3s"/>
-          </circle>
-
-          <!-- Center label -->
-          <rect x="355" y="240" width="190" height="36" rx="18" fill="#111827" stroke="url(#rg1)" stroke-width="1" opacity="0.9"/>
-          <text x="450" y="263" text-anchor="middle" fill="url(#rg1)" font-family="Inter,sans-serif" font-size="10" font-weight="700">44 Repos &middot; 120K+ Lines of Code</text>
-        </svg>
-      </div>
-
-      <!-- Repository categories -->
-      <div style="margin-top:64px">
-        <h3 style="font-size:1.3rem;font-weight:700;margin-bottom:32px;text-align:center">Complete Repository Catalogue</h3>
-        <div class="lockin-grid">
-          <div class="lockin-card">
-            <h4 style="color:var(--accent-1);margin-bottom:12px">Application Security</h4>
-            <div class="repo-list">
-              <a href="https://github.com/Krishcalin/Application-Security-Scanner" target="_blank" rel="noopener">Application-Security-Scanner</a>
-              <a href="https://github.com/Krishcalin/Dynamic-Application-Security-Testing" target="_blank" rel="noopener">Dynamic-Application-Security-Testing</a>
-              <a href="https://github.com/Krishcalin/API-Security" target="_blank" rel="noopener">API-Security</a>
-              <a href="https://github.com/Krishcalin/Responsible-AI-Framework" target="_blank" rel="noopener">Responsible-AI-Framework</a>
-              <a href="https://github.com/Krishcalin/AI-Secure-Posture-Management" target="_blank" rel="noopener">AI-Secure-Posture-Management</a>
-            </div>
-          </div>
-          <div class="lockin-card">
-            <h4 style="color:var(--accent-1);margin-bottom:12px">Cloud Security</h4>
-            <div class="repo-list">
-              <a href="https://github.com/Krishcalin/AWS-Security-Scanner" target="_blank" rel="noopener">AWS-Security-Scanner</a>
-              <a href="https://github.com/Krishcalin/Azure-Security-Scanner" target="_blank" rel="noopener">Azure-Security-Scanner</a>
-              <a href="https://github.com/Krishcalin/GCP-CNAPP-Security-Scanner" target="_blank" rel="noopener">GCP-CNAPP-Security-Scanner</a>
-              <a href="https://github.com/Krishcalin/Cloud-Detection-Response" target="_blank" rel="noopener">Cloud-Detection-Response</a>
-              <a href="https://github.com/Krishcalin/Kubernetes-Security-Posture-Management" target="_blank" rel="noopener">Kubernetes-KSPM</a>
-            </div>
-          </div>
-          <div class="lockin-card">
-            <h4 style="color:var(--accent-1);margin-bottom:12px">SaaS Security (SSPM)</h4>
-            <div class="repo-list">
-              <a href="https://github.com/Krishcalin/O365-Security-Posture-Management" target="_blank" rel="noopener">O365-Security-Posture-Management</a>
-              <a href="https://github.com/Krishcalin/SAP-SuccessFactors" target="_blank" rel="noopener">SAP-SuccessFactors</a>
-              <a href="https://github.com/Krishcalin/SSPM-Tableau" target="_blank" rel="noopener">SSPM-Tableau</a>
-              <a href="https://github.com/Krishcalin/SAP-Ariba-Security-Scanner" target="_blank" rel="noopener">SAP-Ariba-Security-Scanner</a>
-              <a href="https://github.com/Krishcalin/Zscaler-Security-Scanner" target="_blank" rel="noopener">Zscaler-Security-Scanner</a>
-            </div>
-          </div>
-          <div class="lockin-card">
-            <h4 style="color:var(--accent-1);margin-bottom:12px">Infrastructure &amp; OT</h4>
-            <div class="repo-list">
-              <a href="https://github.com/Krishcalin/Network-Security-Scanner-NSS" target="_blank" rel="noopener">Network-Security-Scanner-NSS</a>
-              <a href="https://github.com/Krishcalin/PaloAlto-Network-Security" target="_blank" rel="noopener">PaloAlto-Network-Security</a>
-              <a href="https://github.com/Krishcalin/Linux-Hardening" target="_blank" rel="noopener">Linux-Hardening</a>
-              <a href="https://github.com/Krishcalin/Windows-Hardening" target="_blank" rel="noopener">Windows-Hardening</a>
-              <a href="https://github.com/Krishcalin/OT-Security" target="_blank" rel="noopener">OT-Security</a>
-              <a href="https://github.com/Krishcalin/SAP-S4HANA-RISE-Security-Scanner" target="_blank" rel="noopener">SAP-S4HANA-RISE-Security-Scanner</a>
-              <a href="https://github.com/Krishcalin/SAP-Code-Vulnerability-Analyzer" target="_blank" rel="noopener">SAP-Code-Vulnerability-Analyzer</a>
-            </div>
-          </div>
-          <div class="lockin-card">
-            <h4 style="color:var(--accent-1);margin-bottom:12px">Threat Detection &amp; Red Team</h4>
-            <div class="repo-list">
-              <a href="https://github.com/Krishcalin/Detection-Engineering" target="_blank" rel="noopener">Detection-Engineering</a>
-              <a href="https://github.com/Krishcalin/CrowdStrike-Red-Teaming-Test" target="_blank" rel="noopener">CrowdStrike-Red-Teaming-Test</a>
-              <a href="https://github.com/Krishcalin/CrowdStrike-Falcon-Validation-Scanner" target="_blank" rel="noopener">CrowdStrike-Falcon-Validation-Scanner</a>
-              <a href="https://github.com/Krishcalin/Active-Directory-Attack-Scenarios" target="_blank" rel="noopener">Active-Directory-Attack-Scenarios</a>
-            </div>
-          </div>
-          <div class="lockin-card">
-            <h4 style="color:var(--accent-1);margin-bottom:12px">Risk &amp; Attack Surface</h4>
-            <div class="repo-list">
-              <a href="https://github.com/Krishcalin/Attack-Surface-Management" target="_blank" rel="noopener">Attack-Surface-Management</a>
-              <a href="https://github.com/Krishcalin/Vulnerability-Management" target="_blank" rel="noopener">Vulnerability-Management</a>
-              <a href="https://github.com/Krishcalin/Cyber-Risk-Quantification" target="_blank" rel="noopener">Cyber-Risk-Quantification</a>
-              <a href="https://github.com/Krishcalin/My-Portal" target="_blank" rel="noopener">My-Portal (phalanxcyber.ai)</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ CERTIFICATIONS & CREDENTIALS ============ -->
-  <section class="about-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag" data-i18n="about.creds.tag">Credentials</span>
-        <h2 class="section-title" data-i18n="about.creds.title">Education &amp; <span class="gradient-text">Certifications</span></h2>
-      </div>
-
-      <div class="capabilities__grid">
-        <div class="board-card">
-          <span class="board-card__who">Education</span>
-          <h4>Indian Institute of Technology, Kharagpur</h4>
-          <p>India's first and most prestigious IIT (est. 1951). Consistently ranked among Asia's top 10 engineering institutions. The rigorous engineering curriculum built a foundation for first-principles thinking in security architecture, algorithm design, and systems engineering that underpins every tool in the Phalanx Cyber portfolio.</p>
-        </div>
-        <div class="board-card">
-          <span class="board-card__who">ISC2 &middot; Since 2008</span>
-          <h4>CISSP &mdash; Certified Information Systems Security Professional</h4>
-          <p>The world's premier cybersecurity certification, held since 2008. CISSP validates mastery across all eight domains of information security: Security &amp; Risk Management, Asset Security, Security Architecture, Communications &amp; Network Security, IAM, Security Assessment, Security Operations, and Software Development Security. An ISC2 member for over 17 years, reflecting sustained commitment to the profession.</p>
-        </div>
-        <div class="board-card">
-          <span class="board-card__who">Offensive Security</span>
-          <h4>OSCP &mdash; Offensive Security Certified Professional</h4>
-          <p>The industry's gold-standard penetration testing certification from OffSec. Requires hands-on exploitation of a multi-machine lab environment under exam conditions. Validates the real-world offensive skillset that directly informs how every Phalanx Cyber detection rule is written &mdash; built by someone who knows how attackers actually operate.</p>
-        </div>
-        <div class="board-card">
-          <span class="board-card__who">Cloud</span>
-          <h4>AWS Certified Solutions Architect</h4>
-          <p>Validates expertise in designing distributed systems and architectures on Amazon Web Services. This certification grounds the AWS Security Scanner's detection logic in hands-on architectural knowledge &mdash; understanding not just what a misconfiguration is, but why it creates risk in real-world cloud deployments.</p>
-        </div>
-        <div class="board-card">
-          <span class="board-card__who">Expertise</span>
-          <h4>24+ Years of Practitioner Experience</h4>
-          <p>The most important credential is not a certificate &mdash; it is two decades of defending real enterprises against real threats. From penetration testing to SOC operations, from incident response to security architecture, from red teaming to board-level risk communication. This depth is what separates Phalanx Cyber from academic exercises.</p>
-        </div>
-      </div>
-
-      <!-- Additional Certifications -->
-      <div style="margin-top:48px">
-        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:24px;text-align:center;color:var(--text-muted)">Additional Certifications &amp; Credentials</h3>
-        <div class="cert-badges">
-          <div class="cert-badge">
-            <span class="cert-badge__icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-1)" stroke-width="1.5"><path d="M12 15l-2 5 2-1.5 2 1.5-2-5z"/><circle cx="12" cy="9" r="6"/><path d="M9 9l2 2 4-4"/></svg>
-            </span>
-            <div>
-              <strong>Microsoft Identity &amp; Access Administrator</strong>
-              <span>Entra ID, Conditional Access, PIM, App Registrations</span>
-            </div>
-          </div>
-          <div class="cert-badge">
-            <span class="cert-badge__icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-1)" stroke-width="1.5"><path d="M12 15l-2 5 2-1.5 2 1.5-2-5z"/><circle cx="12" cy="9" r="6"/><path d="M9 9l2 2 4-4"/></svg>
-            </span>
-            <div>
-              <strong>Google Cloud Platform (GCP) Certified</strong>
-              <span>Cloud architecture, security, and infrastructure on Google Cloud</span>
-            </div>
-          </div>
-          <div class="cert-badge">
-            <span class="cert-badge__icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-1)" stroke-width="1.5"><path d="M12 15l-2 5 2-1.5 2 1.5-2-5z"/><circle cx="12" cy="9" r="6"/><path d="M9 9l2 2 4-4"/></svg>
-            </span>
-            <div>
-              <strong>Certified Kubernetes Administrator (CKA)</strong>
-              <span>Kubernetes cluster operations, networking, security, and workload management</span>
-            </div>
-          </div>
-          <div class="cert-badge">
-            <span class="cert-badge__icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-1)" stroke-width="1.5"><path d="M12 15l-2 5 2-1.5 2 1.5-2-5z"/><circle cx="12" cy="9" r="6"/><path d="M9 9l2 2 4-4"/></svg>
-            </span>
-            <div>
-              <strong>Splunk Certified</strong>
-              <span>SIEM administration, SPL query development, and detection engineering</span>
-            </div>
-          </div>
-          <div class="cert-badge">
-            <span class="cert-badge__icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-1)" stroke-width="1.5"><path d="M12 15l-2 5 2-1.5 2 1.5-2-5z"/><circle cx="12" cy="9" r="6"/><path d="M9 9l2 2 4-4"/></svg>
-            </span>
-            <div>
-              <strong>CyberArk Certified</strong>
-              <span>Privileged Access Management, vault architecture, and secrets security</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ CONTACT ============ -->
-  <section class="about-section" id="contact" style="background:var(--bg-surface);border-top:1px solid var(--border)">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag" data-i18n="about.contact.tag">Contact</span>
-        <h2 class="section-title" data-i18n="about.contact.title">Start the <span class="gradient-text">Conversation</span></h2>
-        <p class="section-desc" data-i18n="about.contact.desc">If you would like to connect, drop me an email and I will try to respond back. We can always set up a meeting to discuss further.</p>
-      </div>
-
-      <div style="text-align:center;margin-top:16px">
-        <a href="mailto:krishnendu.de@hotmail.com" class="btn btn--primary btn--lg">
-          Write Me an Email
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5l6 4 6-4M3 12h10a1 1 0 001-1V5a1 1 0 00-1-1H3a1 1 0 00-1 1v6a1 1 0 001 1z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-
-      <div style="display:flex;justify-content:center;gap:32px;margin-top:64px;flex-wrap:wrap">
-        <a href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener" class="btn btn--ghost">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          LinkedIn
-        </a>
-        <a href="https://github.com/Krishcalin" target="_blank" rel="noopener" class="btn btn--ghost">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          GitHub
-        </a>
-        <a href="mailto:krishnendu.de@hotmail.com" class="btn btn--ghost">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          krishnendu.de@hotmail.com
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer__grid">
-        <div class="footer__col footer__col--brand">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:28px">
-              <defs>
-                <linearGradient id="footerGrad" x1="4" y1="2" x2="32" y2="34"><stop stop-color="#00D4FF"/><stop offset="1" stop-color="#7B61FF"/></linearGradient>
-                <linearGradient id="footerFill" x1="4" y1="2" x2="32" y2="34"><stop stop-color="#00D4FF" stop-opacity="0.12"/><stop offset="1" stop-color="#7B61FF" stop-opacity="0.12"/></linearGradient>
-              </defs>
-              <path d="M18 2L4 9v9c0 8.5 5.6 16.4 14 18 8.4-1.6 14-9.5 14-18V9L18 2z" fill="url(#footerFill)" stroke="url(#footerGrad)" stroke-width="1.5"/>
-              <line x1="12" y1="15" x2="24" y2="15" stroke="url(#footerGrad)" stroke-width="1.8" stroke-linecap="round"/>
-              <line x1="13" y1="19" x2="23" y2="19" stroke="url(#footerGrad)" stroke-width="1.8" stroke-linecap="round"/>
-              <line x1="14" y1="23" x2="22" y2="23" stroke="url(#footerGrad)" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-            <span style="font-weight:800;font-size:1.2rem">Phalanx<span style="color:var(--accent-1)">Cyber</span></span>
-          </div>
-          <p style="color:var(--text-muted);font-size:0.85rem;line-height:1.7;max-width:280px">
-            44 open-source security tools built by a practitioner with 25+ years of experience. From Application Code to Cloud Infrastructure to Red Teaming.
-          </p>
-        </div>
-        <div class="footer__col">
-          <h4>Categories</h4>
-          <a href="index.html#catalogue">Application Security</a>
-          <a href="index.html#catalogue">Cloud Security</a>
-          <a href="index.html#catalogue">SaaS / SSPM</a>
-          <a href="index.html#catalogue">Infrastructure</a>
-          <a href="index.html#catalogue">Threat Detection</a>
-          <a href="index.html#catalogue">Red Teaming</a>
-          <a href="index.html#catalogue">Attack Surface</a>
-          <a href="index.html#catalogue">Governance &amp; Risk</a>
-        </div>
-        <div class="footer__col">
-          <h4>Links</h4>
-          <a href="https://github.com/Krishcalin" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://www.linkedin.com/in/krishnendude/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="about.html">About</a>
-          <a href="about.html#contact">Contact</a>
-        </div>
-        <div class="footer__col">
-          <h4>Resources</h4>
-          <a href="#">Whitepapers</a>
-          <a href="#">Presentations</a>
-          <a href="#">Infographics</a>
-          <a href="#">Webinars</a>
-        </div>
-      </div>
-
-      <!-- Disclaimer -->
-      <div style="margin-top:32px;padding:24px;border:1px solid rgba(245,158,11,0.2);border-radius:12px;background:rgba(245,158,11,0.03)">
-        <p style="font-size:0.78rem;line-height:1.7;color:var(--text-muted)">
-          <strong style="color:#F59E0B">Disclaimer:</strong> While thorough testing of these open-source tools has been conducted from both a functional and security perspective, you should always read the documentation within each repository's README.md file, review and understand the source code carefully, and test within your staging environment before deploying to any production system. These tools must be used responsibly and ethically, in full compliance with the legal, regulatory, and cyber law frameworks applicable in your jurisdiction. These initiatives are provided for educational and research purposes only. The creator shall not be held responsible for any system damage, service disruption, data loss, or monetary losses arising from the use or misuse of these tools.
-        </p>
-      </div>
-
-      <div class="footer__bottom"><span>&copy; 2026 Phalanx Cyber. All rights reserved.</span><span>www.phalanxcyber.ai</span></div>
-    </div>
-  </footer>
-
-  <script src="js/main.js"></script>
-  <script src="js/translations.js"></script>
+<script>
+function pcxToggle(){var r=document.documentElement;var n=(r.getAttribute('data-theme')||'light')==='dark'?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('pcx-theme',n);}catch(e){}}
+(function(){
+  function count(el){var t=parseFloat(el.dataset.count),s=el.dataset.suffix||'',d=1400,t0=performance.now();
+    (function step(now){var p=Math.min((now-t0)/d,1),e=1-Math.pow(1-p,3),v=Math.round(e*t);el.textContent=(v>=1000?v.toLocaleString():v)+s;if(p<1)requestAnimationFrame(step);})(performance.now());}
+  var els=document.querySelectorAll('[data-count]');
+  if('IntersectionObserver' in window){var o=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){count(e.target);o.unobserve(e.target);}});},{threshold:.4});els.forEach(function(e){o.observe(e);});}
+  else{els.forEach(function(e){e.textContent=e.dataset.count+(e.dataset.suffix||'');});}
+})();
+</script>
 </body>
 </html>
