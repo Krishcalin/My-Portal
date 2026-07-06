@@ -38,5 +38,19 @@
     "compliance": [
       "ot-security-scanner-purdue.png"
     ]
+  },
+  "easm-scanner": {
+    "hero": [
+      "easm-scanner-pipeline.png"
+    ],
+    "architecture": [
+      "easm-scanner-architecture.png"
+    ],
+    "features": [
+      "easm-scanner-capabilities.png"
+    ],
+    "controls": [
+      "easm-scanner-riskscoring.png"
+    ]
   }
 }
